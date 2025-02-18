@@ -1,5 +1,8 @@
 import { GameObjects, Scene } from "phaser";
 
+// This is basic button based on the Phaser textstyle.
+// TODO: Refactor the UI Button component into Image-based.
+// child classes should take image paramenter to make changes.
 export class UIButton extends GameObjects.Text {
     constructor(
         scene: Scene,
@@ -27,7 +30,14 @@ export class UIButton extends GameObjects.Text {
 
 export class PlayButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "Play", callback, { backgroundColor: "#00ff00" });
+        super(scene, x, y, "Play", callback, {
+            fontFamily: "Arial Black",
+            fontSize: 24,
+            color: "#ffffff",
+            stroke: "#000000",
+            strokeThickness: 8,
+            align: "center"
+        });
     }
 }
 
