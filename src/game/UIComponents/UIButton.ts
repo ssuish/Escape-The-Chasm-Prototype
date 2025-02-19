@@ -58,4 +58,3 @@ export class ShootButton extends UIButton {
         super(scene, x, y, "Shoot", callback, { backgroundColor: "#ff00ff" });
     }
 }
-

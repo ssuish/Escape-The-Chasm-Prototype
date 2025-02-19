@@ -1,18 +1,23 @@
 import { Scene, Physics } from "phaser";
 
 export class Player extends Physics.Arcade.Sprite {
-    static interact() {
-        throw new Error("Sprite not yet implemented");
-    }
     body: Physics.Arcade.Body;
 
     constructor(scene: Scene, x: number, y: number) {
         super(scene, x, y, "player");
         scene.add.existing(this);
+
+        if (!scene.physics) {
+            throw new Error("Physics system not found in the scene");
+        }
         scene.physics.add.existing(this);
 
         this.body = this.body as Physics.Arcade.Body;
         this.setCollideWorldBounds(true);
+    }
+
+    static preload(scene: Scene) {
+        scene.load.image("player", "assets/star.png");
     }
 
     moveLeft() {

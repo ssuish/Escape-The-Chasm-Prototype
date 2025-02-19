@@ -1,8 +1,8 @@
-import { Scene, Input, Types } from "phaser";
+import { Scene, Input } from "phaser";
 import { Player } from "./Player";
 
 export class PlayerController {
-    private cursors: Types.Input.Keyboard.CursorKeys;
+    private cursors: { left: Input.Keyboard.Key; right: Input.Keyboard.Key; up: Input.Keyboard.Key };
     private fireKey: Input.Keyboard.Key;
     private interactKey: Input.Keyboard.Key;
     private pauseKey: Input.Keyboard.Key;
@@ -11,16 +11,15 @@ export class PlayerController {
     constructor(scene: Scene, player: Player) {
         this.player = player;
         if (scene.input.keyboard) {
-            this.cursors = scene.input.keyboard.createCursorKeys();
-            this.fireKey = scene.input.keyboard.addKey(
-                Input.Keyboard.KeyCodes.J
-            );
-            this.interactKey = scene.input.keyboard.addKey(
-                Input.Keyboard.KeyCodes.K
-            );
-            this.pauseKey = scene.input.keyboard.addKey(
-                Input.Keyboard.KeyCodes.L
-            );
+            this.cursors = {
+                left: scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.A),
+                right: scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.D),
+                up: scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE)
+            };
+            this.fireKey = scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.J);
+            this.interactKey = scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.K);
+            this.pauseKey = scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.L);
+            console.log("Keyboard input registered"); // Debug log
         } else {
             throw new Error("Keyboard input is not available");
         }
@@ -35,22 +34,25 @@ export class PlayerController {
             console.log("[D] is clicked.");
         } else {
             this.player.setVelocityX(0);
-            console.log("Wrong Key.");
         }
 
         if (this.cursors.up.isDown) {
-            console.log("[Space] is clicked.");
+            this.player.jump();
+            console.log("[SPACE] is clicked.");
         }
 
         if (this.fireKey.isDown) {
+            this.player.fireGun();
             console.log("[J] is clicked.");
         }
 
         if (this.interactKey.isDown) {
+            this.player.interact();
             console.log("[K] is clicked.");
         }
 
         if (this.pauseKey.isDown) {
+            this.player.pauseGame();
             console.log("[L] is clicked.");
         }
     }
