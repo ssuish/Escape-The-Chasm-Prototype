@@ -20,7 +20,7 @@ export class Platforms extends Physics.Arcade.Sprite {
     }
 
     static preload(scene: Scene) {
-        scene.load.image("platform", "assets/star.png");
+        scene.load.image("platform", "assets/logo.png");
     }
 
     create() {
