@@ -34,6 +34,13 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'logo.png');
         this.load.image('star', 'star.png');
+        this.load.image('play', 'play.png');
+        this.load.image('inventory', 'inventory.png');
+        this.load.image('achieve', 'achieve.png');
+        this.load.image('settings', 'settings.png');
+        this.load.image('setting', 'setting.png');
+        this.load.image('back', 'back.png');
+
     }
 
     create ()
