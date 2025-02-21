@@ -1,14 +1,14 @@
 import { Scene } from "phaser";
 
 export class Player {
-    private jumpForce: number;
-    private jumpCount: number;
-    private maxJumps: number;
+    //private jumpForce: number;
+    //private jumpCount: number;
+    //private maxJumps: number;
 
     constructor(
-        scene: Scene,
-        x: number,
-        y: number
+        //scene: Scene,
+        //x: number,
+        //y: number
         //jumpForce: number = -330,
         //maxJumps: number = 2 // Allow double jumps
     ) {}
@@ -41,9 +41,9 @@ export class Player {
     //     }
     // }
 
-    resetJumpCount() {
-        this.jumpCount = 0;
-    }
+    // resetJumpCount() {
+    //     this.jumpCount = 0;
+    // }
 
     fireGun() {
         console.log("Fire gun");
