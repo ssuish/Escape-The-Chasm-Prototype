@@ -27,17 +27,17 @@ export class PlayerController {
 
     update() {
         if (this.cursors.left.isDown) {
-            this.player.moveLeft();
+            //this.player.moveLeft();
             console.log("[A] is clicked.");
         } else if (this.cursors.right.isDown) {
-            this.player.moveRight();
+            //this.player.moveRight();
             console.log("[D] is clicked.");
         } else {
-            this.player.setVelocityX(0);
+            //this.player.setVelocityX(0);
         }
 
         if (this.cursors.up.isDown) {
-            this.player.jump();
+            //this.player.jump();
             console.log("[SPACE] is clicked.");
         }
 

@@ -1,0 +1,14 @@
+{ "columns":14,
+ "image":"\/\/wsl.localhost\/Ubuntu\/home\/ssuish\/projects\/phaser-react\/public\/assets\/tileset\/platformerPack_industrial_tilesheet.png",
+ "imageheight":560,
+ "imagewidth":980,
+ "margin":0,
+ "name":"industrial_tilesheet",
+ "spacing":0,
+ "tilecount":112,
+ "tiledversion":"1.11.2",
+ "tileheight":70,
+ "tilewidth":70,
+ "type":"tileset",
+ "version":"1.10"
+}
