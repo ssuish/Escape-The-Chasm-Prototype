@@ -1,10 +1,10 @@
 import { GameObjects, Scene } from "phaser";
 import { EventBus } from "../EventBus";
-import { PlayButton, UIButton } from "../UIComponents/UIButton";
+import { AchievementsButton, InventoryButton, PlayButton, SettingsButton} from "../UIComponents/UIButton";
 
 export class MainMenu extends Scene {
     background: GameObjects.Image;
-    //logo: GameObjects.Image;
+    logo: GameObjects.Image;
     title: GameObjects.Text;
     logoTween: Phaser.Tweens.Tween | null;
     spawnButton: GameObjects.Text;
@@ -20,34 +20,22 @@ export class MainMenu extends Scene {
             this.sys.canvas.height
         );
 
-        //this.logo = this.add.image(512, 300, "logo").setDepth(100);
-
-        this.title = this.add
-            .text(512, 300, "Escape the Chasm", {
-                fontFamily: "Arial Black",
-                fontSize: 48,
-                color: "#ffffff",
-                stroke: "#000000",
-                strokeThickness: 8,
-                align: "center",
-            })
-            .setOrigin(0.5)
-            .setDepth(100);
+        this.logo = this.add.image(512, 250, "escape").setDepth(100);
 
         // Create buttons to switch scenes
         new PlayButton(this, 512, 450, () => {
             this.changeScene("LevelSelection");
         });
 
-        new UIButton(this, 512, 500, "Inventory", () => {
+        new InventoryButton(this, 512, 520, () => {
             this.changeScene("Inventory");
         });
 
-        new UIButton(this, 512, 550, "Achievements", () => {
+        new AchievementsButton(this, 512, 590, () => {
             this.changeScene("Achievements");
         });
 
-        new UIButton(this, 512, 600, "Settings", () => {
+        new SettingsButton(this, 512, 660, () => {
             this.changeScene("Settings");
         });
 

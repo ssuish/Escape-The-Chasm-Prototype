@@ -9,6 +9,7 @@ import { LevelSelection } from "./scenes/LevelSelection";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { gameConfig } from "./config/gameConfig";
+import { Settings } from "./scenes/Settings";
 
 // TODO: Replace MainGame to LevelSelection
 // Always add new scenes here!
@@ -28,6 +29,7 @@ const config: Phaser.Types.Core.GameConfig = {
         Inventory,
         Achievements,
         GameSettings,
+        Settings
     ],
     physics: {
         default: "matter",
@@ -39,7 +41,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent, scene: MainGame });
+    return new Game({ ...config, parent});
 };
 
 export default StartGame;

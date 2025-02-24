@@ -1,6 +1,7 @@
 import { GameObjects, Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { LevelSelectButton } from "../UIComponents/LevelSelectorButton";
+import { BackButton } from "../UIComponents/UIButton";
 
 // Import all levels dynamically
 //const levels = require(`../levels/${}`);
@@ -27,6 +28,10 @@ export class LevelSelection extends Scene {
             })
             .setOrigin(0.5);
         
+        new BackButton(this, 50, 50, () => {
+            this.changeScene("MainMenu");
+        });
+
         new LevelSelectButton(this, 512, 400, () => {
             this.changeScene("../levels/level1.ts");
         });

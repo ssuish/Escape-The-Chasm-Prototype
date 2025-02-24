@@ -2,13 +2,13 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { BackButton } from "../UIComponents/UIButton";
 
-export class Achievements extends Scene {
+export class Settings extends Scene {
     constructor() {
-        super("Achievements");
+        super("Settings");
     }
 
     create() {
-        this.add.text(100, 100, "Achievements", {
+        this.add.text(100, 100, "Settings", {
             fontSize: "32px",
             color: "#fff",
         });
@@ -18,6 +18,7 @@ export class Achievements extends Scene {
             this.changeScene("MainMenu");
         });
     }
+    
     changeScene(scene: string) {
         this.scene.start(scene);
     }
