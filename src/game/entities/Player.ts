@@ -1,38 +1,49 @@
-import { Scene, Physics } from "phaser";
+import { Scene } from "phaser";
 
-export class Player extends Physics.Arcade.Sprite {
-    body: Physics.Arcade.Body;
+export class Player {
+    //private jumpForce: number;
+    //private jumpCount: number;
+    //private maxJumps: number;
 
-    constructor(scene: Scene, x: number, y: number) {
-        super(scene, x, y, "player");
-        scene.add.existing(this);
-
-        if (!scene.physics) {
-            throw new Error("Physics system not found in the scene");
-        }
-        scene.physics.add.existing(this);
-
-        this.body = this.body as Physics.Arcade.Body;
-        this.setCollideWorldBounds(true);
-    }
+    constructor(
+        //scene: Scene,
+        //x: number,
+        //y: number
+        //jumpForce: number = -330,
+        //maxJumps: number = 2 // Allow double jumps
+    ) {}
 
     static preload(scene: Scene) {
-        scene.load.image("player", "assets/star.png");
+        scene.load
+            .atlas(
+                "player",
+                "/player/player_placeholder.png",
+                "/player/player_placeholder.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            });
     }
 
-    moveLeft() {
-        this.setVelocityX(-160);
-    }
+    // moveLeft() {
+    //     this.setVelocityX(-160);
+    // }
 
-    moveRight() {
-        this.setVelocityX(160);
-    }
+    // moveRight() {
+    //     this.setVelocityX(160);
+    // }
 
-    jump() {
-        if (this.body && this.body.touching.down) {
-            this.setVelocityY(-330);
-        }
-    }
+    // jump() {
+    //     if (this.jumpCount < this.maxJumps) {
+    //         console.log(this.jumpCount);
+    //         this.setVelocityY(this.jumpForce);
+    //         this.jumpCount++;
+    //     }
+    // }
+
+    // resetJumpCount() {
+    //     this.jumpCount = 0;
+    // }
 
     fireGun() {
         console.log("Fire gun");
@@ -46,3 +57,4 @@ export class Player extends Physics.Arcade.Sprite {
         console.log("Pause game");
     }
 }
+

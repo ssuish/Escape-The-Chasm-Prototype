@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Custom Ignores
+/public/assets/player_placeholder/*
+/public/assets/tiles_placeholder/*
