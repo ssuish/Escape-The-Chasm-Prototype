@@ -1,5 +1,5 @@
 import { Scene, Input } from "phaser";
-import { Player } from "./Player";
+import { EventBus } from "../EventBus";
 
 export class PlayerController {
     private cursors: {
@@ -10,10 +10,8 @@ export class PlayerController {
     private fireKey: Input.Keyboard.Key;
     private interactKey: Input.Keyboard.Key;
     private pauseKey: Input.Keyboard.Key;
-    player: Player;
 
-    constructor(scene: Scene, player: Player) {
-        this.player = player;
+    constructor(scene: Scene) {
         if (scene.input.keyboard) {
             this.cursors = {
                 left: scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.A),
@@ -37,32 +35,31 @@ export class PlayerController {
 
     update() {
         if (this.cursors.left.isDown) {
-            this.player.moveLeft();
+            EventBus.emit("player-move-left");
         } else if (this.cursors.right.isDown) {
-            this.player.moveRight();
+            EventBus.emit("player-move-right");
         } else {
-            this.player.idle();
+            EventBus.emit("player-idle");
         }
 
         if (this.cursors.up.isDown) {
-            this.player.jump();
+            EventBus.emit("player-jump");
             console.log("[SPACE] is clicked.");
         }
 
         if (this.fireKey.isDown) {
-            this.player.fireGun();
+            EventBus.emit("player-fire");
             console.log("[J] is clicked.");
         }
 
         if (this.interactKey.isDown) {
-            this.player.interact();
+            EventBus.emit("player-interact");
             console.log("[K] is clicked.");
         }
 
         if (this.pauseKey.isDown) {
-            this.player.pauseGame();
+            EventBus.emit("player-pause");
             console.log("[L] is clicked.");
         }
     }
 }
-

@@ -1,4 +1,5 @@
 import { Scene, Physics } from "phaser";
+import { EventBus } from "../EventBus";
 import { gameConfig } from "../config/gameConfig";
 
 export class Player extends Physics.Matter.Sprite {
@@ -18,6 +19,18 @@ export class Player extends Physics.Matter.Sprite {
         this.jumpForce = gameConfig.jumpForce; // Adjust jump force as needed
 
         scene.add.existing(this);
+
+        this.registerEventListeners();
+    }
+
+    private registerEventListeners() {
+        EventBus.on("player-move-left", this.moveLeft.bind(this));
+        EventBus.on("player-move-right", this.moveRight.bind(this));
+        EventBus.on("player-idle", this.idle.bind(this));
+        EventBus.on("player-jump", this.jump.bind(this));
+        EventBus.on("player-fire", this.fireGun.bind(this));
+        EventBus.on("player-interact", this.interact.bind(this));
+        EventBus.on("player-pause", this.pauseGame.bind(this));
     }
 
     static preload(scene: Scene) {
@@ -88,4 +101,3 @@ export class Player extends Physics.Matter.Sprite {
         console.log("Pause game");
     }
 }
-

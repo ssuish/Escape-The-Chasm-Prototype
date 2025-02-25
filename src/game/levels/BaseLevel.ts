@@ -101,7 +101,7 @@ export class BaseLevel extends Scene {
             this.player.setFixedRotation();
 
             // Player Controls
-            this.playerController = new PlayerController(this, this.player);
+            this.playerController = new PlayerController(this);
             this.player.setOnCollide((data: MatterJS.ICollisionPair) => {
                 if (this.player) {
                     this.player.isTouchingGround = true;
