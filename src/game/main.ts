@@ -29,19 +29,20 @@ const config: Phaser.Types.Core.GameConfig = {
         Inventory,
         Achievements,
         GameSettings,
-        Settings
+        Settings,
     ],
     physics: {
         default: "matter",
         matter: {
             debug: true,
-        }
+        },
     },
+    scale: gameConfig.scale,
 };
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent});
+    return new Game({ ...config, parent, scene: MainGame });
 };
 
 export default StartGame;

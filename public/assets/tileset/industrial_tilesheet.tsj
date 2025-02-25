@@ -1,5 +1,5 @@
 { "columns":14,
- "image":"\/\/wsl.localhost\/Ubuntu\/home\/ssuish\/projects\/phaser-react\/public\/assets\/tileset\/platformerPack_industrial_tilesheet.png",
+ "image":"platformerPack_industrial_tilesheet.png",
  "imageheight":560,
  "imagewidth":980,
  "margin":0,
@@ -8,6 +8,43 @@
  "tilecount":112,
  "tiledversion":"1.11.2",
  "tileheight":70,
+ "tiles":[
+        {
+         "id":4,
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }]
+        }, 
+        {
+         "id":58,
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }]
+        }, 
+        {
+         "id":59,
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }]
+        }, 
+        {
+         "id":60,
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }]
+        }],
  "tilewidth":70,
  "type":"tileset",
  "version":"1.10"

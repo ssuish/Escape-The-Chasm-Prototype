@@ -1,10 +1,12 @@
 import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
+import { gameConfig } from "../config/gameConfig";
 
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
+    player: Player;
 
     constructor(levelName: string) {
         super(levelName);
@@ -12,7 +14,7 @@ export class BaseLevel extends Scene {
     }
 
     preload() {
-        this.load.setPath("/public/assets/");
+        this.load.setPath("/assets/");
 
         Player.preload(this);
 
@@ -36,6 +38,8 @@ export class BaseLevel extends Scene {
     }
 
     create() {
+        this.load.setPath("assets");
+
         const map = this.make.tilemap({ key: "tilemap" });
         const tileset = map.addTilesetImage(
             "industrial_tilesheet",
@@ -52,22 +56,46 @@ export class BaseLevel extends Scene {
                 this.matter.world.convertTilemapLayer(wall);
             }
             if (elevator) {
+                elevator.setCollisionByProperty({ collides: true });
                 this.matter.world.convertTilemapLayer(elevator);
+            } else {
+                console.error("Failed to create Elevator layer");
             }
         } else {
             console.error("Tileset is null");
         }
 
+        // Camera Settings
         const mapHeight = map.heightInPixels;
-        this.cameras.main.scrollY = mapHeight - this.cameras.main.height + 25;
+        this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
 
         const { width, height } = this.scale;
 
-        this.matter.add.sprite(width * 0.5, height * 5, "player");
+        // Instantiate the Player class and create animations
+        this.player = new Player(
+            this,
+            width * 0.5,
+            height * 0.5,
+            "player",
+            gameConfig.playerSpeed
+        );
+
+        this.player.createAnimation(this);
+
+        // Create the player with a Matter.js body
+        this.player.setRectangle(this.player.width, this.player.height);
+        this.player.setFixedRotation();
+
+        // Player Controls
+        this.playerController = new PlayerController(this, this.player);
+
+        // Player Animations
+        this.player.play("idle");
     }
 
     update() {
-        //this.playerController.update();
+        this.playerController.update();
     }
 }
+
 
