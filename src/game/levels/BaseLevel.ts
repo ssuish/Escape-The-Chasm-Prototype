@@ -6,7 +6,7 @@ import { gameConfig } from "../config/gameConfig";
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
-    player: Player;
+    player?: Player;
 
     constructor(levelName: string) {
         super(levelName);
@@ -46,6 +46,9 @@ export class BaseLevel extends Scene {
             "tilesheet"
         );
 
+        let spawnX = this.scale.width / 2;
+        let spawnY = this.scale.height / 2;
+
         if (tileset) {
             const wall = map.createLayer("Wall", tileset);
             const elevator = map.createLayer("Elevator", tileset);
@@ -61,41 +64,57 @@ export class BaseLevel extends Scene {
             } else {
                 console.error("Failed to create Elevator layer");
             }
+
+            const objectsLayer = map.getObjectLayer("objects");
+
+            if (objectsLayer) {
+                objectsLayer.objects.forEach((objData) => {
+                    const { x = 0, y = 0, name } = objData;
+                    if (name === "spawner") {
+                        spawnX = x;
+                        spawnY = y;
+                    }
+                });
+            }
         } else {
             console.error("Tileset is null");
         }
+
+        // Instantiate the Player class and create animations
+        this.player = new Player(
+            this,
+            spawnX,
+            spawnY,
+            "player",
+            gameConfig.playerSpeed
+        );
 
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
 
-        const { width, height } = this.scale;
+        if (this.player) {
+            this.player.createAnimation(this);
 
-        // Instantiate the Player class and create animations
-        this.player = new Player(
-            this,
-            width * 0.5,
-            height * 0.5,
-            "player",
-            gameConfig.playerSpeed
-        );
+            // Create the player with a Matter.js body
+            this.player.setRectangle(this.player.width, this.player.height);
+            this.player.setFixedRotation();
 
-        this.player.createAnimation(this);
+            // Player Controls
+            this.playerController = new PlayerController(this, this.player);
+            this.player.setOnCollide((data: MatterJS.ICollisionPair) => {
+                if (this.player) {
+                    this.player.isTouchingGround = true;
+                }
+            });
 
-        // Create the player with a Matter.js body
-        this.player.setRectangle(this.player.width, this.player.height);
-        this.player.setFixedRotation();
-
-        // Player Controls
-        this.playerController = new PlayerController(this, this.player);
-
-        // Player Animations
-        this.player.play("idle");
+            // Player Animations
+            this.player.play("idle");
+        }
     }
 
     update() {
         this.playerController.update();
     }
 }
-
 

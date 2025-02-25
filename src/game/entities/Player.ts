@@ -1,11 +1,10 @@
 import { Scene, Physics } from "phaser";
+import { gameConfig } from "../config/gameConfig";
 
 export class Player extends Physics.Matter.Sprite {
     private jumpForce: number;
-    private jumpCount: number;
-    private maxJumps: number;
     private speed: number;
-    private isTouchingGround: boolean = false;
+    isTouchingGround: boolean = false;
 
     constructor(
         scene: Scene,
@@ -16,23 +15,7 @@ export class Player extends Physics.Matter.Sprite {
     ) {
         super(scene.matter.world, x, y, texture);
         this.speed = speed;
-        this.jumpForce = -10; // Adjust jump force as needed
-        this.maxJumps = 2;
-        this.jumpCount = 0;
-
-        // TODO: State machine should be build
-        // Add collision event to reset jump count when landing
-        this.setOnCollide(
-            (data: Phaser.Types.Physics.Matter.MatterCollisionData) => {
-                console.log("Collision detected");
-                if (data.bodyA.isSensor || data.bodyB.isSensor) {
-                    console.log("Collision with sensor, ignoring");
-                    return; // Ignore sensor collisions
-                }
-                console.log("Resetting jump count");
-                this.resetJumpCount();
-            }
-        );
+        this.jumpForce = gameConfig.jumpForce; // Adjust jump force as needed
 
         scene.add.existing(this);
     }
@@ -68,15 +51,10 @@ export class Player extends Physics.Matter.Sprite {
     }
 
     jump() {
-        if (this.jumpCount < this.maxJumps) {
-            console.log(this.jumpCount);
+        if (this.isTouchingGround) {
             this.setVelocityY(this.jumpForce);
-            this.jumpCount++;
+            this.isTouchingGround = false;
         }
-    }
-
-    resetJumpCount() {
-        this.jumpCount = 0;
     }
 
     createAnimation(scene: Scene) {

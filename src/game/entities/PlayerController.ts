@@ -38,10 +38,8 @@ export class PlayerController {
     update() {
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
-            console.log("[A] is clicked.");
         } else if (this.cursors.right.isDown) {
             this.player.moveRight();
-            console.log("[D] is clicked.");
         } else {
             this.player.idle();
         }
