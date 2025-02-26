@@ -1,20 +1,82 @@
 import { Scene, Physics } from "phaser";
-import { EventBus } from "../EventBus";
 import { gameConfig } from "../config/gameConfig";
+import StateMachine from "../logic/StateMachine";
 
 export class Player {
     private jumpForce: number;
     private speed: number;
     private sprite: Physics.Matter.Sprite;
-    isTouchingGround: boolean = false;
+    private stateMachine: StateMachine;
+    private isTouchingGround: boolean = false;
 
     constructor(sprite: Physics.Matter.Sprite) {
         this.sprite = sprite;
         this.speed = gameConfig.playerSpeed;
-        this.jumpForce = gameConfig.jumpForce * 1.5; // Adjust jump force as needed
+        this.jumpForce = gameConfig.jumpForce * 1.5;
 
+        this.stateMachine = new StateMachine(this, "player");
+        this.stateMachine
+            .addState("idle", {
+                onEnter: this.idleOnEnter,
+            })
+            .addState("walk", {
+                onEnter: this.walkOnEnter,
+            })
+            .addState("jump", {
+                onEnter: this.jumpOnEnter,
+            })
+            .addState("fire", {
+                onEnter: this.fireOnEnter,
+            })
+            .addState("interact", {
+                onEnter: this.interactOnEnter,
+            })
+            .addState("pause", {
+                onEnter: this.pauseOnEnter,
+            })
+            .setState("idle");
+
+        this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
+            const { bodyA, bodyB } = data;
+            if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
+                this.isTouchingGround = true;
+                if (
+                    this.stateMachine.isCurrentState("jump")
+                ) {
+                    this.stateMachine.setState("idle");
+                }
+            }
+        });
+
+        this.sprite.setFixedRotation();
         this.createAnimation();
-        this.registerEventListeners();
+    }
+
+    private idleOnEnter() {
+        this.sprite.play("idle");
+    }
+
+    private walkOnEnter() {
+        this.sprite.play("walk");
+    }
+
+    private jumpOnEnter() {
+        if (this.isTouchingGround) {
+            this.sprite.setVelocityY(this.jumpForce);
+            this.isTouchingGround = false;
+        }
+    }
+
+    private fireOnEnter() {
+        console.log("Fire gun");
+    }
+
+    private interactOnEnter() {
+        console.log("Interact");
+    }
+
+    private pauseOnEnter() {
+        console.log("Pause game");
     }
 
     private createAnimation() {
@@ -36,24 +98,6 @@ export class Player {
         });
     }
 
-    private registerEventListeners() {
-        EventBus.on("player-move-left", this.moveLeft.bind(this));
-        EventBus.on("player-move-right", this.moveRight.bind(this));
-        EventBus.on("player-idle", this.idle.bind(this));
-        EventBus.on("player-jump", this.jump.bind(this));
-        EventBus.on("player-fire", this.fireGun.bind(this));
-        EventBus.on("player-interact", this.interact.bind(this));
-        EventBus.on("player-pause", this.pauseGame.bind(this));
-    }
-
-    private checkSprite() {
-        if (!this.sprite) {
-            console.error("Player sprite is not defined");
-            return false;
-        }
-        return true;
-    }
-
     static preload(scene: Scene) {
         scene.load.setPath("assets");
         scene.load
@@ -68,45 +112,48 @@ export class Player {
     }
 
     moveLeft() {
-        if (this.checkSprite()) {
+        if (this.sprite) {
             this.sprite.flipX = true;
             this.sprite.setVelocityX(-this.speed);
-            this.sprite.play("walk", true);
+            this.stateMachine.setState("walk");
         }
     }
 
     moveRight() {
-        if (this.checkSprite()) {
+        if (this.sprite) {
             this.sprite.flipX = false;
             this.sprite.setVelocityX(this.speed);
-            this.sprite.play("walk", true);
+            this.stateMachine.setState("walk");
         }
     }
 
     idle() {
-        if (this.checkSprite()) {
+        if (this.sprite) {
             this.sprite.setVelocityX(0);
-            this.sprite.play("idle", true);
+            this.stateMachine.setState("idle");
         }
     }
 
     jump() {
-        if (this.checkSprite() && this.isTouchingGround) {
-            this.sprite.setVelocityY(this.jumpForce);
-            this.isTouchingGround = false;
+        if (this.isTouchingGround) {
+            this.stateMachine.setState("jump");
         }
     }
 
     fireGun() {
-        console.log("Fire gun");
+        this.stateMachine.setState("fire");
     }
 
     interact() {
-        console.log("Interact");
+        this.stateMachine.setState("interact");
     }
 
     pauseGame() {
-        console.log("Pause game");
+        this.stateMachine.setState("pause");
+    }
+
+    update(deltaTime: number) {
+        this.stateMachine.update(deltaTime);
     }
 }
 

@@ -53,6 +53,11 @@ export default class StateMachine {
             this.currentState.onExit();
         }
 
+        // Error logging on states switching
+        if (this.currentState?.name !== name) {
+            console.log(`Switching state to: ${name}`);
+        }
+
         this.currentState = this.states.get(name);
 
         if (this.currentState?.onEnter) {
@@ -80,4 +85,3 @@ export default class StateMachine {
         }
     }
 }
-

@@ -82,32 +82,22 @@ export class BaseLevel extends Scene {
         const playerSprite = this.matter.add.sprite(spawnX, spawnY, "player");
 
         this.matter.world.setGravity(0, 2);
-        
+
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
+        
         // Instantiate the Player class
         this.player = new Player(playerSprite);
 
         if (this.player) {
-            playerSprite.setFixedRotation();
-
             // Player Controls
             this.playerController = new PlayerController(this, this.player);
-
-            // Player Collision
-            playerSprite.setOnCollide((data: MatterJS.ICollisionPair) => {
-                this.player!.isTouchingGround = true;
-            });
-
-            // Player Animations
-            this.player.idle();
         }
     }
 
-    update() {
-        this.playerController.update();
+    update(deltaTime: number) {
+        this.playerController.update(deltaTime);
     }
 }
-
 

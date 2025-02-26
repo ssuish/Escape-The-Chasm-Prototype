@@ -36,12 +36,12 @@ export class PlayerController {
         }
     }
 
-    update() {
+    update(deltaTime: number) {
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
         } else if (this.cursors.right.isDown) {
             this.player.moveRight();
-        } else {
+        } else if (!this.cursors.up.isDown) {
             this.player.idle();
         }
 
@@ -63,5 +63,8 @@ export class PlayerController {
             this.player.pauseGame();
             console.log("[L] is clicked.");
         }
+
+        this.player.update(deltaTime);
     }
 }
+
