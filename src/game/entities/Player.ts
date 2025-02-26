@@ -2,25 +2,38 @@ import { Scene, Physics } from "phaser";
 import { EventBus } from "../EventBus";
 import { gameConfig } from "../config/gameConfig";
 
-export class Player extends Physics.Matter.Sprite {
+export class Player {
     private jumpForce: number;
     private speed: number;
+    private sprite: Physics.Matter.Sprite;
     isTouchingGround: boolean = false;
 
-    constructor(
-        scene: Scene,
-        x: number,
-        y: number,
-        texture: string,
-        speed: number
-    ) {
-        super(scene.matter.world, x, y, texture);
-        this.speed = speed;
-        this.jumpForce = gameConfig.jumpForce; // Adjust jump force as needed
+    constructor(sprite: Physics.Matter.Sprite) {
+        this.sprite = sprite;
+        this.speed = gameConfig.playerSpeed;
+        this.jumpForce = gameConfig.jumpForce * 1.5; // Adjust jump force as needed
 
-        scene.add.existing(this);
-
+        this.createAnimation();
         this.registerEventListeners();
+    }
+
+    private createAnimation() {
+        this.sprite.anims.create({
+            key: "idle",
+            frames: [{ key: "player", frame: "penguin_walk01.png" }],
+        });
+
+        this.sprite.anims.create({
+            key: "walk",
+            frames: this.sprite.anims.generateFrameNames("player", {
+                prefix: "penguin_walk0",
+                start: 1,
+                end: 4,
+                suffix: ".png",
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
     }
 
     private registerEventListeners() {
@@ -31,6 +44,14 @@ export class Player extends Physics.Matter.Sprite {
         EventBus.on("player-fire", this.fireGun.bind(this));
         EventBus.on("player-interact", this.interact.bind(this));
         EventBus.on("player-pause", this.pauseGame.bind(this));
+    }
+
+    private checkSprite() {
+        if (!this.sprite) {
+            console.error("Player sprite is not defined");
+            return false;
+        }
+        return true;
     }
 
     static preload(scene: Scene) {
@@ -47,46 +68,33 @@ export class Player extends Physics.Matter.Sprite {
     }
 
     moveLeft() {
-        this.flipX = true;
-        this.setVelocityX(-this.speed);
-        this.play("walk", true);
-    }
-
-    moveRight() {
-        this.flipX = false;
-        this.setVelocityX(this.speed);
-        this.play("walk", true);
-    }
-
-    idle() {
-        this.setVelocityX(0);
-        this.play("idle", true);
-    }
-
-    jump() {
-        if (this.isTouchingGround) {
-            this.setVelocityY(this.jumpForce);
-            this.isTouchingGround = false;
+        if (this.checkSprite()) {
+            this.sprite.flipX = true;
+            this.sprite.setVelocityX(-this.speed);
+            this.sprite.play("walk", true);
         }
     }
 
-    createAnimation(scene: Scene) {
-        scene.anims.create({
-            key: "idle",
-            frames: [{ key: "player", frame: "penguin_walk01.png" }],
-        });
+    moveRight() {
+        if (this.checkSprite()) {
+            this.sprite.flipX = false;
+            this.sprite.setVelocityX(this.speed);
+            this.sprite.play("walk", true);
+        }
+    }
 
-        scene.anims.create({
-            key: "walk",
-            frames: scene.anims.generateFrameNames("player", {
-                prefix: "penguin_walk0",
-                start: 1,
-                end: 4,
-                suffix: ".png",
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
+    idle() {
+        if (this.checkSprite()) {
+            this.sprite.setVelocityX(0);
+            this.sprite.play("idle", true);
+        }
+    }
+
+    jump() {
+        if (this.checkSprite() && this.isTouchingGround) {
+            this.sprite.setVelocityY(this.jumpForce);
+            this.isTouchingGround = false;
+        }
     }
 
     fireGun() {
@@ -101,3 +109,4 @@ export class Player extends Physics.Matter.Sprite {
         console.log("Pause game");
     }
 }
+

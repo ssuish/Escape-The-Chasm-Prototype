@@ -1,7 +1,6 @@
 import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
-import { gameConfig } from "../config/gameConfig";
 
 export class BaseLevel extends Scene {
     levelName: string;
@@ -80,36 +79,29 @@ export class BaseLevel extends Scene {
             console.error("Tileset is null");
         }
 
-        // Instantiate the Player class and create animations
-        this.player = new Player(
-            this,
-            spawnX,
-            spawnY,
-            "player",
-            gameConfig.playerSpeed
-        );
+        const playerSprite = this.matter.add.sprite(spawnX, spawnY, "player");
 
+        this.matter.world.setGravity(0, 2);
+        
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
+        // Instantiate the Player class
+        this.player = new Player(playerSprite);
 
         if (this.player) {
-            this.player.createAnimation(this);
-
-            // Create the player with a Matter.js body
-            this.player.setRectangle(this.player.width, this.player.height);
-            this.player.setFixedRotation();
+            playerSprite.setFixedRotation();
 
             // Player Controls
-            this.playerController = new PlayerController(this);
-            this.player.setOnCollide((data: MatterJS.ICollisionPair) => {
-                if (this.player) {
-                    this.player.isTouchingGround = true;
-                }
+            this.playerController = new PlayerController(this, this.player);
+
+            // Player Collision
+            playerSprite.setOnCollide((data: MatterJS.ICollisionPair) => {
+                this.player!.isTouchingGround = true;
             });
 
             // Player Animations
-            this.player.play("idle");
+            this.player.idle();
         }
     }
 
@@ -117,4 +109,5 @@ export class BaseLevel extends Scene {
         this.playerController.update();
     }
 }
+
 
