@@ -1,6 +1,7 @@
 import { Scene, Physics } from "phaser";
 import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
+import { ProjectilePool } from "./ProjectilePool";
 
 export class Player {
     private jumpForce: number;
@@ -8,6 +9,9 @@ export class Player {
     private sprite: Physics.Matter.Sprite;
     private stateMachine: StateMachine;
     private isTouchingGround: boolean = false;
+    private projectilePool: ProjectilePool;
+    private fireCooldown: number = 500;
+    private lastFireTime: number = 0;
 
     constructor(sprite: Physics.Matter.Sprite) {
         this.sprite = sprite;
@@ -36,13 +40,13 @@ export class Player {
             })
             .setState("idle");
 
+        this.projectilePool = new ProjectilePool(this.sprite.scene, 5);
+
         this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
             const { bodyA, bodyB } = data;
             if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
                 this.isTouchingGround = true;
-                if (
-                    this.stateMachine.isCurrentState("jump")
-                ) {
+                if (this.stateMachine.isCurrentState("jump")) {
                     this.stateMachine.setState("idle");
                 }
             }
@@ -53,11 +57,11 @@ export class Player {
     }
 
     private idleOnEnter() {
-        this.sprite.play("idle");
+        this.sprite.play("idle", true);
     }
 
     private walkOnEnter() {
-        this.sprite.play("walk");
+        this.sprite.play("walk", true);
     }
 
     private jumpOnEnter() {
@@ -67,8 +71,18 @@ export class Player {
         }
     }
 
+    // TODO: Fix sprite projectile renderer and physics
     private fireOnEnter() {
-        console.log("Fire gun");
+        const projectile = this.projectilePool.getProjectile();
+        if (projectile) {
+            const facingLeft = this.sprite.flipX;
+            projectile.fireFromPlayer(
+                this.sprite.x,
+                this.sprite.y,
+                facingLeft,
+                5
+            );
+        }
     }
 
     private interactOnEnter() {
@@ -109,6 +123,9 @@ export class Player {
             .on("loaderror", () => {
                 console.error(`Failed to load atlas.`);
             });
+        scene.load.image("projectile", "star.png").on("loaderror", () => {
+            console.error(`Failed to load sprite.`);
+        });
     }
 
     moveLeft() {
@@ -141,7 +158,11 @@ export class Player {
     }
 
     fireGun() {
-        this.stateMachine.setState("fire");
+        const currentTime = this.sprite.scene.time.now;
+        if (currentTime - this.lastFireTime > this.fireCooldown) {
+            this.stateMachine.setState("fire");
+            this.lastFireTime = currentTime;
+        }
     }
 
     interact() {
@@ -154,6 +175,7 @@ export class Player {
 
     update(deltaTime: number) {
         this.stateMachine.update(deltaTime);
+        this.projectilePool.update();
     }
 }
 

@@ -86,7 +86,7 @@ export class BaseLevel extends Scene {
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
-        
+
         // Instantiate the Player class
         this.player = new Player(playerSprite);
 
