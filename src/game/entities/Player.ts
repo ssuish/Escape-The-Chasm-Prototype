@@ -1,19 +1,119 @@
-import { Scene } from "phaser";
+import { Scene, Physics } from "phaser";
+import { gameConfig } from "../config/gameConfig";
+import StateMachine from "../logic/StateMachine";
+import { ProjectilePool } from "./ProjectilePool";
 
 export class Player {
-    //private jumpForce: number;
-    //private jumpCount: number;
-    //private maxJumps: number;
+    private jumpForce: number;
+    private speed: number;
+    private sprite: Physics.Matter.Sprite;
+    private stateMachine: StateMachine;
+    private isTouchingGround: boolean = false;
+    private projectilePool: ProjectilePool;
+    private fireCooldown: number = 500;
+    private lastFireTime: number = 0;
 
-    constructor(
-        //scene: Scene,
-        //x: number,
-        //y: number
-        //jumpForce: number = -330,
-        //maxJumps: number = 2 // Allow double jumps
-    ) {}
+    constructor(sprite: Physics.Matter.Sprite) {
+        this.sprite = sprite;
+        this.speed = gameConfig.playerSpeed;
+        this.jumpForce = gameConfig.jumpForce * 1.5;
+
+        this.stateMachine = new StateMachine(this, "player");
+        this.stateMachine
+            .addState("idle", {
+                onEnter: this.idleOnEnter,
+            })
+            .addState("walk", {
+                onEnter: this.walkOnEnter,
+            })
+            .addState("jump", {
+                onEnter: this.jumpOnEnter,
+            })
+            .addState("fire", {
+                onEnter: this.fireOnEnter,
+            })
+            .addState("interact", {
+                onEnter: this.interactOnEnter,
+            })
+            .addState("pause", {
+                onEnter: this.pauseOnEnter,
+            })
+            .setState("idle");
+
+        this.projectilePool = new ProjectilePool(this.sprite.scene, 5);
+
+        this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
+            const { bodyA, bodyB } = data;
+            if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
+                this.isTouchingGround = true;
+                if (this.stateMachine.isCurrentState("jump")) {
+                    this.stateMachine.setState("idle");
+                }
+            }
+        });
+
+        this.sprite.setFixedRotation();
+        this.createAnimation();
+    }
+
+    private idleOnEnter() {
+        this.sprite.play("idle", true);
+    }
+
+    private walkOnEnter() {
+        this.sprite.play("walk", true);
+    }
+
+    private jumpOnEnter() {
+        if (this.isTouchingGround) {
+            this.sprite.setVelocityY(this.jumpForce);
+            this.isTouchingGround = false;
+        }
+    }
+
+    // TODO: Fix sprite projectile renderer and physics
+    private fireOnEnter() {
+        const projectile = this.projectilePool.getProjectile();
+        if (projectile) {
+            const facingLeft = this.sprite.flipX;
+            projectile.fireFromPlayer(
+                this.sprite.x,
+                this.sprite.y,
+                facingLeft,
+                5
+            );
+        }
+    }
+
+    private interactOnEnter() {
+        console.log("Interact");
+    }
+
+    private pauseOnEnter() {
+        console.log("Pause game");
+    }
+
+    private createAnimation() {
+        this.sprite.anims.create({
+            key: "idle",
+            frames: [{ key: "player", frame: "penguin_walk01.png" }],
+        });
+
+        this.sprite.anims.create({
+            key: "walk",
+            frames: this.sprite.anims.generateFrameNames("player", {
+                prefix: "penguin_walk0",
+                start: 1,
+                end: 4,
+                suffix: ".png",
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+    }
 
     static preload(scene: Scene) {
+        scene.load.setPath("assets");
         scene.load
             .atlas(
                 "player",
@@ -23,38 +123,59 @@ export class Player {
             .on("loaderror", () => {
                 console.error(`Failed to load atlas.`);
             });
+        scene.load.image("projectile", "star.png").on("loaderror", () => {
+            console.error(`Failed to load sprite.`);
+        });
     }
 
-    // moveLeft() {
-    //     this.setVelocityX(-160);
-    // }
+    moveLeft() {
+        if (this.sprite) {
+            this.sprite.flipX = true;
+            this.sprite.setVelocityX(-this.speed);
+            this.stateMachine.setState("walk");
+        }
+    }
 
-    // moveRight() {
-    //     this.setVelocityX(160);
-    // }
+    moveRight() {
+        if (this.sprite) {
+            this.sprite.flipX = false;
+            this.sprite.setVelocityX(this.speed);
+            this.stateMachine.setState("walk");
+        }
+    }
 
-    // jump() {
-    //     if (this.jumpCount < this.maxJumps) {
-    //         console.log(this.jumpCount);
-    //         this.setVelocityY(this.jumpForce);
-    //         this.jumpCount++;
-    //     }
-    // }
+    idle() {
+        if (this.sprite) {
+            this.sprite.setVelocityX(0);
+            this.stateMachine.setState("idle");
+        }
+    }
 
-    // resetJumpCount() {
-    //     this.jumpCount = 0;
-    // }
+    jump() {
+        if (this.isTouchingGround) {
+            this.stateMachine.setState("jump");
+        }
+    }
 
     fireGun() {
-        console.log("Fire gun");
+        const currentTime = this.sprite.scene.time.now;
+        if (currentTime - this.lastFireTime > this.fireCooldown) {
+            this.stateMachine.setState("fire");
+            this.lastFireTime = currentTime;
+        }
     }
 
     interact() {
-        console.log("Interact");
+        this.stateMachine.setState("interact");
     }
 
     pauseGame() {
-        console.log("Pause game");
+        this.stateMachine.setState("pause");
+    }
+
+    update(deltaTime: number) {
+        this.stateMachine.update(deltaTime);
+        this.projectilePool.update();
     }
 }
 
