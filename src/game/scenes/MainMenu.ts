@@ -1,6 +1,6 @@
 import { GameObjects, Scene } from "phaser";
 import { EventBus } from "../EventBus";
-import { AchievementsButton, InventoryButton, PlayButton, SettingsButton} from "../UIComponents/UIButton";
+import { AchievementsButton, MusicButton, PlayButton} from "../UIComponents/UIButton";
 
 export class MainMenu extends Scene {
     background: GameObjects.Image;
@@ -8,37 +8,29 @@ export class MainMenu extends Scene {
     title: GameObjects.Text;
     logoTween: Phaser.Tweens.Tween | null;
     spawnButton: GameObjects.Text;
+    tileSprite: GameObjects.TileSprite;
+    scrollSpeed: number;
 
     constructor() {
         super("MainMenu");
     }
 
     create() {
-        this.background = this.add.image(512, 384, "background");
-        this.background.setDisplaySize(
-            this.sys.canvas.width,
-            this.sys.canvas.height
-        );
-
+        //logo
         this.logo = this.add.image(512, 250, "escape").setDepth(100);
 
         // Create buttons to switch scenes
-        new PlayButton(this, 512, 450, () => {
+        new PlayButton(this, 512, 500, () => {
             this.changeScene("LevelSelection");
         });
 
-        new InventoryButton(this, 512, 520, () => {
-            this.changeScene("Inventory");
-        });
-
-        new AchievementsButton(this, 512, 590, () => {
+        new AchievementsButton(this, 512, 580, () => {
             this.changeScene("Achievements");
         });
 
-        new SettingsButton(this, 512, 660, () => {
-            this.changeScene("Settings");
+        new MusicButton(this, 980, 40, () => {
         });
-
+        
         EventBus.emit("current-scene-ready", this);
     }
 

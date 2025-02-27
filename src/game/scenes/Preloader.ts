@@ -26,11 +26,12 @@ export class Preloader extends Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
         this.load.image('play', 'play.png');
-        this.load.image('inventory', 'inventory.png');
         this.load.image('achieve', 'achieve.png');
-        this.load.image('settings', 'settings.png');
-        this.load.image('setting', 'setting.png');
         this.load.image('back', 'back.png');
+        this.load.image('button', 'btn-grey.png');
+        this.load.image('card1', 'card1.png');
+        this.load.image('volume-on', 'volume.png');
+        this.load.image('volume-off', 'mute.png');
     }
 
     create() {
@@ -39,6 +40,7 @@ export class Preloader extends Scene {
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start("MainMenu");
+        
     }
 }
 
