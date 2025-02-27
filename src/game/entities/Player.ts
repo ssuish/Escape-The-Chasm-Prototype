@@ -76,7 +76,7 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
-            const offsetX = facingLeft ? -25 : 25; // Adjust the offset value as needed
+            const offsetX = facingLeft ? -30 : 30 // Adjust the offset value as needed
             const offsetY = 0; // Adjust the vertical offset if needed
             projectile.fireFromPlayer(
                 this.sprite.x + offsetX,
