@@ -16,12 +16,7 @@ export class MainMenu extends Scene {
     }
 
     create() {
-        //autoscroll backgound
-        this.tileSprite = this.add.tileSprite(0, 0, 2048, 1536, 'background')
-        this.tileSprite.setTilePosition(0,0);
-        this.tileSprite.setScrollFactor(1);
-        this.scrollSpeed = 0.3;
-
+        //logo
         this.logo = this.add.image(512, 250, "escape").setDepth(100);
 
         // Create buttons to switch scenes
@@ -41,10 +36,6 @@ export class MainMenu extends Scene {
 
     changeScene(scene?: string) {
         this.scene.start(scene ?? "MainMenu");
-    }
-
-    update() {
-        this.tileSprite.tilePositionY -= this.scrollSpeed;
     }
 
     // moveLogo(vueCallback: ({ x, y }: { x: number; y: number }) => void) {

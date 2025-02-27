@@ -12,12 +12,6 @@ export class Achievements extends Scene {
     }
 
     create() {
-        //autoscroll backgound
-        this.tileSprite = this.add.tileSprite(0, 0, 2048, 1536, 'background')
-        this.tileSprite.setTilePosition(0,0);
-        this.tileSprite.setScrollFactor(1);
-        this.scrollSpeed = 0.3;
-
         new BackButton(this, 50, 50, () => {
             this.changeScene("MainMenu");
         });
@@ -29,11 +23,5 @@ export class Achievements extends Scene {
     changeScene(scene: string) {
         this.scene.start(scene);
     }
-
-    update() {
-        this.tileSprite.tilePositionY -= this.scrollSpeed;
-    }
-
-      
 }
 

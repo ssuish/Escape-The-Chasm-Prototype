@@ -7,6 +7,7 @@ import { GameSettings } from "./scenes/GameSettings";
 import { LevelSelection } from "./scenes/LevelSelection";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
+import { Background } from "./scenes/Background";
 import { gameConfig } from "./config/gameConfig";
 
 // TODO: Replace MainGame to LevelSelection
@@ -20,6 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         Boot,
         Preloader,
+        Background,
         MainMenu,
         LevelSelection,
         MainGame,
