@@ -2,7 +2,7 @@ export const gameConfig = {
     screenWidth: 1024,
     screenHeight: 768,
     playerSpeed: 5,
-    jumpForce: -10,
+    jumpForce: -12,
     maxJumps: 2,
     jumpCount: 0,
     scale: {
@@ -12,3 +12,4 @@ export const gameConfig = {
         height: 768,
     },
 } as const;
+

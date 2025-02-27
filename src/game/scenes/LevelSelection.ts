@@ -33,7 +33,7 @@ export class LevelSelection extends Scene {
         });
 
         new LevelSelectButton(this, 512, 400, () => {
-            this.changeScene("../levels/level1.ts");
+            this.changeScene("levels/Level1");
         });
 
         EventBus.emit("current-scene-ready", this);

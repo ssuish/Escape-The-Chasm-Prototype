@@ -1,12 +1,11 @@
 import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
-import { gameConfig } from "../config/gameConfig";
 
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
-    player: Player;
+    player?: Player;
 
     constructor(levelName: string) {
         super(levelName);
@@ -46,6 +45,9 @@ export class BaseLevel extends Scene {
             "tilesheet"
         );
 
+        let spawnX = this.scale.width / 2;
+        let spawnY = this.scale.height / 2;
+
         if (tileset) {
             const wall = map.createLayer("Wall", tileset);
             const elevator = map.createLayer("Elevator", tileset);
@@ -61,41 +63,41 @@ export class BaseLevel extends Scene {
             } else {
                 console.error("Failed to create Elevator layer");
             }
+
+            const objectsLayer = map.getObjectLayer("objects");
+
+            if (objectsLayer) {
+                objectsLayer.objects.forEach((objData) => {
+                    const { x = 0, y = 0, name } = objData;
+                    if (name === "spawner") {
+                        spawnX = x;
+                        spawnY = y;
+                    }
+                });
+            }
         } else {
             console.error("Tileset is null");
         }
+
+        const playerSprite = this.matter.add.sprite(spawnX, spawnY, "player");
+
+        this.matter.world.setGravity(0, 2);
 
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
 
-        const { width, height } = this.scale;
+        // Instantiate the Player class
+        this.player = new Player(playerSprite);
 
-        // Instantiate the Player class and create animations
-        this.player = new Player(
-            this,
-            width * 0.5,
-            height * 0.5,
-            "player",
-            gameConfig.playerSpeed
-        );
-
-        this.player.createAnimation(this);
-
-        // Create the player with a Matter.js body
-        this.player.setRectangle(this.player.width, this.player.height);
-        this.player.setFixedRotation();
-
-        // Player Controls
-        this.playerController = new PlayerController(this, this.player);
-
-        // Player Animations
-        this.player.play("idle");
+        if (this.player) {
+            // Player Controls
+            this.playerController = new PlayerController(this, this.player);
+        }
     }
 
-    update() {
-        this.playerController.update();
+    update(deltaTime: number) {
+        this.playerController.update(deltaTime);
     }
 }
-
 

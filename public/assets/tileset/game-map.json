@@ -83,9 +83,31 @@
          "width":15,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"Objects",
+         "objects":[
+                {
+                 "height":54,
+                 "id":1,
+                 "name":"spawner",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":51,
+                 "x":500,
+                 "y":1899
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":1,
+ "nextlayerid":7,
+ "nextobjectid":2,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

@@ -10,10 +10,11 @@ export class PlayerController {
     private fireKey: Input.Keyboard.Key;
     private interactKey: Input.Keyboard.Key;
     private pauseKey: Input.Keyboard.Key;
-    player: Player;
+    private player: Player;
 
     constructor(scene: Scene, player: Player) {
         this.player = player;
+
         if (scene.input.keyboard) {
             this.cursors = {
                 left: scene.input.keyboard.addKey(Input.Keyboard.KeyCodes.A),
@@ -35,20 +36,17 @@ export class PlayerController {
         }
     }
 
-    update() {
+    update(deltaTime: number) {
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
-            console.log("[A] is clicked.");
         } else if (this.cursors.right.isDown) {
             this.player.moveRight();
-            console.log("[D] is clicked.");
-        } else {
+        } else if (!this.cursors.up.isDown) {
             this.player.idle();
         }
 
         if (this.cursors.up.isDown) {
             this.player.jump();
-            console.log("[SPACE] is clicked.");
         }
 
         if (this.fireKey.isDown) {
@@ -65,6 +63,8 @@ export class PlayerController {
             this.player.pauseGame();
             console.log("[L] is clicked.");
         }
+
+        this.player.update(deltaTime);
     }
 }
 
