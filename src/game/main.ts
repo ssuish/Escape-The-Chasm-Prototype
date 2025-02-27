@@ -9,7 +9,7 @@ import { LevelSelection } from "./scenes/LevelSelection";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { gameConfig } from "./config/gameConfig";
-import { Settings } from "./scenes/Settings";
+import { Plugin as NineSlicePlugin } from 'phaser3-nineslice';
 
 // TODO: Replace MainGame to LevelSelection
 // Always add new scenes here!
@@ -29,13 +29,15 @@ const config: Phaser.Types.Core.GameConfig = {
         Inventory,
         Achievements,
         GameSettings,
-        Settings
     ],
     physics: {
         default: "matter",
         matter: {
             debug: true,
         }
+    },
+    plugins: {
+        global: [ NineSlicePlugin.DefaultCfg ]
     },
 };
 

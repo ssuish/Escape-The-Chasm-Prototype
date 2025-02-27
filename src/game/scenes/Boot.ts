@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 
 export class Boot extends Scene {
+    
     constructor() {
         super("Boot");
     }
@@ -14,8 +15,6 @@ export class Boot extends Scene {
         this.load.image("play", "assets/play.png");
         this.load.image("inventory", "assets/inventory.png");
         this.load.image("achieve", "assets/achieve.png");
-        this.load.image("settings", "assets/settings.png");
-        this.load.image("setting", "assets/setting.png");
         this.load.image("back", "assets/back.png");
     }
 

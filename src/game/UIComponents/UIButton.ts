@@ -5,15 +5,14 @@ import { GameObjects, Scene } from "phaser";
 // child classes should take image paramenter to make changes.
 export class UIButton extends GameObjects.Sprite {
     constructor(
-        scene: Scene,
-        x: number,
-        y: number,
-        text: string,
-        callback: () => void
+        scene: Scene, //current scene
+        x: number, //position in x axis
+        y: number, //position in y axis
+        text: string, //name ng button
+        callback: () => void //any function
     ) {
-        super(scene, x, y, text)
+        super(scene, x, y, text) 
         this.setOrigin(0.5).setInteractive();
-
         this.on("pointerdown", callback);
         this.setScale(0.5);
 
@@ -39,17 +38,11 @@ export class AchievementsButton extends UIButton {
     }
 }
 
-export class SettingsButton extends UIButton {
-    constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "settings", callback)
-    }
-}
-
-export class SettingButton extends UIButton {
-    constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "setting", callback)
-    }
-}
+//export class GearButton extends UIButton {
+//    constructor(scene: Scene, x: number, y: number, callback: () => void) {
+ //       super()
+ //  }
+//}
 
 export class BackButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {

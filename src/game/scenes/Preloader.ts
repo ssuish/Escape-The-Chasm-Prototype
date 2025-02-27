@@ -28,9 +28,10 @@ export class Preloader extends Scene {
         this.load.image('play', 'play.png');
         this.load.image('inventory', 'inventory.png');
         this.load.image('achieve', 'achieve.png');
-        this.load.image('settings', 'settings.png');
-        this.load.image('setting', 'setting.png');
+        this.load.image('gear', 'gear.png');
         this.load.image('back', 'back.png');
+        this.load.image('button', 'btn-grey.png');
+        this.load.image('check', 'check.png');
     }
 
     create() {
@@ -39,6 +40,7 @@ export class Preloader extends Scene {
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start("MainMenu");
+        
     }
 }
 
