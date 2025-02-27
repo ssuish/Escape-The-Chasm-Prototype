@@ -11,7 +11,7 @@ export class UIButton extends GameObjects.Sprite {
         text: string, //name ng button
         callback: () => void //any function
     ) {
-        super(scene, x, y, text) 
+        super(scene, x, y, text);
         this.setOrigin(0.5).setInteractive();
         this.on("pointerdown", callback);
         this.setScale(0.5);
@@ -22,31 +22,76 @@ export class UIButton extends GameObjects.Sprite {
 
 export class PlayButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "play", callback)
+        super(scene, x, y, "play", callback);
     }
 }
 
 export class InventoryButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "inventory", callback)
+        super(scene, x, y, "inventory", callback);
     }
 }
 
 export class AchievementsButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "achieve", callback)
+        super(scene, x, y, "achieve", callback);
     }
 }
 
-//export class GearButton extends UIButton {
-//    constructor(scene: Scene, x: number, y: number, callback: () => void) {
- //       super()
- //  }
-//}
+export class MusicButton extends UIButton {
+    onVolume: GameObjects.Image;
+    offVolume: GameObjects.Image;
+
+    constructor(scene: Scene, x: number, y: number, callback: () => void) {
+        super(scene, x, y, "button", callback);
+
+        this.setScale(0.9)
+
+        let offVolume = scene.add.image(980, 40, 'volume-off').setScale(0.07);
+        let onVolume = scene.add.image(980, 40, 'volume-on').setScale(0.07);
+
+        onVolume.visible = true;
+        offVolume.visible = false;
+
+        onVolume.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.setTint(0x8afbff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+                onVolume.visible = false;
+                offVolume.visible = true;
+                console.log('Music Off');
+            });
+
+        offVolume.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.setTint(0x8afbff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+                onVolume.visible = true;
+                offVolume.visible =false;
+                console.log('Music On');
+            });
+    }
+}
 
 export class BackButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "back", callback)
+        super(scene, x, y, "back", callback);
     }
 }
 

@@ -2,14 +2,12 @@ import { Boot } from "./scenes/Boot";
 import { GameOver } from "./scenes/GameOver";
 import { Level1 as MainGame } from "./levels/level1";
 import { MainMenu } from "./scenes/MainMenu";
-import { Inventory } from "./scenes/Inventory";
 import { Achievements } from "./scenes/Achievements";
 import { GameSettings } from "./scenes/GameSettings";
 import { LevelSelection } from "./scenes/LevelSelection";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { gameConfig } from "./config/gameConfig";
-import { Plugin as NineSlicePlugin } from 'phaser3-nineslice';
 
 // TODO: Replace MainGame to LevelSelection
 // Always add new scenes here!
@@ -26,7 +24,6 @@ const config: Phaser.Types.Core.GameConfig = {
         LevelSelection,
         MainGame,
         GameOver,
-        Inventory,
         Achievements,
         GameSettings,
     ],
@@ -35,9 +32,6 @@ const config: Phaser.Types.Core.GameConfig = {
         matter: {
             debug: true,
         }
-    },
-    plugins: {
-        global: [ NineSlicePlugin.DefaultCfg ]
     },
 };
 

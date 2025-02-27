@@ -13,9 +13,11 @@ export class Boot extends Scene {
         this.load.image("background", "assets/bg.png");
         this.load.image("escape", "assets/escape.png");
         this.load.image("play", "assets/play.png");
-        this.load.image("inventory", "assets/inventory.png");
         this.load.image("achieve", "assets/achieve.png");
         this.load.image("back", "assets/back.png");
+        this.load.image('card1', 'assets/card1.png');
+        this.load.image('volume-on', 'assets/volume.png');
+        this.load.image('volume-off', 'assets/mute.png');
     }
 
     create() {
