@@ -48,19 +48,16 @@ export class Projectile extends Physics.Matter.Sprite {
 
     update() {
         if (
-            this.x < 0 ||
-            this.x > this.scene.scale.width ||
-            this.y < 0 ||
-            this.y > this.scene.scale.height
+            this.x > this.scene.scale.width
         ) {
             this.setActive(false);
             this.setVisible(false);
+            this.setVelocity(0, 0);
+            console.log("Projectile location:", this.x, this.y);
         }
     }
 
     handleCollision(event: Phaser.Physics.Matter.Events.CollisionStartEvent) {
-        console.log("Handling collision event");
-
         const pairs = event.pairs;
         for (let i = 0; i < pairs.length; i++) {
             const pair = pairs[i];
@@ -69,14 +66,17 @@ export class Projectile extends Physics.Matter.Sprite {
             if (bodyA === this.body || bodyB === this.body) {
                 const otherBody = bodyA === this.body ? bodyB : bodyA;
                 console.log("Projectile collided with:", otherBody.label);
-
+                console.log("Projectile location:", this.x, this.y);
                 this.setActive(false);
                 this.setVisible(false);
+                this.setVelocity(0, 0);
                 this.pool.returnProjectile(this);
                 break;
             }
         }
     }
 }
+
+
 
 
