@@ -12,9 +12,9 @@ export class UIButton extends GameObjects.Sprite {
         callback: () => void //any function
     ) {
         super(scene, x, y, text);
-        this.setOrigin(0.5).setInteractive();
+        //this.setOrigin(0.5).setInteractive();
         this.on("pointerdown", callback);
-        this.setScale(0.5);
+        //this.setScale(0.);
 
         scene.add.existing(this);
     }
@@ -22,19 +22,43 @@ export class UIButton extends GameObjects.Sprite {
 
 export class PlayButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "play", callback);
-    }
-}
+        super(scene, x, y, "button-rectangle", callback);
+        scene.add.image(512, 470, 'play').setScale(0.2);
 
-export class InventoryButton extends UIButton {
-    constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "inventory", callback);
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.setTint(0x8afbff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
     }
 }
 
 export class AchievementsButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "achieve", callback);
+        super(scene, x, y, "button-rectangle", callback);
+        scene.add.image(512, 595, 'achieve').setScale(0.35);
+
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.setTint(0x8afbff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
     }
 }
 
@@ -91,7 +115,23 @@ export class MusicButton extends UIButton {
 
 export class BackButton extends UIButton {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "back", callback);
+        super(scene, x, y, "button", callback);
+        scene.add.image(45, 40, 'back').setScale(0.07);
+        this.setScale(0.9)
+
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+                this.setTint(0x8afbff);
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
     }
 }
 

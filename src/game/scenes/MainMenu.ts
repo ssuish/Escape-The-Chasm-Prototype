@@ -20,7 +20,7 @@ export class MainMenu extends Scene {
         this.logo = this.add.image(512, 250, "escape").setDepth(100);
 
         // Create buttons to switch scenes
-        new PlayButton(this, 512, 500, () => {
+        new PlayButton(this, 512, 470, () => {
             this.changeScene("LevelSelection");
         });
 
@@ -30,7 +30,7 @@ export class MainMenu extends Scene {
 
         new MusicButton(this, 980, 40, () => {
         });
-        
+    
         EventBus.emit("current-scene-ready", this);
     }
 

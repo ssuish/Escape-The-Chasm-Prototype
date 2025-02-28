@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
-import { BackButton } from "../UIComponents/UIButton";
+import { BackButton, MusicButton } from "../UIComponents/UIButton";
 
 export class Achievements extends Scene {
     logo: Phaser.GameObjects.Image;
@@ -12,10 +12,16 @@ export class Achievements extends Scene {
     }
 
     create() {
-        new BackButton(this, 50, 50, () => {
+        new BackButton(this, 45, 40, () => {
             this.changeScene("MainMenu");
         });
-        this.logo = this.add.image(512, 60, "achieve").setScale(.7); 
+        
+        //this.logo = this.add.image(512, 60, "achieve").setScale(.7);
+        
+        new MusicButton(this, 980, 40, () => {
+                
+        });
+
         EventBus.emit("current-scene-ready", this);
         
     }

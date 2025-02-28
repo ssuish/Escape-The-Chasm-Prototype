@@ -23,7 +23,7 @@ export class LevelSelection extends Scene {
         //this.tileSprite.setScrollFactor(1);
         //this.scrollSpeed = 0.3;
 
-        new BackButton(this, 50, 50, () => {
+        new BackButton(this, 45, 40, () => {
             this.changeScene("MainMenu");
         });
 

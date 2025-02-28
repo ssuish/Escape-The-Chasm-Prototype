@@ -32,6 +32,7 @@ export class Preloader extends Scene {
         this.load.image('card1', 'card1.png');
         this.load.image('volume-on', 'volume.png');
         this.load.image('volume-off', 'mute.png');
+        this.load.image('button-rectangle', 'btn-rectangle.png')
     }
 
     create() {
