@@ -8,11 +8,6 @@ export class ProjectilePool {
     constructor(scene: Scene, maxSize: number) {
         this.scene = scene;
 
-        if (!this.scene.matter) {
-            throw new Error(
-                "Scene's Matter physics system is not initialized."
-            );
-        }
         this.projectiles = this.scene.add.group({
             classType: Projectile,
             maxSize: maxSize,
@@ -20,10 +15,23 @@ export class ProjectilePool {
         });
 
         for (let i = 0; i < maxSize; i++) {
-            const projectile = new Projectile(scene, 0, 0, "projectile");
+            const projectile = new Projectile(
+                scene,
+                -100,
+                -100,
+                "projectile",
+                this
+            );
             this.projectiles.add(projectile, true);
             console.log(`Projectile ${i} added to pool`);
         }
+    }
+
+    returnProjectile(proj: Projectile) {
+        proj.setActive(false);
+        proj.setVisible(false);
+        proj.setPosition(-100, -100); // Move off-screen
+        console.log("Projectile returned to pool");
     }
 
     getProjectile(): Projectile | null {

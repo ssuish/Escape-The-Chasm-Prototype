@@ -10,7 +10,7 @@ export class Player {
     private stateMachine: StateMachine;
     private isTouchingGround: boolean = false;
     private projectilePool: ProjectilePool;
-    private fireCooldown: number = 500;
+    private fireCooldown: number = 300;
     private lastFireTime: number = 0;
 
     constructor(sprite: Physics.Matter.Sprite) {
@@ -76,11 +76,13 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
+            const offsetX = facingLeft ? -30 : 30 // Adjust the offset value as needed
+            const offsetY = 0; // Adjust the vertical offset if needed
             projectile.fireFromPlayer(
-                this.sprite.x,
-                this.sprite.y,
+                this.sprite.x + offsetX,
+                this.sprite.y + offsetY,
                 facingLeft,
-                5
+                20
             );
         }
     }
@@ -178,4 +180,6 @@ export class Player {
         this.projectilePool.update();
     }
 }
+
+
 

@@ -1,10 +1,9 @@
-//import { Scene } from "phaser";
 import { BaseLevel } from "./BaseLevel";
 import { EventBus } from "../EventBus";
 
 export class Level1 extends BaseLevel {
     constructor() {
-        super("Level 1");
+        super("Level1");
     }
 
     preload(): void {
