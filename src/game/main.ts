@@ -17,7 +17,6 @@ const config: Phaser.Types.Core.GameConfig = {
     width: gameConfig.screenWidth,
     height: gameConfig.screenHeight,
     parent: "game-container",
-    backgroundColor: "#028af8",
     scene: [
         Boot,
         Preloader,
@@ -40,7 +39,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent, scene: MainGame });
+    return new Game({ ...config, parent });
 };
 
 export default StartGame;
