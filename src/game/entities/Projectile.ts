@@ -1,5 +1,6 @@
 import { Physics, Scene } from "phaser";
 import { ProjectilePool } from "./ProjectilePool";
+import { EventBus } from "../EventBus";
 
 export class Projectile extends Physics.Matter.Sprite {
     private pool: ProjectilePool;
@@ -65,8 +66,7 @@ export class Projectile extends Physics.Matter.Sprite {
 
             if (bodyA === this.body || bodyB === this.body) {
                 const otherBody = bodyA === this.body ? bodyB : bodyA;
-                console.log("Projectile collided with:", otherBody.label);
-                console.log("Projectile location:", this.x, this.y);
+                EventBus.emit("projectile-hit", otherBody.label);
                 this.setActive(false);
                 this.setVisible(false);
                 this.setVelocity(0, 0);

@@ -27,12 +27,10 @@ export class LevelSelection extends Scene {
             this.changeScene("MainMenu");
         });
 
-        new MusicButton(this, 980, 40, () => {
-            
-        });
+        new MusicButton(this, 980, 40, () => {});
 
         new LevelSelectButton(this, 512, 400, () => {
-            this.changeScene("levels/Level1");
+            this.changeScene("Level1");
         });
 
         EventBus.emit("current-scene-ready", this);
@@ -42,3 +40,5 @@ export class LevelSelection extends Scene {
         this.scene.start(scene);
     }
 }
+
+
