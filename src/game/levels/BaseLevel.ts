@@ -100,7 +100,7 @@ export class BaseLevel extends Scene {
     }
 
     handlePlayerSpawn(x: number, y: number) {
-        const playerSprite = this.matter.add.sprite(x, y, "player");
+        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {label: "player"});
         this.player = new Player(playerSprite);
 
         if (this.player) {
@@ -110,7 +110,7 @@ export class BaseLevel extends Scene {
 
     handleEnemySpawn(x: number, y: number, width: number) {
         const randomX = x + Math.random() * width;
-        const enemySprite = this.matter.add.sprite(randomX, y, "enemy");
+        const enemySprite = this.matter.add.sprite(randomX, y, "enemy", 0, {label: "enemy"});
         console.error("Enemy is not implemented yet.");
         // this.enemy = new Enemy(enemySprite);
 

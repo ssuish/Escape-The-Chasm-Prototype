@@ -4,13 +4,21 @@ import { EventBus } from "../EventBus";
 
 export class Projectile extends Physics.Matter.Sprite {
     private pool: ProjectilePool;
+    private hasCollided: boolean;
 
-    constructor(scene: Scene, x: number, y: number, texture: string, pool: ProjectilePool) {
+    constructor(
+        scene: Scene,
+        x: number,
+        y: number,
+        texture: string,
+        pool: ProjectilePool
+    ) {
         super(scene.matter.world, x, y, texture);
         scene.add.existing(this);
         this.setActive(false);
         this.setVisible(false);
         this.pool = pool;
+        this.hasCollided = false;
 
         // Adjust the size of the collider box
         this.setBody({
@@ -34,6 +42,7 @@ export class Projectile extends Physics.Matter.Sprite {
         this.setVelocity(velocityX, velocityY);
         this.setActive(true);
         this.setVisible(true);
+        this.hasCollided = false;
     }
 
     fireFromPlayer(
@@ -48,9 +57,7 @@ export class Projectile extends Physics.Matter.Sprite {
     }
 
     update() {
-        if (
-            this.x > this.scene.scale.width
-        ) {
+        if (this.x > this.scene.scale.width) {
             this.setActive(false);
             this.setVisible(false);
             this.setVelocity(0, 0);
@@ -59,6 +66,10 @@ export class Projectile extends Physics.Matter.Sprite {
     }
 
     handleCollision(event: Phaser.Physics.Matter.Events.CollisionStartEvent) {
+        if (this.hasCollided) {
+            return; // Ignore subsequent collisions
+        }
+
         const pairs = event.pairs;
         for (let i = 0; i < pairs.length; i++) {
             const pair = pairs[i];
@@ -66,17 +77,16 @@ export class Projectile extends Physics.Matter.Sprite {
 
             if (bodyA === this.body || bodyB === this.body) {
                 const otherBody = bodyA === this.body ? bodyB : bodyA;
-                EventBus.emit("projectile-hit", otherBody.label);
+                console.log("Projectile hit:", otherBody.label);
+                //EventBus.emit("projectile-hit", otherBody.label);
                 this.setActive(false);
                 this.setVisible(false);
                 this.setVelocity(0, 0);
                 this.pool.returnProjectile(this);
+                this.hasCollided = true;
                 break;
             }
         }
     }
 }
-
-
-
 
