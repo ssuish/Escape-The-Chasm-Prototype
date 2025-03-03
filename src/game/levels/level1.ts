@@ -11,10 +11,6 @@ export class Level1 extends BaseLevel {
     }
 
     create() {
-        this.add.text(100, 100, "Test Level", {
-            fontSize: "32px",
-            color: "#fff",
-        });
 
         super.create();
 

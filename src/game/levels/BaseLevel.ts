@@ -45,9 +45,6 @@ export class BaseLevel extends Scene {
             "tilesheet"
         );
 
-        let spawnX = this.scale.width / 2;
-        let spawnY = this.scale.height / 2;
-
         if (tileset) {
             const wall = map.createLayer("Wall", tileset);
             const elevator = map.createLayer("Elevator", tileset);
@@ -64,36 +61,64 @@ export class BaseLevel extends Scene {
                 console.error("Failed to create Elevator layer");
             }
 
-            const objectsLayer = map.getObjectLayer("objects");
+            const objectsLayer = map.getObjectLayer("Objects");
 
-            if (objectsLayer) {
-                objectsLayer.objects.forEach((objData) => {
-                    const { x = 0, y = 0, name } = objData;
-                    if (name === "spawner") {
-                        spawnX = x;
-                        spawnY = y;
+            objectsLayer?.objects.forEach((objData) => {
+                const {
+                    x = this.scale.width / 2,
+                    y = this.scale.height / 2,
+                    width = 0,
+                    name,
+                } = objData;
+
+                switch (name) {
+                    case "playerSpawn": {
+                        this.handlePlayerSpawn(x, y);
+                        break;
                     }
-                });
-            }
+
+                    case "enemySpawn": {
+                        this.handleEnemySpawn(x, y, width);
+                        break;
+                    }
+
+                    default:
+                        console.error(`Object: ${name} is not implemented.`);
+                        break;
+                }
+            });
         } else {
             console.error("Tileset is null");
         }
 
-        const playerSprite = this.matter.add.sprite(spawnX, spawnY, "player");
-
+        // Entities will fall down faster
         this.matter.world.setGravity(0, 2);
 
         // Camera Settings
         const mapHeight = map.heightInPixels;
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
+    }
 
-        // Instantiate the Player class
+    handlePlayerSpawn(x: number, y: number) {
+        const playerSprite = this.matter.add.sprite(x, y, "player");
         this.player = new Player(playerSprite);
 
         if (this.player) {
-            // Player Controls
             this.playerController = new PlayerController(this, this.player);
         }
+    }
+
+    handleEnemySpawn(x: number, y: number, width: number) {
+        const randomX = x + Math.random() * width;
+        const enemySprite = this.matter.add.sprite(randomX, y, "enemy");
+        console.error("Enemy is not implemented yet.");
+        // this.enemy = new Enemy(enemySprite);
+
+        // if (this.enemy)
+        // {
+        //     // Enemy AI
+        //     // Enemy Event Handling
+        // }
     }
 
     update(deltaTime: number) {
