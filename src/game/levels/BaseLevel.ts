@@ -2,11 +2,14 @@ import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
+import { EventBus } from "../EventBus";
+import { EnemyFootman } from "../entities/EnemyFootman";
 
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
     player?: Player;
+    enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
 
     constructor(levelName: string) {
@@ -131,14 +134,12 @@ export class BaseLevel extends Scene {
             { label: "enemy-footman" }
         );
         enemySprite.name = "enemy-footman";
-        console.error("Enemy is not implemented yet.");
-        // this.enemy = new Enemy(enemySprite);
+        console.error("Enemy sprite and texture is not implemented yet.");
+        this.enemyFootman = new EnemyFootman(enemySprite, this.obstacles);
 
-        // if (this.enemy)
-        // {
-        //     // Enemy AI
-        //     // Enemy Event Handling
-        // }
+        if (EnemyFootman) {
+            // Add methods to handle enemy behavior
+        }
     }
 
     handleDeadEnd(x: number, y: number, width: number, height: number) {
