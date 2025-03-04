@@ -2,6 +2,7 @@ import { Scene, Physics } from "phaser";
 import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
 import { ProjectilePool } from "./ProjectilePool";
+import CollisionIdentifier from "../logic/CollisionIdentifier";
 
 export class Player {
     private jumpForce: number;
@@ -12,11 +13,13 @@ export class Player {
     private projectilePool: ProjectilePool;
     private fireCooldown: number = 300; // Firing rate in milliseconds
     private lastFireTime: number = 0;
+    private obstacles!: CollisionIdentifier;
 
-    constructor(sprite: Physics.Matter.Sprite) {
+    constructor(sprite: Physics.Matter.Sprite, obstacles: CollisionIdentifier) {
         this.sprite = sprite;
         this.speed = gameConfig.playerSpeed;
         this.jumpForce = gameConfig.jumpForce * 1.5;
+        this.obstacles = obstacles;
 
         this.stateMachine = new StateMachine(this, "player");
         this.stateMachine
@@ -43,17 +46,52 @@ export class Player {
         this.projectilePool = new ProjectilePool(this.sprite.scene, 5);
 
         this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
+            // const { bodyA, bodyB } = data;
+            // if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
+            //     this.isTouchingGround = true;
+            //     if (this.stateMachine.isCurrentState("jump")) {
+            //         this.stateMachine.setState("idle");
+            //     }
+            // }
+
             const { bodyA, bodyB } = data;
-            if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
-                this.isTouchingGround = true;
-                if (this.stateMachine.isCurrentState("jump")) {
-                    this.stateMachine.setState("idle");
-                }
+
+            const playerBody = this.sprite.body as MatterJS.BodyType;
+            const otherBody =
+                bodyA === playerBody
+                    ? (bodyB as MatterJS.BodyType)
+                    : (bodyA as MatterJS.BodyType);
+            const gameObject = otherBody.gameObject;
+
+            console.log(`Collided with: ${otherBody.label}`);
+            if (this.obstacles.is("deadEnd", otherBody))
+            {
+                console.log("Dead end");
             }
+
+            if (!gameObject) {
+                console.error(
+                    "Failed to get game object from body: " + otherBody.label
+                );
+                return;
+            }
+
+            this.handleCollisionWith(gameObject);
         });
 
         this.sprite.setFixedRotation();
         this.createAnimation();
+    }
+
+    private handleCollisionWith(gameObject: Phaser.GameObjects.GameObject) {
+        if (gameObject instanceof Physics.Matter.TileBody) {
+            this.isTouchingGround = true;
+            if (this.stateMachine.isCurrentState("jump")) {
+                this.stateMachine.setState("idle");
+            }
+        }
+
+
     }
 
     private idleOnEnter() {
@@ -76,7 +114,7 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
-            const offsetX = facingLeft ? -30 : 30 // Adjust the offset value as needed
+            const offsetX = facingLeft ? -30 : 30; // Adjust the offset value as needed
             const offsetY = 0; // Adjust the vertical offset if needed
             projectile.fireFromPlayer(
                 this.sprite.x + offsetX,
@@ -180,6 +218,8 @@ export class Player {
         this.projectilePool.update();
     }
 }
+
+
 
 
 

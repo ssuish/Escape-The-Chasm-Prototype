@@ -1,15 +1,21 @@
 import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
+import CollisionIdentifier from "../logic/CollisionIdentifier";
 
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
     player?: Player;
+    private obstacles!: CollisionIdentifier;
 
     constructor(levelName: string) {
         super(levelName);
         this.levelName = levelName;
+    }
+
+    init(){
+        this.obstacles = new CollisionIdentifier();
     }
 
     preload() {
@@ -46,10 +52,14 @@ export class BaseLevel extends Scene {
             const wall = map.createLayer("Wall", tileset);
             const elevator = map.createLayer("Elevator", tileset);
 
-            wall?.setCollisionByProperty({ collides: true });
-
             if (wall) {
+                wall.setCollisionByProperty({ collides: true });
                 this.matter.world.convertTilemapLayer(wall);
+                // wall.forEachTile((tile) => {
+                //     if (tile.collides) {
+                //         // TODO: Tiles stickyness not yet fixed.
+                //     }
+                // });
             }
             if (elevator) {
                 elevator.setCollisionByProperty({ collides: true });
@@ -62,9 +72,10 @@ export class BaseLevel extends Scene {
 
             objectsLayer?.objects.forEach((objData) => {
                 const {
-                    x = this.scale.width / 2,
-                    y = this.scale.height / 2,
+                    x = 0,
+                    y = 0,
                     width = 0,
+                    height = 0,
                     name,
                 } = objData;
 
@@ -76,6 +87,11 @@ export class BaseLevel extends Scene {
 
                     case "enemySpawn": {
                         this.handleEnemySpawn(x, y, width);
+                        break;
+                    }
+
+                    case "deadEnd": {
+                        this.handleDeadEnd(x, y, width, height);
                         break;
                     }
 
@@ -101,8 +117,10 @@ export class BaseLevel extends Scene {
     }
 
     handlePlayerSpawn(x: number, y: number) {
-        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {label: "player"});
-        this.player = new Player(playerSprite);
+        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {
+            label: "player",
+        });
+        this.player = new Player(playerSprite, this.obstacles);
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
@@ -111,7 +129,13 @@ export class BaseLevel extends Scene {
 
     handleEnemySpawn(x: number, y: number, width: number) {
         const randomX = x + Math.random() * width;
-        const enemySprite = this.matter.add.sprite(randomX, y, "enemy-footman", 0, {label: "enemy-footman"});
+        const enemySprite = this.matter.add.sprite(
+            randomX,
+            y,
+            "enemy-footman",
+            0,
+            { label: "enemy-footman" }
+        );
         console.error("Enemy is not implemented yet.");
         // this.enemy = new Enemy(enemySprite);
 
@@ -120,6 +144,15 @@ export class BaseLevel extends Scene {
         //     // Enemy AI
         //     // Enemy Event Handling
         // }
+    }
+
+    handleDeadEnd(x: number, y: number, width: number, height: number) {
+        const deadEnd = this.matter.add.rectangle(x, y, width, height, {
+            isStatic: true,
+            isSensor: true,
+            label: "deadEnd",
+        });
+        this.obstacles.add("deadEnd", deadEnd);
     }
 
     update(deltaTime: number) {
