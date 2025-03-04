@@ -31,9 +31,6 @@ export class BaseLevel extends Scene {
             .on("loaderror", () => {
                 console.error(`Failed to load tilemap.`);
             });
-
-        // this.basePlatform = new Platforms(this, 500, 500, 200, 32);
-        // this.basePlatform.create();
     }
 
     create() {
@@ -96,7 +93,11 @@ export class BaseLevel extends Scene {
 
         // Camera Settings
         const mapHeight = map.heightInPixels;
+        const mapWidth = map.widthInPixels;
+        this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
+        this.cameras.main.setZoom(1);
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
+        this.cameras.main.scrollX = mapWidth / 2 - this.cameras.main.width;
     }
 
     handlePlayerSpawn(x: number, y: number) {
@@ -110,7 +111,7 @@ export class BaseLevel extends Scene {
 
     handleEnemySpawn(x: number, y: number, width: number) {
         const randomX = x + Math.random() * width;
-        const enemySprite = this.matter.add.sprite(randomX, y, "enemy", 0, {label: "enemy"});
+        const enemySprite = this.matter.add.sprite(randomX, y, "enemy-footman", 0, {label: "enemy-footman"});
         console.error("Enemy is not implemented yet.");
         // this.enemy = new Enemy(enemySprite);
 

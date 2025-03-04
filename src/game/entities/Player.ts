@@ -10,7 +10,7 @@ export class Player {
     private stateMachine: StateMachine;
     private isTouchingGround: boolean = false;
     private projectilePool: ProjectilePool;
-    private fireCooldown: number = 300;
+    private fireCooldown: number = 300; // Firing rate in milliseconds
     private lastFireTime: number = 0;
 
     constructor(sprite: Physics.Matter.Sprite) {

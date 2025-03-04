@@ -70,29 +70,29 @@ function App() {
         <div id="app">
             <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
             <div>
-                <div>
+                {/* <div>
                     <button className="button" onClick={changeScene}>
                         Change Scene
                     </button>
                 </div>
                 <div>
-                    {/* <button
+                    { <button
                         disabled={canMoveSprite}
                         className="button"
                         onClick={moveSprite}
                     >
                         Toggle Movement
-                    </button> */}
+                    </button> }
                 </div>
-                {/* <div className="spritePosition">
+                { <div className="spritePosition">
                     Sprite Position:
                     <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                </div> */}
+                </div> }
                 <div>
                     <button className="button" onClick={addSprite}>
                         Add New Sprite
                     </button>
-                </div>
+                </div> */}
             </div>
         </div>
     );
