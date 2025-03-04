@@ -14,7 +14,7 @@ export class BaseLevel extends Scene {
         this.levelName = levelName;
     }
 
-    init(){
+    init() {
         this.obstacles = new CollisionIdentifier();
     }
 
@@ -71,13 +71,7 @@ export class BaseLevel extends Scene {
             const objectsLayer = map.getObjectLayer("Objects");
 
             objectsLayer?.objects.forEach((objData) => {
-                const {
-                    x = 0,
-                    y = 0,
-                    width = 0,
-                    height = 0,
-                    name,
-                } = objData;
+                const { x = 0, y = 0, width = 0, height = 0, name } = objData;
 
                 switch (name) {
                     case "playerSpawn": {
@@ -120,7 +114,7 @@ export class BaseLevel extends Scene {
         const playerSprite = this.matter.add.sprite(x, y, "player", 0, {
             label: "player",
         });
-        this.player = new Player(playerSprite, this.obstacles);
+        this.player = new Player(playerSprite, this.obstacles, this);
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
@@ -136,6 +130,7 @@ export class BaseLevel extends Scene {
             0,
             { label: "enemy-footman" }
         );
+        enemySprite.name = "enemy-footman";
         console.error("Enemy is not implemented yet.");
         // this.enemy = new Enemy(enemySprite);
 
@@ -147,11 +142,19 @@ export class BaseLevel extends Scene {
     }
 
     handleDeadEnd(x: number, y: number, width: number, height: number) {
-        const deadEnd = this.matter.add.rectangle(x, y, width, height, {
-            isStatic: true,
-            isSensor: true,
-            label: "deadEnd",
-        });
+        const adjustedX = x + width / 2;
+        const adjustedY = y + height / 2;
+        const deadEnd = this.matter.add.rectangle(
+            adjustedX,
+            adjustedY,
+            width,
+            height,
+            {
+                isStatic: true,
+                isSensor: true,
+                label: "deadEnd",
+            }
+        );
         this.obstacles.add("deadEnd", deadEnd);
     }
 

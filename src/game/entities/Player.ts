@@ -3,6 +3,7 @@ import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
 import { ProjectilePool } from "./ProjectilePool";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
+import { EventBus } from "../EventBus";
 
 export class Player {
     private jumpForce: number;
@@ -14,12 +15,18 @@ export class Player {
     private fireCooldown: number = 300; // Firing rate in milliseconds
     private lastFireTime: number = 0;
     private obstacles!: CollisionIdentifier;
+    private scene: Scene;
 
-    constructor(sprite: Physics.Matter.Sprite, obstacles: CollisionIdentifier) {
+    constructor(
+        sprite: Physics.Matter.Sprite,
+        obstacles: CollisionIdentifier,
+        scene: Scene
+    ) {
         this.sprite = sprite;
         this.speed = gameConfig.playerSpeed;
         this.jumpForce = gameConfig.jumpForce * 1.5;
         this.obstacles = obstacles;
+        this.scene = scene;
 
         this.stateMachine = new StateMachine(this, "player");
         this.stateMachine
@@ -40,6 +47,15 @@ export class Player {
             })
             .addState("pause", {
                 onEnter: this.pauseOnEnter,
+            })
+            .addState("enemyHit", {
+                onEnter: this.enemyHitOnEnter,
+            })
+            .addState("defeated", {
+                onEnter: this.deafeatedOnEnter,
+            })
+            .addState("win", {
+                onEnter: this.gameFinishedOnEnter,
             })
             .setState("idle");
 
@@ -64,9 +80,10 @@ export class Player {
             const gameObject = otherBody.gameObject;
 
             console.log(`Collided with: ${otherBody.label}`);
-            if (this.obstacles.is("deadEnd", otherBody))
-            {
-                console.log("Dead end");
+
+            if (this.obstacles.is("deadEnd", otherBody)) {
+                this.stateMachine.setState("defeated");
+                return;
             }
 
             if (!gameObject) {
@@ -91,8 +108,20 @@ export class Player {
             }
         }
 
+        // Just testing hit animation
+        if (gameObject instanceof Physics.Matter.Sprite) {
+            if (gameObject.name === "enemy-footman") {
+                this.stateMachine.setState("enemyHit");
+            }
+        }
 
+        // TODO: Add collision handling for other game objects
+        // if (gameObject instanceof Enemy) {
+        //     this.stateMachine.setState("enemyHit");
+        // }
     }
+
+    private gameFinishedOnEnter() {}
 
     private idleOnEnter() {
         this.sprite.play("idle", true);
@@ -107,6 +136,60 @@ export class Player {
             this.sprite.setVelocityY(this.jumpForce);
             this.isTouchingGround = false;
         }
+    }
+
+    private enemyHitOnEnter() {
+        console.log("Enemy hit");
+
+        this.sprite.setVelocityY(-10);
+
+        const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
+        const endColor = Phaser.Display.Color.ValueToColor(0xff0000);
+
+        // TODO: Add enemy hit animation and sound effect
+        this.scene.tweens.addCounter({
+            from: 0,
+            to: 100,
+            duration: 100,
+            repeat: 2,
+            yoyo: true,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            onUpdate: (tween) => {
+                const value = tween.getValue();
+                const colorObject =
+                    Phaser.Display.Color.Interpolate.ColorWithColor(
+                        startColor,
+                        endColor,
+                        100,
+                        value
+                    );
+
+                const color = Phaser.Display.Color.GetColor(
+                    colorObject.r,
+                    colorObject.g,
+                    colorObject.b
+                );
+
+                this.sprite.setTint(color);
+            },
+        });
+
+        // TODO: health system upon enemy hit
+
+        this.stateMachine.setState("idle");
+    }
+
+    private deafeatedOnEnter() {
+        this.sprite.setVelocityY(-25);
+        this.sprite.setAngularVelocity(0.1);
+
+        // Change scene to game over after 1.5 seconds
+        // TODO: Upon listening to event prevent player controls and change to the game-over scene.
+        this.sprite.scene.time.delayedCall(1500, () => {
+            console.log("Player defeated");
+            EventBus.emit("gameOver");
+            this.sprite.scene.scene.restart();
+        });
     }
 
     // TODO: Fix sprite projectile renderer and physics
@@ -218,8 +301,4 @@ export class Player {
         this.projectilePool.update();
     }
 }
-
-
-
-
 
