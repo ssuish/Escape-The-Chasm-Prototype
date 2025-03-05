@@ -11,10 +11,12 @@ export class BaseLevel extends Scene {
     player?: Player;
     enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
+    private numberOfEnemies: number; // Add this property
 
-    constructor(levelName: string) {
+    constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
         this.levelName = levelName;
+        this.numberOfEnemies = numberOfEnemies; // Initialize the property
     }
 
     init() {
@@ -125,20 +127,22 @@ export class BaseLevel extends Scene {
     }
 
     handleEnemySpawn(x: number, y: number, width: number) {
-        const randomX = x + Math.random() * width;
-        const enemySprite = this.matter.add.sprite(
-            randomX,
-            y,
-            "enemy-footman",
-            0,
-            { label: "enemy-footman" }
-        );
-        enemySprite.name = "enemy-footman";
-        console.error("Enemy sprite and texture is not implemented yet.");
-        this.enemyFootman = new EnemyFootman(enemySprite, this.obstacles);
+        for (let i = 0; i < this.numberOfEnemies; i++) {
+            const randomX = x + Math.random() * width;
+            const enemySprite = this.matter.add.sprite(
+                randomX,
+                y,
+                "enemy-footman",
+                0,
+                { label: "enemy-footman" }
+            );
+            enemySprite.name = "enemy-footman";
+            console.error("Enemy sprite and texture is not implemented yet.");
+            const enemyFootman = new EnemyFootman(enemySprite, this.obstacles);
 
-        if (EnemyFootman) {
-            // Add methods to handle enemy behavior
+            if (enemyFootman) {
+                // Add methods to handle enemy behavior
+            }
         }
     }
 
@@ -163,4 +167,6 @@ export class BaseLevel extends Scene {
         this.playerController.update(deltaTime);
     }
 }
+
+
 

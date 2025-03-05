@@ -45,7 +45,7 @@ export class ProjectilePool {
     }
 
     update() {
-        this.projectiles.children.each(
+        this.projectiles.children.iterate(
             (projectile: Phaser.GameObjects.GameObject) => {
                 const proj = projectile as Projectile;
                 if (proj.active) {

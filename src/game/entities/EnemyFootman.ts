@@ -4,11 +4,23 @@ import { EventBus } from "../EventBus";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 
 export class EnemyFootman extends BaseEnemy {
+    private health: number;
+    private damage: number;
+    private id: number;
+
     constructor(sprite: Physics.Matter.Sprite, obstacles: CollisionIdentifier) {
-        super(sprite, 10, 100, obstacles); // Example values for damage and health
+        super(sprite, obstacles);
 
         // Event listeners
-        EventBus.on("player-hurt", this.onPlayerHurt.bind(this));
+        EventBus.on("player-hurt", this.onPlayerHurt.bind(this)).on(
+            "projectile-hit",
+            this.onEnemyHurt.bind(this)
+        );
+
+        this.health = 100;
+        this.damage = 10;
+        const body = sprite.body as MatterJS.BodyType;
+        this.id = body.id;
     }
 
     protected handleCollisionWith(
@@ -31,12 +43,15 @@ export class EnemyFootman extends BaseEnemy {
         this.stateMachine.setState("idle");
     }
 
-    protected playerHitOnEnter() {
-        // Implement player hit behavior
+    protected enemyHitOnEnter() {
+        console.log("New health: ", this.health);
+        this.stateMachine.setState("idle");
     }
 
     protected defeatedOnEnter() {
         // Implement dead behavior
+        console.log("Enemy defeated");
+        this.sprite.destroy();
     }
 
     private onPlayerHurt() {
@@ -44,6 +59,27 @@ export class EnemyFootman extends BaseEnemy {
         EventBus.emit("enemy-hit", this.damage);
         EventBus.off("player-hurt", this.onPlayerHurt);
     }
-}
 
+    private onEnemyHurt(projectileHit: {
+        id: number;
+        type: string;
+        damage: number;
+    }) {
+        if (projectileHit.type === "enemy-footman") {
+            console.log(
+                `Enemy ${projectileHit.id} is taking ${projectileHit.damage} damage.`
+            );
+
+            if (projectileHit.id === this.id) {
+                this.health -= projectileHit.damage;
+                if (this.health <= 0) {
+                    this.stateMachine.setState("defeated");
+                } else {
+                    this.stateMachine.setState("enemyHurt");
+                }
+            }
+        }
+        EventBus.off("projectile-hit", this.onEnemyHurt);
+    }
+}
 

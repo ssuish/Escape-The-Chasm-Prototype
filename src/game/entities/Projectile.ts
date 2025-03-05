@@ -1,10 +1,12 @@
 import { Physics, Scene } from "phaser";
 import { ProjectilePool } from "./ProjectilePool";
 import { EventBus } from "../EventBus";
+import { EnemyFootman } from "./EnemyFootman";
 
 export class Projectile extends Physics.Matter.Sprite {
     private pool: ProjectilePool;
     private hasCollided: boolean;
+    private damage: number;
 
     constructor(
         scene: Scene,
@@ -19,6 +21,7 @@ export class Projectile extends Physics.Matter.Sprite {
         this.setVisible(false);
         this.pool = pool;
         this.hasCollided = false;
+        this.damage = 10;
 
         // Adjust the size of the collider box
         this.setBody({
@@ -77,8 +80,14 @@ export class Projectile extends Physics.Matter.Sprite {
 
             if (bodyA === this.body || bodyB === this.body) {
                 const otherBody = bodyA === this.body ? bodyB : bodyA;
-                console.log("Projectile hit:", otherBody.label);
-                //EventBus.emit("projectile-hit", otherBody.label);
+                console.log("Projectile hit:", otherBody.label, " with id:", otherBody.id);
+
+                EventBus.emit("projectile-hit", {
+                    id: otherBody.id,
+                    type: otherBody.label,
+                    damage: this.damage,
+                });
+
                 this.setActive(false);
                 this.setVisible(false);
                 this.setVelocity(0, 0);

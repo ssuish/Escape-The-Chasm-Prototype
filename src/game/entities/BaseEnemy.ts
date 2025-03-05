@@ -4,8 +4,6 @@ import StateMachine from "../logic/StateMachine";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 
 export abstract class BaseEnemy {
-    protected readonly damage: number;
-    protected readonly health: number;
     protected speed: number;
     protected jumpForce: number;
     protected sprite: Physics.Matter.Sprite;
@@ -16,13 +14,9 @@ export abstract class BaseEnemy {
 
     constructor(
         sprite: Physics.Matter.Sprite,
-        damage: number,
-        health: number,
         obstacles: CollisionIdentifier
     ) {
         this.sprite = sprite;
-        this.damage = damage;
-        this.health = health;
         this.speed = gameConfig.playerSpeed; // replace to enemy
         this.jumpForce = gameConfig.jumpForce; // replace to enemy
         this.obstacles = obstacles;
@@ -38,8 +32,8 @@ export abstract class BaseEnemy {
             .addState("attack", {
                 onEnter: this.attackOnEnter,
             })
-            .addState("playerHit", {
-                onEnter: this.playerHitOnEnter,
+            .addState("enemyHurt", {
+                onEnter: this.enemyHitOnEnter,
             })
             .addState("defeated", {
                 onEnter: this.defeatedOnEnter,
@@ -86,6 +80,6 @@ export abstract class BaseEnemy {
     protected abstract idleOnEnter(): void;
     protected abstract patrolOnEnter(): void;
     protected abstract attackOnEnter(): void;
-    protected abstract playerHitOnEnter(): void;
+    protected abstract enemyHitOnEnter(): void;
     protected abstract defeatedOnEnter(): void;
 }
