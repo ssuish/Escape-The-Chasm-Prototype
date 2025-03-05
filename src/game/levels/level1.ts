@@ -3,7 +3,7 @@ import { EventBus } from "../EventBus";
 
 export class Level1 extends BaseLevel {
     constructor() {
-        super("Level1", 2);
+        super("Level1", 10);
     }
 
     preload(): void {

@@ -153,6 +153,9 @@ export class Player {
 
     private enemyHitOnEnter() {
         this.sprite.setVelocityY(-10);
+        
+        // Apply knockback effect
+        this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
 
         const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
         const endColor = Phaser.Display.Color.ValueToColor(0xff0000);
@@ -206,6 +209,7 @@ export class Player {
             this.sprite.scene.time.delayedCall(1500, () => {
                 EventBus.emit("player-defeated");
                 this.sprite.scene.scene.restart();
+                this.stateMachine.setState("idle");
             });
         } else {
             console.error("Sprite is not defined in defeatedOnEnter");
@@ -262,6 +266,10 @@ export class Player {
             frameRate: 10,
             repeat: -1,
         });
+    }
+
+    getPlayerSprite = () => {
+        return this.sprite;
     }
 
     static preload(scene: Scene) {
@@ -330,4 +338,5 @@ export class Player {
         this.projectilePool.update();
     }
 }
+
 
