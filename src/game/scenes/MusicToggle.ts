@@ -1,35 +1,52 @@
-import { GameObjects } from "phaser";
+import { EventBus } from "../EventBus";
 import { MusicButton } from "../UIComponents/UIButton";
 
 export class MusicToggle extends Phaser.Scene {
     musicToggle: MusicButton;
-    onVolume: GameObjects.Image;
-    offVolume: GameObjects.Image;
+    music: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   
     constructor() {
       super({ key: 'MusicToggle', active: true });
     }
-  
-    create() {
-      this.musicToggle = new MusicButton(this, 980, 40, () => {
 
+    preload() {
+        this.load.image('button', './assets/btn-grey.png');
+        this.load.image('musicOn', './assets/volume.png')
+        this.load.image('musicOff', './assets/mute.png')
 
-            /*this.musicToggle.setInteractive()
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-                this.musicToggle.setTint(0xdedede);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-                this.musicToggle.setTint(0xffffff);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.musicToggle.setTint(0x8afbff);
-                this.musicToggle.onVolume.visible = false;
-                this.musicToggle.offVolume.visible = true;
-                console.log('Music Off');
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                this.musicToggle.setTint(0xffffff);
-            }); */
-        });
+        this.load.audio('bgm', './assets/floating-also.mp3');
     }
-  }
+  
+    create() {   
+        //Music toggle appear on top right corner
+        this.musicToggle = new MusicButton(this, 980, 40, () => { 
+        });
+
+        //checking if there is a 'musicEnabled' data
+        if (!this.registry.has('musicEnabled')) {
+            this.registry.set('musicEnabled', true);
+            this.music = this.sound.add('bgm', { loop: true });
+            this.music.play();
+        } else {
+            this.music = this.sound.add('bgm');
+            this.music.play();
+            this.music.pause();
+            if (this.registry.get('musicEnabled')) {
+              this.music.resume();
+            }
+        }
+
+        //Event where the music is toggled on/off
+        EventBus.on('toggleMusic', () => {
+              console.log('Music Toggle Clicked');
+              const musicEnabled = !this.registry.get('musicEnabled');
+              this.registry.set('musicEnabled', musicEnabled);
+        
+              if (musicEnabled) {
+                this.music.resume();
+              } else {
+                this.music.pause();
+              }
+          }, this);
+    }
+}

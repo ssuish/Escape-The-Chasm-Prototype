@@ -27,9 +27,6 @@ export class MainMenu extends Scene {
         new AchievementsButton(this, 512, 580, () => {
             this.changeScene("Achievements");
         });
-
-        //new MusicButton(this, 980, 40, () => {
-        //});
     
         EventBus.emit("current-scene-ready", this);
     }

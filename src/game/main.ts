@@ -22,15 +22,15 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         Boot,
         Preloader,
-        Background,
-        MusicToggle,
+        Background, 
         MainMenu,
         LevelSelection,
         BaseLevel,
         Level1,
         GameOver,
         Achievements,
-        GameSettings
+        GameSettings,
+        MusicToggle,
     ],
     physics: {
         default: "matter",
@@ -43,7 +43,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent, scene: Level1 });
+    return new Game({ ...config, parent });
 };
 
 export default StartGame;

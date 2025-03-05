@@ -13,9 +13,7 @@ export class UIButton extends GameObjects.Sprite {
         callback: () => void //any function
     ) {
         super(scene, x, y, text);
-        //this.setOrigin(0.5).setInteractive();
         this.on("pointerdown", callback);
-        //this.setScale(0.);
 
         scene.add.existing(this);
     }
@@ -64,21 +62,15 @@ export class AchievementsButton extends UIButton {
 }
 
 export class MusicButton extends UIButton {
-    onVolume: GameObjects.Image;
-    offVolume: GameObjects.Image;
-
+    musicButton: GameObjects.Image;
+    music: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
         super(scene, x, y, "button", callback);
 
-        this.setScale(0.9)
+        this.musicButton = scene.add.image(980, 40, 'musicOn').setScale(0.07).setDepth(100)
 
-        let offVolume = scene.add.image(980, 40, 'volume-off').setScale(0.07);
-        let onVolume = scene.add.image(980, 40, 'volume-on').setScale(0.07);
-
-        onVolume.visible = true;
-        offVolume.visible = false;
-
-        onVolume.setInteractive()
+        this.musicButton.setInteractive().setDepth(100)
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
                 this.setTint(0xdedede);
             })
@@ -87,30 +79,17 @@ export class MusicButton extends UIButton {
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
                 this.setTint(0x8afbff);
-                onVolume.visible = false;
-                offVolume.visible = true;
-                console.log('Music Off');
+                EventBus.emit('toggleMusic'); //When clicked the event will start
+                this.updateButtonImage(); //calls the function 
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
                 this.setTint(0xffffff);
             });
-
-        offVolume.setInteractive()
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-                this.setTint(0xdedede);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-                this.setTint(0xffffff);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.setTint(0x8afbff);
-                onVolume.visible = true;
-                offVolume.visible =false;
-                console.log('Music On');
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                this.setTint(0xffffff);
-            });
+    }
+    //function to change the texture
+    updateButtonImage(){
+        const musicEnabled = this.scene.registry.get('musicEnabled');
+        this.musicButton.setTexture( musicEnabled ? 'musicOn' : 'musicOff' );
     }
 }
 
