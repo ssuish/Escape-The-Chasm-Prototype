@@ -1,6 +1,9 @@
 import { Scene } from "phaser";
+import { MusicButton } from "../UIComponents/UIButton";
 
 export class Preloader extends Scene {
+    music: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+    musicToggle: MusicButton;
     constructor() {
         super("Preloader");
     }
@@ -32,7 +35,9 @@ export class Preloader extends Scene {
         this.load.image('card1', 'card1.png');
         this.load.image('volume-on', 'volume.png');
         this.load.image('volume-off', 'mute.png');
-        this.load.image('button-rectangle', 'btn-rectangle.png')
+        this.load.image('button-rectangle', 'btn-rectangle.png');
+
+        this.load.audio('bgm', 'floating-also.mp3');
     }
 
     create() {
@@ -41,7 +46,8 @@ export class Preloader extends Scene {
 
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start("MainMenu");
-        
+        this.music = this.sound.add('bgm', { loop: true, delay: 0 });
+        this.music.play();
     }
 }
 

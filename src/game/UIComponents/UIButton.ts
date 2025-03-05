@@ -1,4 +1,5 @@
 import { GameObjects, Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 // This is basic button based on the Phaser textstyle.
 // TODO: Refactor the UI Button component into Image-based.
@@ -86,12 +87,12 @@ export class MusicButton extends UIButton {
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
                 this.setTint(0x8afbff);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                this.setTint(0xffffff);
                 onVolume.visible = false;
                 offVolume.visible = true;
                 console.log('Music Off');
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
             });
 
         offVolume.setInteractive()
@@ -103,12 +104,12 @@ export class MusicButton extends UIButton {
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
                 this.setTint(0x8afbff);
-            })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-                this.setTint(0xffffff);
                 onVolume.visible = true;
                 offVolume.visible =false;
                 console.log('Music On');
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
             });
     }
 }
