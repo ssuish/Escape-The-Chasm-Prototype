@@ -1,7 +1,6 @@
 import { Physics, Scene } from "phaser";
 import { ProjectilePool } from "./ProjectilePool";
 import { EventBus } from "../EventBus";
-import { EnemyFootman } from "./EnemyFootman";
 
 export class Projectile extends Physics.Matter.Sprite {
     private pool: ProjectilePool;

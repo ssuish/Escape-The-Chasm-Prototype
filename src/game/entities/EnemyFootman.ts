@@ -5,6 +5,7 @@ import CollisionIdentifier from "../logic/CollisionIdentifier";
 
 export class EnemyFootman extends BaseEnemy {
     private health: number;
+    private maxHealth: number;
     private damage: number;
     private id: number;
 
@@ -17,11 +18,20 @@ export class EnemyFootman extends BaseEnemy {
             this.onEnemyHurt.bind(this)
         );
 
-        this.health = 100;
+        this.maxHealth = 30;
+        this.health = this.maxHealth;
         this.damage = 10;
         const body = sprite.body as MatterJS.BodyType;
         this.id = body.id;
     }
+
+    GetHealth = () => {
+        this.health;
+    };
+
+    GetMaxHealth = () => {
+        this.maxHealth;
+    };
 
     protected handleCollisionWith(
         gameObject: Phaser.GameObjects.GameObject | undefined
@@ -82,4 +92,5 @@ export class EnemyFootman extends BaseEnemy {
         EventBus.off("projectile-hit", this.onEnemyHurt);
     }
 }
+
 

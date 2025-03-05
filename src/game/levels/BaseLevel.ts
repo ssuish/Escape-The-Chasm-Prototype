@@ -137,7 +137,6 @@ export class BaseLevel extends Scene {
                 { label: "enemy-footman" }
             );
             enemySprite.name = "enemy-footman";
-            console.error("Enemy sprite and texture is not implemented yet.");
             const enemyFootman = new EnemyFootman(enemySprite, this.obstacles);
 
             if (enemyFootman) {

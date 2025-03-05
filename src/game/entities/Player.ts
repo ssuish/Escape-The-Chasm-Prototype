@@ -17,6 +17,7 @@ export class Player {
     private obstacles!: CollisionIdentifier;
     private scene: Scene;
     private health: number;
+    private maxHealth: number = 100;
 
     constructor(
         sprite: Physics.Matter.Sprite,
@@ -28,7 +29,7 @@ export class Player {
         this.jumpForce = gameConfig.jumpForce * 1.5;
         this.obstacles = obstacles;
         this.scene = scene;
-        this.health = 100;
+        this.health = this.maxHealth;
 
         this.stateMachine = new StateMachine(this, "player");
         this.stateMachine
@@ -103,6 +104,14 @@ export class Player {
 
         this.handleEnemyHit = this.handleEnemyHit.bind(this);
     }
+
+    GetHealth = () => {
+        return this.health;
+    }
+
+    GetMaxHealth = () => {
+        return this.maxHealth;
+    };
 
     private handleCollisionWith(gameObject: Phaser.GameObjects.GameObject) {
         if (gameObject instanceof Physics.Matter.TileBody) {

@@ -43,7 +43,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent });
+    return new Game({ ...config, parent, scene: Level1 });
 };
 
 export default StartGame;
