@@ -1,15 +1,24 @@
 import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
+import CollisionIdentifier from "../logic/CollisionIdentifier";
+import { EventBus } from "../EventBus";
+import { EnemyFootman } from "../entities/EnemyFootman";
 
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
     player?: Player;
+    enemyFootman?: EnemyFootman;
+    private obstacles!: CollisionIdentifier;
 
     constructor(levelName: string) {
         super(levelName);
         this.levelName = levelName;
+    }
+
+    init() {
+        this.obstacles = new CollisionIdentifier();
     }
 
     preload() {
@@ -31,9 +40,6 @@ export class BaseLevel extends Scene {
             .on("loaderror", () => {
                 console.error(`Failed to load tilemap.`);
             });
-
-        // this.basePlatform = new Platforms(this, 500, 500, 200, 32);
-        // this.basePlatform.create();
     }
 
     create() {
@@ -49,10 +55,14 @@ export class BaseLevel extends Scene {
             const wall = map.createLayer("Wall", tileset);
             const elevator = map.createLayer("Elevator", tileset);
 
-            wall?.setCollisionByProperty({ collides: true });
-
             if (wall) {
+                wall.setCollisionByProperty({ collides: true });
                 this.matter.world.convertTilemapLayer(wall);
+                // wall.forEachTile((tile) => {
+                //     if (tile.collides) {
+                //         // TODO: Tiles stickyness not yet fixed.
+                //     }
+                // });
             }
             if (elevator) {
                 elevator.setCollisionByProperty({ collides: true });
@@ -64,12 +74,7 @@ export class BaseLevel extends Scene {
             const objectsLayer = map.getObjectLayer("Objects");
 
             objectsLayer?.objects.forEach((objData) => {
-                const {
-                    x = this.scale.width / 2,
-                    y = this.scale.height / 2,
-                    width = 0,
-                    name,
-                } = objData;
+                const { x = 0, y = 0, width = 0, height = 0, name } = objData;
 
                 switch (name) {
                     case "playerSpawn": {
@@ -79,6 +84,11 @@ export class BaseLevel extends Scene {
 
                     case "enemySpawn": {
                         this.handleEnemySpawn(x, y, width);
+                        break;
+                    }
+
+                    case "deadEnd": {
+                        this.handleDeadEnd(x, y, width, height);
                         break;
                     }
 
@@ -96,12 +106,18 @@ export class BaseLevel extends Scene {
 
         // Camera Settings
         const mapHeight = map.heightInPixels;
+        const mapWidth = map.widthInPixels;
+        this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
+        this.cameras.main.setZoom(1);
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
+        this.cameras.main.scrollX = mapWidth / 2 - this.cameras.main.width;
     }
 
     handlePlayerSpawn(x: number, y: number) {
-        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {label: "player"});
-        this.player = new Player(playerSprite);
+        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {
+            label: "player",
+        });
+        this.player = new Player(playerSprite, this.obstacles, this);
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
@@ -110,15 +126,37 @@ export class BaseLevel extends Scene {
 
     handleEnemySpawn(x: number, y: number, width: number) {
         const randomX = x + Math.random() * width;
-        const enemySprite = this.matter.add.sprite(randomX, y, "enemy", 0, {label: "enemy"});
-        console.error("Enemy is not implemented yet.");
-        // this.enemy = new Enemy(enemySprite);
+        const enemySprite = this.matter.add.sprite(
+            randomX,
+            y,
+            "enemy-footman",
+            0,
+            { label: "enemy-footman" }
+        );
+        enemySprite.name = "enemy-footman";
+        console.error("Enemy sprite and texture is not implemented yet.");
+        this.enemyFootman = new EnemyFootman(enemySprite, this.obstacles);
 
-        // if (this.enemy)
-        // {
-        //     // Enemy AI
-        //     // Enemy Event Handling
-        // }
+        if (EnemyFootman) {
+            // Add methods to handle enemy behavior
+        }
+    }
+
+    handleDeadEnd(x: number, y: number, width: number, height: number) {
+        const adjustedX = x + width / 2;
+        const adjustedY = y + height / 2;
+        const deadEnd = this.matter.add.rectangle(
+            adjustedX,
+            adjustedY,
+            width,
+            height,
+            {
+                isStatic: true,
+                isSensor: true,
+                label: "deadEnd",
+            }
+        );
+        this.obstacles.add("deadEnd", deadEnd);
     }
 
     update(deltaTime: number) {

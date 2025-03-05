@@ -55,7 +55,7 @@ export default class StateMachine {
 
         // Error logging on states switching
         if (this.currentState?.name !== name) {
-            console.log(`Switching state to: ${name}`);
+            console.log(`Object ${this.id} Switching state to: ${name}`);
         }
 
         this.currentState = this.states.get(name);
@@ -85,3 +85,4 @@ export default class StateMachine {
         }
     }
 }
+
