@@ -10,6 +10,7 @@ import { Preloader } from "./scenes/Preloader";
 import { Background } from "./scenes/Background";
 import { gameConfig } from "./config/gameConfig";
 import { BaseLevel } from "./levels/BaseLevel";
+import { MusicToggle } from "./scenes/MusicToggle";
 
 // TODO: Replace MainGame to LevelSelection
 // Always add new scenes here!
@@ -22,13 +23,14 @@ const config: Phaser.Types.Core.GameConfig = {
         Boot,
         Preloader,
         Background,
+        MusicToggle,
         MainMenu,
         LevelSelection,
         BaseLevel,
         Level1,
         GameOver,
         Achievements,
-        GameSettings,
+        GameSettings
     ],
     physics: {
         default: "matter",
