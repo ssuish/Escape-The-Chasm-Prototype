@@ -113,7 +113,7 @@ export class BaseLevel extends Scene {
 
         // Create the health bar
         if (this.player){
-            this.playerHealthBar = new PlayerHealthBar(this, 10, 10, this.player);
+            this.playerHealthBar = new PlayerHealthBar(this, 10, 10, this.player); //display profileplayer
         }
     }
 

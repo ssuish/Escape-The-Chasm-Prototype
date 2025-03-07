@@ -1,17 +1,27 @@
 import { GameObjects, Scene } from "phaser";
 import { Player } from "../entities/Player";
 
-
 export default class PlayerHealthBar extends GameObjects.Graphics {
     barWidth: number;
     barHeight: number;
     player:  Player;
-    constructor(scene: Scene, x: number, y: number, player: Player) {
-        super(scene, { x: x, y: y });
+    borderThickness: number;
+    borderRadius: number;
+    borderColor: number;
+    //playerProfile: GameObjects.Sprite;
+    constructor(scene: Scene, x: number, y: number, player: Player, /*displayPlayer: GameObjects.Sprite*/) {
+        super(scene)
+        this.x = 90;
+        this.y = 20;
         this.scene = scene;
         this.player = player;
-        this.barWidth = 100;
-        this.barHeight = 20;
+        this.barWidth = (this.player.GetHealth() * 2);
+        this.barHeight = 40;
+        this.borderThickness = 7;
+        this.borderRadius = 10;
+        this.borderColor = 0x61271b;
+
+        //this.playerProfile = scene.add.sprite(x - 40, y + this.barHeight / 2, /*displayPlayer*/)
 
         this.draw();
         scene.add.existing(this);
@@ -22,23 +32,29 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
         this.clear();
 
         // Background
-        this.fillStyle(0x000000);
-        this.fillRect(0, 0, this.barWidth, this.barHeight);
+        this.fillStyle(0x843423);
+        this.fillRoundedRect(0, 0, this.barWidth, this.barHeight, this.borderRadius);
+
+        //border
+        this.lineStyle(this.borderThickness, this.borderColor, 1)
+        this.strokeRoundedRect(0, 0, this.barWidth, this.barHeight, this.borderRadius);
 
         // Health fill
         let percent = this.player.GetHealth() / this.player.GetMaxHealth();
-        let fillWidth = this.barWidth * percent;
+        if (percent > 0) {
+            let fillWidth = this.barWidth * percent;
+            let color = 0xFF0000; // Red
+            if (color)
+            if (percent > 0.25) {
+                color = 0xFFFF00; // Yellow
+            }
+            if (percent > 0.50) {
+                color = 0x00FF00; // Green
+            }
 
-        let color = 0xFF0000; // Red
-        if (percent > 0.5) {
-            color = 0xFFFF00; // Yellow
+        this.fillStyle(color); //fill color health
+        this.fillRoundedRect(3, 3, fillWidth - 5, this.barHeight - 5, this.borderRadius);
         }
-        if (percent > 0.75) {
-            color = 0x00FF00; // Green
-        }
-
-        this.fillStyle(color);
-        this.fillRect(0, 0, fillWidth, this.barHeight);
     }
 
     update() {
