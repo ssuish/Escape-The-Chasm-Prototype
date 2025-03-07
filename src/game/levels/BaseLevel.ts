@@ -13,7 +13,10 @@ export class BaseLevel extends Scene {
     enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
     private numberOfEnemies: number; // Add this property
-    playerHealthBar: PlayerHealthBar
+    private enemySpawnTimer!: Phaser.Time.TimerEvent;
+    private map!: Phaser.Tilemaps.Tilemap;
+    private enemiesSpawned: number = 0;
+    playerHealthBar: PlayerHealthBar;
 
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
