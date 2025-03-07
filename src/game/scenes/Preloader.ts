@@ -29,7 +29,6 @@ export class Preloader extends Scene {
         this.load.image('back', 'back.png');
         this.load.image('button', 'btn-grey.png');
         this.load.image('card1', 'card1.png');
-        this.load.image('button-rectangle', 'btn-rectangle.png');;
     }
 
     create() {
