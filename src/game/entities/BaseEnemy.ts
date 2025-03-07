@@ -1,4 +1,4 @@
-import { Scene, Physics } from "phaser";
+import { Physics, Scene } from "phaser";
 import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
@@ -9,17 +9,22 @@ export abstract class BaseEnemy {
     protected sprite: Physics.Matter.Sprite;
     protected stateMachine: StateMachine;
     protected isTouchingGround: boolean = false;
-    protected scene: Scene;
+    protected player: Phaser.GameObjects.Sprite;
     protected obstacles: CollisionIdentifier;
+    protected scene: Scene;
 
     constructor(
         sprite: Physics.Matter.Sprite,
-        obstacles: CollisionIdentifier
+        obstacles: CollisionIdentifier,
+        player: Phaser.GameObjects.Sprite,
+        scene: Scene
     ) {
         this.sprite = sprite;
         this.speed = gameConfig.playerSpeed; // replace to enemy
         this.jumpForce = gameConfig.jumpForce; // replace to enemy
         this.obstacles = obstacles;
+        this.player = player;
+        this.scene = scene;
 
         this.stateMachine = new StateMachine(this, "enemy");
         this.stateMachine
@@ -83,3 +88,4 @@ export abstract class BaseEnemy {
     protected abstract enemyHitOnEnter(): void;
     protected abstract defeatedOnEnter(): void;
 }
+
