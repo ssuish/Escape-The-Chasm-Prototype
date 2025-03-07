@@ -15,13 +15,10 @@ export class EnemyFootman extends BaseEnemy {
         player: Phaser.GameObjects.Sprite,
         scene: Scene
     ) {
-        super(sprite, obstacles, player, scene);
+        const instanceID =
+            "enemy-footman-" + (sprite.body as MatterJS.BodyType).id;
 
-        // Event listeners
-        EventBus.on("player-hurt", this.onPlayerHurt.bind(this)).on(
-            "projectile-hit",
-            this.onEnemyHurt.bind(this)
-        );
+        super(instanceID, sprite, obstacles, player, scene);
 
         this.maxHealth = 30;
         this.health = this.maxHealth;
@@ -30,6 +27,14 @@ export class EnemyFootman extends BaseEnemy {
         this.player = player;
         const body = sprite.body as MatterJS.BodyType;
         this.id = body.id;
+        this.lastPlayerX = player.x;
+        this.lastPlayerY = player.y;
+
+        // Event listeners
+        EventBus.on("player-hurt", this.onPlayerHurt.bind(this)).on(
+            "projectile-hit",
+            this.onEnemyHurt.bind(this)
+        );
     }
 
     GetHealth = () => {
@@ -42,59 +47,88 @@ export class EnemyFootman extends BaseEnemy {
 
     protected handleCollisionWith(
         gameObject: Phaser.GameObjects.GameObject | undefined
-    ): void {}
+    ): void {
+        console.log(
+            `Enemy ${this.id} collided with: ${gameObject?.name || "unknown"}`
+        );
+        this.Jump();
+
+        if (gameObject instanceof Physics.Matter.TileBody) {
+            this.isTouchingGround = true;
+        }
+
+        if (gameObject instanceof Physics.Matter.Sprite) {
+            if (gameObject.name === "player") {
+                console.log("Player collided with enemy");
+                this.stateMachine.setState("attack");
+            }
+        }
+
+        return;
+    }
 
     protected createAnimation(): void {}
 
-    protected idleOnEnter() {
-        // Implement idle behavior
-    }
-
     protected patrolOnEnter() {
-        // Implement patrol behavior
+        console.log("Enemy patrolling");
     }
 
     protected attackOnEnter() {
-        // Implement attack behavior
         console.log("Enemy attacking player");
+        this.scene.time.delayedCall(1000, () => {
+            this.stateMachine.setState("patrol");
+        });
+    }
 
-        // Assuming you have a reference to the player object
-        const player = this.getPlayer(); // Implement this method to get the player object
+    private Jump() {
+        const player = this.getPlayer();
+        console.log("Jump method called");
 
-        // Calculate direction towards the player
-        const directionX = player.x - this.sprite.x;
-        const directionY = player.y - this.sprite.y;
+        if (player) {
+            this.lastPlayerX = player.x;
+            this.lastPlayerY = player.y;
+        } else {
+            console.error(
+                "Player object is undefined, using last known position"
+            );
+        }
 
-        // Normalize direction
+        const directionX = this.lastPlayerX - this.sprite.x;
+        const directionY = this.lastPlayerY - this.sprite.y;
         const magnitude = Math.sqrt(
             directionX * directionX + directionY * directionY
         );
         const normalizedDirectionX = directionX / magnitude;
-        const normalizedDirectionY = directionY / magnitude;
+        let normalizedDirectionY = directionY / magnitude;
 
-        // Set velocity to move towards the player
-        const speed = 5; // Adjust speed as needed
-        this.sprite.setVelocity(
-            normalizedDirectionX * speed,
-            normalizedDirectionY * speed
-        );
+        if (directionY >= 0) {
+            normalizedDirectionY = Math.max(normalizedDirectionY, 0.1);
+        }
 
-        // Set a timer to reset to idle state after a short duration
-        this.scene.time.delayedCall(1000, () => {
-            this.sprite.setVelocity(0, 0);
-            this.stateMachine.setState("idle");
-        });
+        const speed = 5;
+        if (directionY < 0) {
+            // Player is above, frog hop
+            this.sprite.setVelocity(
+                normalizedDirectionX * speed,
+                normalizedDirectionY * speed * 2
+            );
+        } else {
+            this.sprite.setVelocity(normalizedDirectionX * speed, 0);
+        }
+
+        this.isTouchingGround = false;
     }
 
     protected enemyHitOnEnter() {
         console.log("New health: ", this.health);
-        this.stateMachine.setState("idle");
     }
 
     protected defeatedOnEnter() {
-        // Implement dead behavior
         console.log("Enemy defeated");
-        this.sprite.destroy();
+        EventBus.emit("enemy-defeated", this.id);
+        if (this.sprite) {
+            this.sprite.destroy();
+        }
     }
 
     private onPlayerHurt() {
@@ -131,6 +165,15 @@ export class EnemyFootman extends BaseEnemy {
 
     private getPlayer(): Phaser.GameObjects.Sprite {
         return this.player;
+    }
+
+    // Update player position
+    update(deltaTime: number) {
+        const player = this.getPlayer();
+        if (player) {
+            this.lastPlayerX = player.x;
+            this.lastPlayerY = player.y;
+        }
     }
 }
 

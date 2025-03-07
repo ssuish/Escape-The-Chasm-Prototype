@@ -2,17 +2,16 @@ import { Scene } from "phaser";
 import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
-import { EventBus } from "../EventBus";
 import { EnemyFootman } from "../entities/EnemyFootman";
 import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
 
 export class BaseLevel extends Scene {
     levelName: string;
-    playerController: PlayerController;
+    playerController?: PlayerController;
     player?: Player;
     enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
-    private numberOfEnemies: number; // Add this property
+    private numberOfEnemies: number; 
     private enemySpawnTimer!: Phaser.Time.TimerEvent;
     private map!: Phaser.Tilemaps.Tilemap;
     private enemiesSpawned: number = 0;
@@ -21,7 +20,7 @@ export class BaseLevel extends Scene {
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
         this.levelName = levelName;
-        this.numberOfEnemies = numberOfEnemies; // Initialize the property
+        this.numberOfEnemies = numberOfEnemies; 
     }
 
     init() {
@@ -65,11 +64,6 @@ export class BaseLevel extends Scene {
             if (wall) {
                 wall.setCollisionByProperty({ collides: true });
                 this.matter.world.convertTilemapLayer(wall);
-                // wall.forEachTile((tile) => {
-                //     if (tile.collides) {
-                //         // TODO: Tiles stickyness not yet fixed.
-                //     }
-                // });
             }
             if (elevator) {
                 elevator.setCollisionByProperty({ collides: true });
@@ -88,11 +82,6 @@ export class BaseLevel extends Scene {
                         this.handlePlayerSpawn(x, y);
                         break;
                     }
-
-                    // case "enemySpawn": {
-                    //     this.handleEnemySpawn(x, y, width);
-                    //     break;
-                    // }
 
                     case "deadEnd": {
                         this.handleDeadEnd(x, y, width, height);
@@ -125,7 +114,7 @@ export class BaseLevel extends Scene {
 
     startEnemySpawnTimer() {
         const spawnInterval = 5000; // Interval in milliseconds
-        const spawnDuration = 30000; // Total duration in milliseconds (30 seconds)
+        const spawnDuration = 30000; // Total duration in milliseconds
 
         this.enemySpawnTimer = this.time.addEvent({
             delay: spawnInterval,
@@ -138,6 +127,7 @@ export class BaseLevel extends Scene {
     spawnEnemies() {
         if (this.enemiesSpawned >= this.numberOfEnemies) {
             this.enemySpawnTimer.remove(); // Stop the timer if the limit is reached
+            // TODO - Add a game over/finish condition
             return;
         }
 
@@ -159,15 +149,27 @@ export class BaseLevel extends Scene {
                         { label: "enemy-footman" }
                     );
                     enemySprite.name = "enemy-footman";
+
+                    if (!this.player) {
+                        console.error("player is missing");
+                        return;
+                    }
+
+                    const playerSprite = this.player?.getPlayerSprite();
+                    if (!playerSprite) {
+                        console.error("Player sprite is missing");
+                        return;
+                    }
+
                     const enemyFootman = new EnemyFootman(
                         enemySprite,
                         this.obstacles,
-                        this.player!.getPlayerSprite(),
+                        playerSprite,
                         this
                     );
 
                     if (enemyFootman) {
-                        // Add methods to handle enemy behavior
+                        // TODO: Add methods to handle enemy behavior
                     }
 
                     this.enemiesSpawned++;
@@ -190,30 +192,6 @@ export class BaseLevel extends Scene {
         }
     }
 
-    handleEnemySpawn(x: number, y: number, width: number) {
-        for (let i = 0; i < this.numberOfEnemies; i++) {
-            const randomX = x + Math.random() * width;
-            const enemySprite = this.matter.add.sprite(
-                randomX,
-                y,
-                "enemy-footman",
-                0,
-                { label: "enemy-footman" }
-            );
-            enemySprite.name = "enemy-footman";
-            const enemyFootman = new EnemyFootman(
-                enemySprite,
-                this.obstacles,
-                this.player!.getPlayerSprite(),
-                this
-            );
-
-            if (enemyFootman) {
-                // Add methods to handle enemy behavior
-            }
-        }
-    }
-
     handleDeadEnd(x: number, y: number, width: number, height: number) {
         const adjustedX = x + width / 2;
         const adjustedY = y + height / 2;
@@ -232,8 +210,9 @@ export class BaseLevel extends Scene {
     }
 
     update(deltaTime: number) {
-        this.playerController.update(deltaTime);
-        //this.playerHealthBar.update();
+        if (this.player?.getPlayerSprite()) {
+            this.playerController?.update(deltaTime);
+        }
     }
 }
 

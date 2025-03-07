@@ -24,7 +24,7 @@ export class Player {
         obstacles: CollisionIdentifier,
         scene: Scene
     ) {
-        this.sprite = sprite;
+        this.sprite = sprite; 
         this.speed = gameConfig.playerSpeed;
         this.jumpForce = gameConfig.jumpForce * 1.5;
         this.obstacles = obstacles;
@@ -65,14 +65,6 @@ export class Player {
         this.projectilePool = new ProjectilePool(this.sprite.scene, 5);
 
         this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
-            // const { bodyA, bodyB } = data;
-            // if (bodyA === this.sprite.body || bodyB === this.sprite.body) {
-            //     this.isTouchingGround = true;
-            //     if (this.stateMachine.isCurrentState("jump")) {
-            //         this.stateMachine.setState("idle");
-            //     }
-            // }
-
             const { bodyA, bodyB } = data;
 
             const playerBody = this.sprite.body as MatterJS.BodyType;
@@ -107,7 +99,7 @@ export class Player {
 
     GetHealth = () => {
         return this.health;
-    }
+    };
 
     GetMaxHealth = () => {
         return this.maxHealth;
@@ -153,8 +145,8 @@ export class Player {
 
     private enemyHitOnEnter() {
         this.sprite.setVelocityY(-10);
-        
-        // Apply knockback effect
+
+        // Apply knockback
         this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
 
         const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
@@ -188,7 +180,6 @@ export class Player {
             },
         });
 
-        // TODO: health system upon enemy hit
         console.log("Current player health: ", this.health);
         EventBus.emit("player-hurt");
 
@@ -203,17 +194,25 @@ export class Player {
         if (this.sprite) {
             this.sprite.setVelocityY(-25);
             this.sprite.setAngularVelocity(0.1);
-
             // Change scene to game over after 1.5 seconds
             // TODO: Upon listening to event prevent player controls and change to the game-over scene.
             this.sprite.scene.time.delayedCall(1500, () => {
                 EventBus.emit("player-defeated");
-                this.sprite.scene.scene.restart();
-                this.stateMachine.setState("idle");
+                this.cleanup();
+                this.scene.scene.start("LevelSelection");
             });
         } else {
             console.error("Sprite is not defined in defeatedOnEnter");
         }
+    }
+
+    private cleanup() {
+        this.sprite.setVelocity(0);
+        this.sprite.setAngularVelocity(0);
+        this.sprite.setTint(0xffffff); 
+        this.health = this.maxHealth; 
+        this.stateMachine.setState("idle"); 
+        EventBus.off("enemy-hit", this.handleEnemyHit); 
     }
 
     private handleEnemyHit(damage: number) {
@@ -230,8 +229,8 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
-            const offsetX = facingLeft ? -30 : 30; // Adjust the offset value as needed
-            const offsetY = 0; // Adjust the vertical offset if needed
+            const offsetX = facingLeft ? -30 : 30; // Adjust the offset value
+            const offsetY = 0; // Adjust the vertical offset
             projectile.fireFromPlayer(
                 this.sprite.x + offsetX,
                 this.sprite.y + offsetY,
@@ -269,8 +268,11 @@ export class Player {
     }
 
     getPlayerSprite = () => {
-        return this.sprite;
-    }
+        if (this.sprite) {
+            return this.sprite;
+        }
+        return null;
+    };
 
     static preload(scene: Scene) {
         scene.load.setPath("assets");
@@ -337,6 +339,9 @@ export class Player {
         this.stateMachine.update(deltaTime);
         this.projectilePool.update();
     }
-}
 
+    destroy() {
+        this.sprite.destroy();
+    }
+}
 
