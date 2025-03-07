@@ -11,16 +11,17 @@ export class BaseLevel extends Scene {
     player?: Player;
     enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
-    private numberOfEnemies: number; 
+    private numberOfEnemies: number;
     private enemySpawnTimer!: Phaser.Time.TimerEvent;
     private map!: Phaser.Tilemaps.Tilemap;
     private enemiesSpawned: number = 0;
     playerHealthBar: PlayerHealthBar;
+    private defeatedEnemies: number = 0;
 
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
         this.levelName = levelName;
-        this.numberOfEnemies = numberOfEnemies; 
+        this.numberOfEnemies = numberOfEnemies;
     }
 
     init() {
@@ -119,7 +120,7 @@ export class BaseLevel extends Scene {
 
     startEnemySpawnTimer() {
         const spawnInterval = 5000; // Interval in milliseconds
-        const spawnDuration = 30000; // Total duration in milliseconds
+        const spawnDuration = 60000; // Total duration in milliseconds
 
         this.enemySpawnTimer = this.time.addEvent({
             delay: spawnInterval,
@@ -132,7 +133,6 @@ export class BaseLevel extends Scene {
     spawnEnemies() {
         if (this.enemiesSpawned >= this.numberOfEnemies) {
             this.enemySpawnTimer.remove(); // Stop the timer if the limit is reached
-            // TODO - Add a game over/finish condition
             return;
         }
 
@@ -143,8 +143,9 @@ export class BaseLevel extends Scene {
 
             if (name === "enemySpawn") {
                 const spawnCount = Math.random() < 0.5 ? 1 : 2; // 50% chance to spawn 1 or 2 enemies
-
+                
                 for (let i = 0; i < spawnCount; i++) {
+
                     const randomX = x + Math.random() * width;
                     const enemySprite = this.matter.add.sprite(
                         randomX,
@@ -182,6 +183,20 @@ export class BaseLevel extends Scene {
                 }
             }
         });
+    }
+
+    incrementDefeatedEnemies() {
+        this.defeatedEnemies++;
+        console.log(`Defeated enemies: ${this.defeatedEnemies}`);
+        if (this.defeatedEnemies >= this.numberOfEnemies) {
+            this.handleWinCondition();
+        }
+    }
+
+    handleWinCondition() {
+        console.log("All enemies defeated! You win!");
+
+        // TODO Add win condition
     }
 
     handlePlayerSpawn(x: number, y: number) {

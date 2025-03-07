@@ -2,6 +2,7 @@ import { Physics, Scene } from "phaser";
 import { BaseEnemy } from "./BaseEnemy";
 import { EventBus } from "../EventBus";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
+import { BaseLevel } from "../levels/BaseLevel";
 
 export class EnemyFootman extends BaseEnemy {
     private health: number;
@@ -22,7 +23,7 @@ export class EnemyFootman extends BaseEnemy {
 
         this.maxHealth = 30;
         this.health = this.maxHealth;
-        this.damage = 10;
+        this.damage = 5;
         this.scene = scene;
         this.player = player;
         const body = sprite.body as MatterJS.BodyType;
@@ -48,9 +49,6 @@ export class EnemyFootman extends BaseEnemy {
     protected handleCollisionWith(
         gameObject: Phaser.GameObjects.GameObject | undefined
     ): void {
-        console.log(
-            `Enemy ${this.id} collided with: ${gameObject?.name || "unknown"}`
-        );
         this.Jump();
 
         if (gameObject instanceof Physics.Matter.TileBody) {
@@ -123,11 +121,13 @@ export class EnemyFootman extends BaseEnemy {
         console.log("New health: ", this.health);
     }
 
-    protected defeatedOnEnter() {
+    protected defeatedOnEnter(): void {
         console.log("Enemy defeated");
         EventBus.emit("enemy-defeated", this.id);
         if (this.sprite) {
             this.sprite.destroy();
+            const baseLevel = this.scene as BaseLevel;
+            baseLevel.incrementDefeatedEnemies();
         }
     }
 

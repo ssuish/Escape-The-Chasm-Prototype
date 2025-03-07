@@ -60,11 +60,14 @@ export class PlayerController {
         if (this.interactKey.isDown) {
             this.player.interact();
             console.log("[K] is clicked.");
+            
         }
 
         if (this.pauseKey.isDown) {
             this.player.pauseGame();
             console.log("[L] is clicked.");
+
+            
         }
 
         this.player.update(deltaTime);

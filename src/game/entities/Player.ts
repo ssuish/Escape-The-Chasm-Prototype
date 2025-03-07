@@ -24,7 +24,7 @@ export class Player {
         obstacles: CollisionIdentifier,
         scene: Scene
     ) {
-        this.sprite = sprite; 
+        this.sprite = sprite;
         this.speed = gameConfig.playerSpeed;
         this.jumpForce = gameConfig.jumpForce * 1.5;
         this.obstacles = obstacles;
@@ -192,7 +192,7 @@ export class Player {
 
     private defeatedOnEnter() {
         if (this.sprite) {
-            this.sprite.setVelocityY(-25);
+            this.sprite.setVelocityY(-15);
             this.sprite.setAngularVelocity(0.1);
             // Change scene to game over after 1.5 seconds
             // TODO: Upon listening to event prevent player controls and change to the game-over scene.
@@ -209,10 +209,10 @@ export class Player {
     private cleanup() {
         this.sprite.setVelocity(0);
         this.sprite.setAngularVelocity(0);
-        this.sprite.setTint(0xffffff); 
-        this.health = this.maxHealth; 
-        this.stateMachine.setState("idle"); 
-        EventBus.off("enemy-hit", this.handleEnemyHit); 
+        this.sprite.setTint(0xffffff);
+        this.health = this.maxHealth;
+        this.stateMachine.setState("idle");
+        EventBus.off("enemy-hit", this.handleEnemyHit);
     }
 
     private handleEnemyHit(damage: number) {
@@ -333,6 +333,7 @@ export class Player {
 
     pauseGame() {
         this.stateMachine.setState("pause");
+
     }
 
     update(deltaTime: number) {

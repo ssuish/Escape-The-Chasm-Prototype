@@ -2,6 +2,7 @@ import { Physics, Scene } from "phaser";
 import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
+import { EventBus } from "../EventBus";
 
 export abstract class BaseEnemy {
     protected speed: number;
@@ -62,6 +63,9 @@ export abstract class BaseEnemy {
 
             if (this.obstacles.is("deadEnd", otherBody)) {
                 this.stateMachine.setState("defeated");
+                // TODO: Add event emitter for defeated enemies on deadend.
+                // TODO: check enemy id and emit event accordingly
+                EventBus.emit("enemy-defeated-onDeadEnd");
                 return;
             }
 
@@ -86,6 +90,6 @@ export abstract class BaseEnemy {
     protected abstract patrolOnEnter(): void;
     protected abstract attackOnEnter(): void;
     protected abstract enemyHitOnEnter(): void;
-    protected abstract defeatedOnEnter(): void;
+    protected defeatedOnEnter(): void {}
 }
 
