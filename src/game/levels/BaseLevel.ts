@@ -197,6 +197,8 @@ export class BaseLevel extends Scene {
         console.log("All enemies defeated! You win!");
 
         // TODO Add win condition
+        this.scene.stop(this.levelName);
+        this.scene.start("GameVictory");
     }
 
     handlePlayerSpawn(x: number, y: number) {
