@@ -37,12 +37,15 @@ export class PlayerController {
     }
 
     update(deltaTime: number) {
+
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
         } else if (this.cursors.right.isDown) {
             this.player.moveRight();
         } else if (!this.cursors.up.isDown) {
-            this.player.idle();
+            if (this.player) {
+                this.player.idle();
+            }
         }
 
         if (this.cursors.up.isDown) {

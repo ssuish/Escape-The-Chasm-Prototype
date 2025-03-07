@@ -12,25 +12,26 @@ export abstract class BaseEnemy {
     protected player: Phaser.GameObjects.Sprite;
     protected obstacles: CollisionIdentifier;
     protected scene: Scene;
+    protected lastPlayerX: number;
+    protected lastPlayerY: number;
 
     constructor(
+        id: string,
         sprite: Physics.Matter.Sprite,
         obstacles: CollisionIdentifier,
         player: Phaser.GameObjects.Sprite,
         scene: Scene
     ) {
         this.sprite = sprite;
-        this.speed = gameConfig.playerSpeed; // replace to enemy
-        this.jumpForce = gameConfig.jumpForce; // replace to enemy
+        // TODO: Replace the gameConfig values with the enemies' own values
+        this.speed = gameConfig.playerSpeed;
+        this.jumpForce = gameConfig.jumpForce;
         this.obstacles = obstacles;
         this.player = player;
         this.scene = scene;
 
-        this.stateMachine = new StateMachine(this, "enemy");
+        this.stateMachine = new StateMachine(this, id);
         this.stateMachine
-            .addState("idle", {
-                onEnter: this.idleOnEnter,
-            })
             .addState("patrol", {
                 onEnter: this.patrolOnEnter,
             })
@@ -43,7 +44,7 @@ export abstract class BaseEnemy {
             .addState("defeated", {
                 onEnter: this.defeatedOnEnter,
             })
-            .setState("idle");
+            .setState("patrol");
 
         this.sprite.setOnCollide((data: MatterJS.ICollisionPair) => {
             const { bodyA, bodyB } = data;
@@ -82,7 +83,6 @@ export abstract class BaseEnemy {
     protected abstract handleCollisionWith(
         gameObject: Phaser.GameObjects.GameObject | undefined
     ): void;
-    protected abstract idleOnEnter(): void;
     protected abstract patrolOnEnter(): void;
     protected abstract attackOnEnter(): void;
     protected abstract enemyHitOnEnter(): void;
