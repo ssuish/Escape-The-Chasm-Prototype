@@ -4,6 +4,7 @@ import { PlayerController } from "../entities/PlayerController";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EventBus } from "../EventBus";
 import { EnemyFootman } from "../entities/EnemyFootman";
+import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
 
 export class BaseLevel extends Scene {
     levelName: string;
@@ -12,6 +13,7 @@ export class BaseLevel extends Scene {
     enemyFootman?: EnemyFootman;
     private obstacles!: CollisionIdentifier;
     private numberOfEnemies: number; // Add this property
+    playerHealthBar: PlayerHealthBar
 
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
@@ -123,6 +125,8 @@ export class BaseLevel extends Scene {
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
+            this.playerHealthBar = new PlayerHealthBar(this.player);
+            this.playerHealthBar.create();
         }
     }
 
@@ -164,6 +168,7 @@ export class BaseLevel extends Scene {
 
     update(deltaTime: number) {
         this.playerController.update(deltaTime);
+        //this.playerHealthBar.update();
     }
 }
 
