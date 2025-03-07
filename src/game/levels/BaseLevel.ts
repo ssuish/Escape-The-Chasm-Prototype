@@ -110,6 +110,11 @@ export class BaseLevel extends Scene {
 
         // Timer
         this.startEnemySpawnTimer();
+
+        // Create the health bar
+        if (this.player){
+            this.playerHealthBar = new PlayerHealthBar(this, 10, 10, this.player); //display profileplayer
+        }
     }
 
     startEnemySpawnTimer() {
@@ -187,8 +192,8 @@ export class BaseLevel extends Scene {
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
-            this.playerHealthBar = new PlayerHealthBar(this.player);
-            this.playerHealthBar.create();
+            this.playerHealthBar = new PlayerHealthBar(this, x, y, this.player);
+            this.playerHealthBar.draw();
         }
     }
 
@@ -212,6 +217,7 @@ export class BaseLevel extends Scene {
     update(deltaTime: number) {
         if (this.player?.getPlayerSprite()) {
             this.playerController?.update(deltaTime);
+            this.playerHealthBar.update();
         }
     }
 }

@@ -199,7 +199,7 @@ export class Player {
             this.sprite.scene.time.delayedCall(1500, () => {
                 EventBus.emit("player-defeated");
                 this.cleanup();
-                this.scene.scene.start("LevelSelection");
+                this.scene.scene.start("GameOver"); //scene going to game over
             });
         } else {
             console.error("Sprite is not defined in defeatedOnEnter");

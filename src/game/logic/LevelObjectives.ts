@@ -15,7 +15,7 @@ const levelObjectives = {
           //condition: (coinCount) => coinCount >= 10,
         },
         {
-          objective: "Complete the level under 2 minutes",
+          objective: "Complete the stage with 25% health or above",
           //condition: (startTime, currentTime) =>
             //currentTime - startTime <= 30000, // 30000 milliseconds
         },
