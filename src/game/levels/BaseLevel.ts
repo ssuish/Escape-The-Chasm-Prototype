@@ -3,6 +3,7 @@ import { Player } from "../entities/Player";
 import { PlayerController } from "../entities/PlayerController";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EnemyFootman } from "../entities/EnemyFootman";
+import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
 
 export class BaseLevel extends Scene {
     levelName: string;
@@ -14,6 +15,7 @@ export class BaseLevel extends Scene {
     private enemySpawnTimer!: Phaser.Time.TimerEvent;
     private map!: Phaser.Tilemaps.Tilemap;
     private enemiesSpawned: number = 0;
+    playerHealthBar: PlayerHealthBar;
 
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
@@ -185,6 +187,8 @@ export class BaseLevel extends Scene {
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
+            this.playerHealthBar = new PlayerHealthBar(this.player);
+            this.playerHealthBar.create();
         }
     }
 
