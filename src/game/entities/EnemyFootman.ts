@@ -23,7 +23,7 @@ export class EnemyFootman extends BaseEnemy {
 
         this.maxHealth = 30;
         this.health = this.maxHealth;
-        this.damage = 5;
+        this.damage = 3;
         this.scene = scene;
         this.player = player;
         const body = sprite.body as MatterJS.BodyType;

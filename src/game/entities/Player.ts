@@ -192,6 +192,7 @@ export class Player {
 
     private defeatedOnEnter() {
         if (this.sprite) {
+            this.health = 0;
             this.sprite.setVelocityY(-15);
             this.sprite.setAngularVelocity(0.1);
             // Change scene to game over after 1.5 seconds
@@ -333,7 +334,6 @@ export class Player {
 
     pauseGame() {
         this.stateMachine.setState("pause");
-
     }
 
     update(deltaTime: number) {
