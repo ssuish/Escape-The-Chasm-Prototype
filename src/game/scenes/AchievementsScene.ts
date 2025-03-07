@@ -3,10 +3,6 @@ import { EventBus } from "../EventBus";
 import { BackButton } from "../UIComponents/UIButton";
 
 export class Achievements extends Scene {
-    logo: Phaser.GameObjects.Image;
-    tileSprite: Phaser.GameObjects.TileSprite;
-    scrollSpeed: number;
-
     constructor() {
         super("Achievements");
     }
@@ -15,8 +11,6 @@ export class Achievements extends Scene {
         new BackButton(this, 45, 40, () => {
             this.changeScene("MainMenu");
         });
-        
-        //this.logo = this.add.image(512, 60, "achieve").setScale(.7);
 
         EventBus.emit("current-scene-ready", this);
         

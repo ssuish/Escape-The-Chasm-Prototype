@@ -19,7 +19,7 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
         this.barHeight = 40;
         this.borderThickness = 7;
         this.borderRadius = 10;
-        this.borderColor = 0x61271b;
+        this.borderColor = 0x717171;
 
         //this.playerProfile = scene.add.sprite(x - 40, y + this.barHeight / 2, /*displayPlayer*/)
 
@@ -32,7 +32,7 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
         this.clear();
 
         // Background
-        this.fillStyle(0x843423);
+        this.fillStyle(0xa9a9a9);
         this.fillRoundedRect(0, 0, this.barWidth, this.barHeight, this.borderRadius);
 
         //border
@@ -43,13 +43,13 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
         let percent = this.player.GetHealth() / this.player.GetMaxHealth();
         if (percent > 0) {
             let fillWidth = this.barWidth * percent;
-            let color = 0xFF0000; // Red
+            let color = 0xb11414; // Red
             if (color)
             if (percent > 0.25) {
-                color = 0xFFFF00; // Yellow
+                color = 0xc0ca24; // Yellow
             }
             if (percent > 0.50) {
-                color = 0x00FF00; // Green
+                color = 0x2daf2d; // Green
             }
 
         this.fillStyle(color); //fill color health

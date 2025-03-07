@@ -14,50 +14,79 @@ export class UIButton extends GameObjects.Sprite {
     ) {
         super(scene, x, y, text);
         this.on("pointerdown", callback);
-
         scene.add.existing(this);
     }
 }
 
-export class PlayButton extends UIButton {
+export class PlayButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "button-rectangle", callback);
-        scene.add.image(512, 470, 'play').setScale(0.2);
+        super(scene, x, y, "PLAY", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3
+        });
 
         this.setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
                 this.setTint(0xdedede);
+                this.setStroke('000000', 5)
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setTint(0xffffff);
+                this.setStroke('000000', 3)
             })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.setTint(0x8afbff);
-            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
                 this.setTint(0xffffff);
             });
+            scene.add.existing(this);
     }
 }
 
-export class AchievementsButton extends UIButton {
+export class AchievementsButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "button-rectangle", callback);
-        scene.add.image(512, 595, 'achieve').setScale(0.35);
+        super(scene, x, y, "ACHIEVEMENTS", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3
+        });
 
         this.setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
                 this.setTint(0xdedede);
+                this.setStroke('000000', 5)
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setTint(0xffffff);
+                this.setStroke('000000', 3)
             })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.setTint(0x8afbff);
-            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
                 this.setTint(0xffffff);
             });
+            scene.add.existing(this);
+    }
+}
+
+export class CreditsButton extends GameObjects.Text {
+    constructor(scene: Scene, x: number, y: number, callback: () => void) {
+        super(scene, x, y, "CREDITS", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3,
+        });
+
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+                this.setStroke('000000', 5)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+                this.setStroke('000000', 3)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
+            scene.add.existing(this);
     }
 }
 

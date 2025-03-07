@@ -1,16 +1,18 @@
 import { Boot } from "./scenes/Boot";
-import { GameOver } from "./scenes/GameOver";
+import { GameOver } from "./scenes/GameOverScene";
 import { Level1 } from "./levels/level1";
-import { MainMenu } from "./scenes/MainMenu";
-import { Achievements } from "./scenes/Achievements";
+import { MainMenu } from "./scenes/MainMenuScene";
+import { Achievements } from "./scenes/AchievementsScene";
 import { GameSettings } from "./scenes/GameSettings";
-import { LevelSelection } from "./scenes/LevelSelection";
+import { LevelSelection } from "./scenes/LevelSelectionScene";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Background } from "./scenes/Background";
 import { gameConfig } from "./config/gameConfig";
 import { BaseLevel } from "./levels/BaseLevel";
 import { MusicToggle } from "./scenes/MusicToggle";
+import { Credits } from "./scenes/CreditsScene";
+import { GameVictory } from "./scenes/GameVictoryScene";
 
 // TODO: Replace MainGame to LevelSelection
 // Always add new scenes here!
@@ -28,7 +30,9 @@ const config: Phaser.Types.Core.GameConfig = {
         BaseLevel,
         Level1,
         GameOver,
+        GameVictory,
         Achievements,
+        Credits,
         GameSettings,
         MusicToggle,
     ],
@@ -43,7 +47,7 @@ const config: Phaser.Types.Core.GameConfig = {
 
 // TODO: Remove the optional initial scene from the initialization
 const StartGame = (parent: string) => {
-    return new Game({ ...config, parent, scene: Level1 });
+    return new Game({ ...config, parent });
 };
 
 export default StartGame;

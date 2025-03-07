@@ -2,10 +2,10 @@
 //Edit this code when the game play is finalized
 
 const achievements = {
-    earn5Stars:{
+    defeat5Enemies:{
         rarity: "silver",
-        id: "earn5Stars",
-        name: "Starstruck",
+        id: "defeat5Stars",
+        name: "Robot Killer",
         description: "Earn 5 stars in all levels",
         //condition: (Sample condition, edit when correct functions are complete)
         earned: false,
@@ -20,11 +20,11 @@ const achievements = {
         earned: false,
         //badge: (insert the NFT for the badge)
     },
-    doubleJumper:{
+    suicidalEnemies:{
         rarity: "gold",
-        id: "doubleJumper",
-        name: "Spiderman",
-        description: "Attack an enemy using a double jump",
+        id: "suicidalEnemies",
+        name: "Suicidal Enemies",
+        description: "Defeat 5 enemies by letting them fall off the platform",
         //condition: (Sample condition, edit when correct functions are complete)
         earned: false,
         //badge: (insert the NFT for the badge)
@@ -35,7 +35,7 @@ const achievements = {
 //Tracking Achievements from Player Movements
 function earn10Stars() {/* add function */}
 function defeat10Enemies() {/* add function */}
-function doubleJumper() {/* add function */}
+function suicidalEnemies() {/* add function */}
 //add more functions here
 
 //in the function update(){
@@ -43,13 +43,13 @@ function doubleJumper() {/* add function */}
 //}
 
 //Check the achievement conditions
-if (!achievements.earn5Stars.earned /*&& achievements.earn5Stars.condition()*/){
+if (!achievements.defeat5Enemies.earned /*&& achievements.earn5Stars.condition()*/){
     earnAchievement("earn5Stars");
 }
 if (!achievements.defeat10Enemies.earned /*&& achievements.earn5Stars.condition()*/){
     earnAchievement("defeat10Enemies");
 }
-if (!achievements.doubleJumper.earned /*&& achievements.earn5Stars.condition()*/){
+if (!achievements.suicidalEnemies.earned /*&& achievements.earn5Stars.condition()*/){
     earnAchievement("doubleJumper");
 }
 
