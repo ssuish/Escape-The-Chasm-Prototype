@@ -37,7 +37,6 @@ export class PlayerController {
     }
 
     update(deltaTime: number) {
-
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
         } else if (this.cursors.right.isDown) {
@@ -53,21 +52,20 @@ export class PlayerController {
         }
 
         if (this.fireKey.isDown) {
-            this.player.fireGun();
-            console.log("[J] is clicked.");
+            this.player.fireGun(true);
+            console.log("[J] is held down.");
+        } else {
+            this.player.fireGun(false);
         }
 
         if (this.interactKey.isDown) {
             this.player.interact();
             console.log("[K] is clicked.");
-            
         }
 
         if (this.pauseKey.isDown) {
             this.player.pauseGame();
             console.log("[L] is clicked.");
-
-            
         }
 
         this.player.update(deltaTime);
