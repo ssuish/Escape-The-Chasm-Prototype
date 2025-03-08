@@ -26,3 +26,4 @@ dist-ssr
 # Custom Ignores
 /public/assets/player_placeholder/*
 /public/assets/tiles_placeholder/*
+/public/assets/player/*
