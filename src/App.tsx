@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { IRefPhaserGame, PhaserGame } from "./game/PhaserGame";
 import { MainMenu } from "./game/scenes/MainMenuScene";
+//import { EventBus } from "./game/EventBus";
 
 // Integration of the React App and the Phaser game happens here.
 function App() {
