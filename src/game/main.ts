@@ -24,7 +24,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         Boot,
         Preloader,
-        Background, 
+        Background,
         MainMenu,
         LevelSelection,
         BaseLevel,

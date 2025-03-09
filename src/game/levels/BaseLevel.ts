@@ -29,24 +29,22 @@ export class BaseLevel extends Scene {
     }
 
     preload() {
-        this.load.setPath("/assets/");
-
-        Player.preload(this);
+        this.load.setPath("assets/tileset");
 
         this.load
-            .image(
-                "tilesheet",
-                "/tileset/platformerPack_industrial_tilesheet.png"
-            )
+            .image("tilesheet", "platformerPack_industrial_tilesheet.png")
             .on("loaderror", () => {
                 console.error(`Failed to load tilesheet image.`);
             });
 
         this.load
-            .tilemapTiledJSON("tilemap", "/tileset/game-map.json")
+            .tilemapTiledJSON("tilemap", "game-map.json")
             .on("loaderror", () => {
                 console.error(`Failed to load tilemap.`);
             });
+
+        Player.preload(this);
+        EnemyFootman.preload(this);
     }
 
     create() {
@@ -113,8 +111,13 @@ export class BaseLevel extends Scene {
         this.startEnemySpawnTimer();
 
         // Create the health bar
-        if (this.player){
-            this.playerHealthBar = new PlayerHealthBar(this, 10, 10, this.player); //display profileplayer
+        if (this.player) {
+            this.playerHealthBar = new PlayerHealthBar(
+                this,
+                10,
+                10,
+                this.player
+            ); //display profileplayer
         }
     }
 
@@ -143,17 +146,20 @@ export class BaseLevel extends Scene {
 
             if (name === "enemySpawn") {
                 const spawnCount = Math.random() < 0.5 ? 1 : 2; // 50% chance to spawn 1 or 2 enemies
-                
-                for (let i = 0; i < spawnCount; i++) {
 
+                for (let i = 0; i < spawnCount; i++) {
                     const randomX = x + Math.random() * width;
                     const enemySprite = this.matter.add.sprite(
                         randomX,
                         y,
-                        "enemy-footman",
+                        "enemy_footman",
                         0,
                         { label: "enemy-footman" }
                     );
+
+                    // Set additional properties for the sprite
+                    // enemySprite.setScale(2.5);
+                    // enemySprite.setFixedRotation();
                     enemySprite.name = "enemy-footman";
 
                     if (!this.player) {
@@ -173,6 +179,8 @@ export class BaseLevel extends Scene {
                         playerSprite,
                         this
                     );
+
+                    this.enemyFootman = enemyFootman;
 
                     if (enemyFootman) {
                         // TODO: Add methods to handle enemy behavior
@@ -235,6 +243,7 @@ export class BaseLevel extends Scene {
         if (this.player?.getPlayerSprite()) {
             this.playerController?.update(deltaTime);
             this.playerHealthBar.update();
+            this.enemyFootman?.update(deltaTime);
         }
     }
 }
