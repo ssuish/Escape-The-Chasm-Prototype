@@ -112,7 +112,7 @@ export class EnemyFootman extends BaseEnemy {
 
     protected patrolOnEnter() {
         console.log("Enemy patrolling");
-        this.sprite.play("patrol");
+        //this.sprite.play("patrol");
     }
 
     protected attackOnEnter() {
