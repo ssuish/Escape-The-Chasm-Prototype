@@ -1,13 +1,14 @@
 //Sample Achievements Object
 //Edit this code when the game play is finalized
 
+
 const achievements = {
     defeat5Enemies:{
         rarity: "silver",
         id: "defeat5Stars",
         name: "Robot Killer",
         description: "Earn 5 stars in all levels",
-        //condition: (Sample condition, edit when correct functions are complete)
+        //condition: incrementDefeatedEnemies() = 5,
         earned: false,
         //badge: (insert the NFT for the badge)
     },
@@ -16,7 +17,7 @@ const achievements = {
         id: "defeat10Enemies",
         name: "Robot Massacre",
         description: "Defeat 10 enemies in a single level",
-        //condition: (Sample condition, edit when correct functions are complete)
+        //condition: incrementDefeatedEnemies() = 10,
         earned: false,
         //badge: (insert the NFT for the badge)
     },
@@ -56,4 +57,8 @@ if (!achievements.suicidalEnemies.earned /*&& achievements.earn5Stars.condition(
 //Checks the Achievement, making it true
 function earnAchievement(achievementID: string){
     //achievements[achievementID].earned = true;
+}
+
+function incrementDefeatedEnemies() {
+    throw new Error("Function not implemented.");
 }
