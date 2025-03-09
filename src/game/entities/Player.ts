@@ -31,6 +31,25 @@ export class Player {
         this.scene = scene;
         this.health = this.maxHealth;
 
+        const scaleFactor = 2;
+        this.sprite.setScale(scaleFactor);
+        this.sprite.setTexture(this.sprite.texture.key, 0);
+
+        const { width, height } = this.sprite;
+        this.sprite.setBody(
+            {
+                type: "rectangle",
+                width: width * scaleFactor * 0.5,
+                height: height * scaleFactor * 1.7,
+            },
+            {
+                position: {
+                    x: this.sprite.x,
+                    y: this.sprite.y + height * scaleFactor,
+                },
+            }
+        );
+
         this.stateMachine = new StateMachine(this, "player");
         this.stateMachine
             .addState("idle", {
@@ -137,6 +156,7 @@ export class Player {
     }
 
     private jumpOnEnter() {
+        this.sprite.play("jump", true);
         if (this.isTouchingGround) {
             this.sprite.setVelocityY(this.jumpForce);
             this.isTouchingGround = false;
@@ -191,16 +211,33 @@ export class Player {
     }
 
     private defeatedOnEnter() {
+        // TODO: Alternative can't play death animation
         if (this.sprite) {
+            this.sprite.setInteractive(false);
             this.health = 0;
-            this.sprite.setVelocityY(-15);
-            this.sprite.setAngularVelocity(0.1);
-            // Change scene to game over after 1.5 seconds
-            // TODO: Upon listening to event prevent player controls and change to the game-over scene.
-            this.sprite.scene.time.delayedCall(1500, () => {
-                EventBus.emit("player-defeated");
-                this.cleanup();
-                this.scene.scene.start("GameOver"); //scene going to game over
+            console.log("Starting fade out");
+
+            const camera = this.scene.cameras.main;
+            const fadeOutRect = this.scene.add.rectangle(
+                camera.scrollX + camera.width / 2,
+                camera.scrollY + camera.height / 2,
+                camera.width,
+                camera.height,
+                0x000000
+            );
+            fadeOutRect.setAlpha(0);
+
+            // Fade out the black rectangle
+            this.scene.tweens.add({
+                targets: fadeOutRect,
+                alpha: 1,
+                duration: 2000,
+                onComplete: () => {
+                    console.log("Fade out complete");
+                    EventBus.emit("player-defeated");
+                    this.cleanup();
+                    this.scene.scene.start("GameOver");
+                },
             });
         } else {
             console.error("Sprite is not defined in defeatedOnEnter");
@@ -217,8 +254,8 @@ export class Player {
     }
 
     private handleEnemyHit(damage: number) {
-        console.log("Player hit by enemy: ", damage + " damage");
-        this.health = Math.abs(this.health - damage);
+        this.health = Math.max(this.health - damage, 0);
+        console.log("Health: ", this.health);
         if (this.health <= 0) {
             this.stateMachine.setState("defeated");
         }
@@ -230,7 +267,7 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
-            const offsetX = facingLeft ? -30 : 30; // Adjust the offset value
+            const offsetX = facingLeft ? -40 : 40; // Adjust the offset value
             const offsetY = 0; // Adjust the vertical offset
             projectile.fireFromPlayer(
                 this.sprite.x + offsetX,
@@ -249,25 +286,6 @@ export class Player {
         console.log("Pause game");
     }
 
-    private createAnimation() {
-        this.sprite.anims.create({
-            key: "idle",
-            frames: [{ key: "player", frame: "penguin_walk01.png" }],
-        });
-
-        this.sprite.anims.create({
-            key: "walk",
-            frames: this.sprite.anims.generateFrameNames("player", {
-                prefix: "penguin_walk0",
-                start: 1,
-                end: 4,
-                suffix: ".png",
-            }),
-            frameRate: 10,
-            repeat: -1,
-        });
-    }
-
     getPlayerSprite = () => {
         if (this.sprite) {
             return this.sprite;
@@ -276,18 +294,119 @@ export class Player {
     };
 
     static preload(scene: Scene) {
-        scene.load.setPath("assets");
+        scene.load.setPath("assets/player_final");
         scene.load
             .atlas(
-                "player",
-                "/player/player_placeholder.png",
-                "/player/player_placeholder.json"
+                "player_idle",
+                "/player_idle/player_idle.png",
+                "/player_idle/player_idle.json"
             )
             .on("loaderror", () => {
                 console.error(`Failed to load atlas.`);
             });
+
+        scene.load
+            .atlas(
+                "player_death",
+                "/player_death/player_death.png",
+                "/player_death/player_death.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            });
+
+        scene.load
+            .atlas(
+                "player_fire",
+                "/player_fire/player_fire.png",
+                "/player_fire/player_fire.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            });
+
+        scene.load
+            .atlas(
+                "player_jump",
+                "/player_jump/player_jump.png",
+                "/player_jump/player_jump.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            });
+
+        scene.load
+            .atlas(
+                "player_walk",
+                "/player_walk/player_walk.png",
+                "/player_walk/player_walk.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            });
+
         scene.load.image("projectile", "star.png").on("loaderror", () => {
             console.error(`Failed to load sprite.`);
+        });
+    }
+
+    private createAnimation() {
+        this.sprite.anims.create({
+            key: "idle",
+            frames: this.sprite.anims.generateFrameNames("player_idle", {
+                prefix: "player_idle_0",
+                start: 1,
+                end: 4,
+                suffix: ".png",
+            }),
+            frameRate: 8,
+            repeat: -1,
+        });
+
+        this.sprite.anims.create({
+            key: "walk",
+            frames: this.sprite.anims.generateFrameNames("player_walk", {
+                prefix: "player_walk_0",
+                start: 1,
+                end: 4,
+                suffix: ".png",
+            }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.sprite.anims.create({
+            key: "jump",
+            frames: this.sprite.anims.generateFrameNames("player_jump", {
+                prefix: "player_jump_0",
+                start: 1,
+                end: 6,
+                suffix: ".png",
+            }),
+            frameRate: 3,
+        });
+
+        this.sprite.anims.create({
+            key: "fire",
+            frames: this.sprite.anims.generateFrameNames("player_fire", {
+                prefix: "player_fire_0",
+                start: 0,
+                end: 4,
+                suffix: ".png",
+            }),
+            frameRate: 8,
+            repeat: -1,
+        });
+
+        this.sprite.anims.create({
+            key: "death",
+            frames: this.sprite.anims.generateFrameNames("player_death", {
+                prefix: "player_death_0",
+                start: 0,
+                end: 7,
+                suffix: ".png",
+            }),
+            frameRate: 6,
         });
     }
 
@@ -320,11 +439,22 @@ export class Player {
         }
     }
 
-    fireGun() {
+    fireGun(isHolding: boolean) {
         const currentTime = this.sprite.scene.time.now;
-        if (currentTime - this.lastFireTime > this.fireCooldown) {
-            this.stateMachine.setState("fire");
-            this.lastFireTime = currentTime;
+        if (isHolding) {
+            if (this.sprite.anims.currentAnim?.key !== "fire") {
+                this.sprite.play("fire", true);
+            }
+            if (currentTime - this.lastFireTime > this.fireCooldown) {
+                if (!this.stateMachine.isCurrentState("fire")) {
+                    this.stateMachine.setState("fire");
+                    this.lastFireTime = currentTime;
+                }
+            }
+        } else {
+            if (this.stateMachine.isCurrentState("fire")) {
+                this.stateMachine.setState("idle");
+            }
         }
     }
 

@@ -31,6 +31,20 @@ export class EnemyFootman extends BaseEnemy {
         this.lastPlayerX = player.x;
         this.lastPlayerY = player.y;
 
+        scene.add.existing(sprite);
+        this.sprite.setScale(1.8);
+        this.sprite.setFixedRotation();
+        // this.sprite.setRectangle(this.sprite.width, this.sprite.height * 2);
+        // if (this.sprite.body) {
+        //     (this.sprite.body as MatterJS.BodyType & { label: string }).label = "enemy-footman"; // Manually set the label back
+        // }
+
+        this.sprite.setTexture("enemy_idle");
+        console.log(
+            `Sprite dimensions: width=${this.sprite.width}, height=${this.sprite.height}`
+        );
+        console.log(`Sprite body: `, this.sprite.body);
+
         // Event listeners
         EventBus.on("player-hurt", this.onPlayerHurt.bind(this)).on(
             "projectile-hit",
@@ -45,6 +59,37 @@ export class EnemyFootman extends BaseEnemy {
     GetMaxHealth = () => {
         this.maxHealth;
     };
+
+    static preload(scene: Scene) {
+        scene.load.setPath("assets/enemy");
+        scene.load
+            .atlas(
+                "enemy_idle",
+                "enemy_idle/enemy_idle.png",
+                "enemy_idle/enemy_idle.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            })
+            .on("load", () => {
+                console.log("Enemy assets loaded successfully.");
+            });
+    }
+
+    protected createAnimation(): void {
+        this.sprite.anims.create({
+            key: "patrol",
+            frames: this.sprite.anims.generateFrameNames("enemy_idle", {
+                prefix: "enemy_idle_0",
+                start: 0,
+                end: 3,
+                suffix: ".png",
+            }),
+            frameRate: 2,
+            repeat: -1,
+        });
+        console.log("Enemy animation created.");
+    }
 
     protected handleCollisionWith(
         gameObject: Phaser.GameObjects.GameObject | undefined
@@ -65,17 +110,14 @@ export class EnemyFootman extends BaseEnemy {
         return;
     }
 
-    protected createAnimation(): void {}
-
     protected patrolOnEnter() {
         console.log("Enemy patrolling");
+        this.sprite.play("patrol");
     }
 
     protected attackOnEnter() {
         console.log("Enemy attacking player");
-        this.scene.time.delayedCall(1000, () => {
-            this.stateMachine.setState("patrol");
-        });
+        this.stateMachine.setState("patrol");
     }
 
     private Jump() {
@@ -115,10 +157,12 @@ export class EnemyFootman extends BaseEnemy {
         }
 
         this.isTouchingGround = false;
+        this.stateMachine.setState("patrol");
     }
 
     protected enemyHitOnEnter() {
-        console.log("New health: ", this.health);
+        console.log("New Enemy health: ", this.health);
+        this.stateMachine.setState("patrol");
     }
 
     protected defeatedOnEnter(): void {
@@ -144,11 +188,19 @@ export class EnemyFootman extends BaseEnemy {
     }) {
         if (projectileHit.type === "enemy-footman") {
             console.log(
-                `Enemy ${projectileHit.id} is taking ${projectileHit.damage} damage.`
+                "Enemy type hit: ",
+                projectileHit.type,
+                " id: ",
+                projectileHit.id
             );
-
             if (projectileHit.id === this.id) {
                 this.health -= projectileHit.damage;
+                console.log(
+                    "New Enemy health: ",
+                    this.health,
+                    " id: ",
+                    this.id
+                );
 
                 // Apply knockback
                 this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
@@ -174,6 +226,23 @@ export class EnemyFootman extends BaseEnemy {
             this.lastPlayerX = player.x;
             this.lastPlayerY = player.y;
         }
+
+        if (this.sprite && this.sprite.body) {
+            if (this.sprite.body.velocity.x > 0) {
+                if (this.sprite.flipX) {
+                    console.log("Flipping sprite to face right");
+                }
+                this.sprite.setFlipX(false);
+            } else if (this.sprite.body.velocity.x < 0) {
+                if (!this.sprite.flipX) {
+                    console.log("Flipping sprite to face left");
+                }
+                this.sprite.setFlipX(true);
+            }
+        }
+
+        // Call the state machine update method
+        this.stateMachine.update(deltaTime);
     }
 }
 

@@ -25,8 +25,8 @@ export class Projectile extends Physics.Matter.Sprite {
         // Adjust the size of the collider box
         this.setBody({
             type: "rectangle",
-            width: this.width * 0.25,
-            height: this.height * 0.25,
+            width: this.width,
+            height: this.height,
         });
 
         this.setIgnoreGravity(true);
