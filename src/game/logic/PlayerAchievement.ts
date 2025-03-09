@@ -17,7 +17,7 @@ export const achievements: { [key: string]: Achievement } = {
         rarity: "silver",
         id: "defeat5Enemies",
         name: "Pentakill",
-        description: "Earn 5 stars in all levels",
+        description: "Defeat 5 enemies",
         event: "defeated5Enemies",
         earned: false,
         badge: 'silver' //(insert the NFT for the badge)
@@ -26,7 +26,7 @@ export const achievements: { [key: string]: Achievement } = {
         rarity: "silver",
         id: "defeat10Enemies",
         name: "Decakill",
-        description: "Defeat 10 enemies in a single level",
+        description: "Defeat 10 enemies",
         event: "defeated10Enemies",
         earned: false,
         badge: 'silver' //(insert the NFT for the badge)

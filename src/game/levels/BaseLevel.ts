@@ -134,6 +134,7 @@ export class BaseLevel extends Scene {
             if (!achievement.earned){
                 console.log(achievement.earned);
                 achievement.earned = true;
+                EventBus.emit('achievementUnlocked', achievement);
             }            
         }
     }
