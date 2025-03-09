@@ -7,10 +7,6 @@ import { BackButton } from "../UIComponents/UIButton";
 //const levels = require(`../levels/${}`);
 
 export class LevelSelection extends Scene {
-    background: GameObjects.Image;
-    levelImages: GameObjects.Image[] = []; // Array of level pictures
-    tileSprite: GameObjects.TileSprite;
-    scrollSpeed: number;
 
     constructor() {
         super("LevelSelection");

@@ -4,6 +4,8 @@ import { PlayerController } from "../entities/PlayerController";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EnemyFootman } from "../entities/EnemyFootman";
 import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
+import { EventBus } from "../EventBus";
+import { Achievement, achievements } from "../logic/PlayerAchievement";
 
 export class BaseLevel extends Scene {
     levelName: string;
@@ -110,14 +112,30 @@ export class BaseLevel extends Scene {
         // Timer
         this.startEnemySpawnTimer();
 
-        // Create the health bar
-        if (this.player) {
-            this.playerHealthBar = new PlayerHealthBar(
-                this,
-                10,
-                10,
-                this.player
-            ); //display profileplayer
+        //Achievements Event
+        EventBus.on('defeated5Enemies', () =>{
+            this.awardAchievement("defeat5Enemies");
+            console.log('EVENT: DEFEATED 5 ENEMIES')
+        });
+
+        EventBus.on('defeated10Enemies', () =>{
+            this.awardAchievement("defeat10Enemies");
+            console.log('EVENT: DEFEATED 10 ENEMIES')
+        });
+        //EventBus.on('enemy-defeated-onDeadEnd')
+    }
+
+    awardAchievement(achievementID: string){
+        console.log("awardAchievement called", achievementID);
+        const achievement: Achievement = achievements[achievementID];
+        console.log("Achievement object:", achievement);
+        
+        if (achievement) {
+            if (!achievement.earned){
+                console.log(achievement.earned);
+                achievement.earned = true;
+                EventBus.emit('achievementUnlocked', achievement);
+            }            
         }
     }
 
@@ -199,6 +217,13 @@ export class BaseLevel extends Scene {
         if (this.defeatedEnemies >= this.numberOfEnemies) {
             this.handleWinCondition();
         }
+        //Achievements
+        if (this.defeatedEnemies === 5) {
+            EventBus.emit('defeated5Enemies')
+        }
+        if (this.defeatedEnemies === 10) {
+            EventBus.emit('defeated10Enemies')
+        }
     }
 
     handleWinCondition() {
@@ -217,7 +242,7 @@ export class BaseLevel extends Scene {
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
-            this.playerHealthBar = new PlayerHealthBar(this, x, y, this.player);
+            this.playerHealthBar = new PlayerHealthBar(this, 90, 20, this.player);
             this.playerHealthBar.draw();
         }
     }

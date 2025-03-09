@@ -14,7 +14,7 @@ export class MusicToggle extends Phaser.Scene {
         this.load.image('musicOn', './assets/volume.png')
         this.load.image('musicOff', './assets/mute.png')
 
-        this.load.audio('bgm', './assets/floating-also.mp3');
+        //this.load.audio('bgm', './assets/floating-also.mp3');
     }
   
     create() {   

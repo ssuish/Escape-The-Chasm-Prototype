@@ -9,10 +9,10 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
     borderRadius: number;
     borderColor: number;
     //playerProfile: GameObjects.Sprite;
-    constructor(scene: Scene, x: number, y: number, player: Player, /*displayPlayer: GameObjects.Sprite*/) {
+    constructor(scene: Scene, x: number, y: number, player: Player) {
         super(scene)
-        this.x = 90;
-        this.y = 20;
+        this.x = x;
+        this.y = y;
         this.scene = scene;
         this.player = player;
         this.barWidth = (this.player.GetHealth() * 2);
@@ -20,8 +20,6 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
         this.borderThickness = 7;
         this.borderRadius = 10;
         this.borderColor = 0x717171;
-
-        //this.playerProfile = scene.add.sprite(x - 40, y + this.barHeight / 2, /*displayPlayer*/)
 
         this.draw();
         scene.add.existing(this);
@@ -53,7 +51,7 @@ export default class PlayerHealthBar extends GameObjects.Graphics {
             }
 
         this.fillStyle(color); //fill color health
-        this.fillRoundedRect(3, 3, fillWidth - 5, this.barHeight - 5, this.borderRadius);
+        this.fillRoundedRect(3, 3, fillWidth - 5, this.barHeight - 6, this.borderRadius);
         }
     }
 
