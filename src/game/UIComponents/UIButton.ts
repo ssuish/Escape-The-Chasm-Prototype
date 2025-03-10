@@ -144,20 +144,62 @@ export class BackButton extends UIButton {
     }
 }
 
-/*export class PauseButton extends UIButton {
+//export class PauseButton extends UIButton {
+    //constructor(scene: Scene, x: number, y: number, callback: () => void) {
+        //super(scene, x, y, "Pause", callback, { backgroundColor: "#ffff00" });
+    //}
+//}
+
+export class RestartButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "Pause", callback, { backgroundColor: "#ffff00" });
+        super(scene, x, y, "Restart", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3
+        });
+
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+                this.setStroke('000000', 5)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+                this.setStroke('000000', 3)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
+            scene.add.existing(this);
     }
 }
 
-export class RestartButton extends UIButton {
+export class MainMenuButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "Restart", callback, { backgroundColor: "#ff0000" });
+        super(scene, x, y, "Main Menu", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3
+        });
+
+        this.setInteractive()
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+                this.setTint(0xdedede);
+                this.setStroke('000000', 5)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+                this.setTint(0xffffff);
+                this.setStroke('000000', 3)
+            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+                this.setTint(0xffffff);
+            });
+            scene.add.existing(this);
     }
 }
 
-export class ShootButton extends UIButton {
-    constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "Shoot", callback, { backgroundColor: "#ff00ff" });
-    }
-}*/
+//export class ShootButton extends UIButton {
+//    constructor(scene: Scene, x: number, y: number, callback: () => void) {
+//        super(scene, x, y, "Shoot", callback, { backgroundColor: "#ff00ff" });
+//    }
+//}

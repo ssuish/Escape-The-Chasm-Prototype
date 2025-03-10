@@ -207,6 +207,10 @@ export class Player {
         EventBus.on("enemy-hit", this.handleEnemyHit);
         console.log("New player health: ", this.health);
 
+        if (this.health >= 25){
+            EventBus.emit('percent25Health')
+        }
+
         this.stateMachine.setState("idle");
     }
 
