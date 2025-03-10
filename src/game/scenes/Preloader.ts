@@ -36,6 +36,7 @@ export class Preloader extends Scene {
             .on("loaderror", () => {
                 console.error(`Failed to load gunshot sound.`);
             });
+        this.load.image("crosshair", "crosshair.png");
     }
 
     create() {
