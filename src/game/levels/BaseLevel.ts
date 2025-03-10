@@ -45,7 +45,7 @@ export class BaseLevel extends Scene {
             });
 
         this.load
-            .tilemapTiledJSON("tilemap", "game-map.json")
+            .tilemapTiledJSON("tilemap", "game-map.tmj")
             .on("loaderror", () => {
                 console.error(`Failed to load tilemap.`);
             });
@@ -62,7 +62,6 @@ export class BaseLevel extends Scene {
             "industrial_tilesheet",
             "tilesheet"
         );
-
         if (tileset) {
             const wall = this.map.createLayer("Wall", tileset);
             const elevator = this.map.createLayer("Elevator", tileset);
@@ -118,29 +117,29 @@ export class BaseLevel extends Scene {
         this.startEnemySpawnTimer();
 
         //Achievements Event
-        EventBus.on('defeated5Enemies', () =>{
+        EventBus.on("defeated5Enemies", () => {
             this.awardAchievement("defeat5Enemies");
-            console.log('EVENT: DEFEATED 5 ENEMIES')
+            console.log("EVENT: DEFEATED 5 ENEMIES");
         });
 
-        EventBus.on('defeated10Enemies', () =>{
+        EventBus.on("defeated10Enemies", () => {
             this.awardAchievement("defeat10Enemies");
-            console.log('EVENT: DEFEATED 10 ENEMIES')
+            console.log("EVENT: DEFEATED 10 ENEMIES");
         });
         //EventBus.on('enemy-defeated-onDeadEnd')
     }
 
-    awardAchievement(achievementID: string){
+    awardAchievement(achievementID: string) {
         console.log("awardAchievement called", achievementID);
         const achievement: Achievement = achievements[achievementID];
         console.log("Achievement object:", achievement);
-        
+
         if (achievement) {
-            if (!achievement.earned){
+            if (!achievement.earned) {
                 console.log(achievement.earned);
                 achievement.earned = true;
-                EventBus.emit('achievementUnlocked', achievement);
-            }            
+                EventBus.emit("achievementUnlocked", achievement);
+            }
         }
     }
 
@@ -224,10 +223,10 @@ export class BaseLevel extends Scene {
         }
         //Achievements
         if (this.defeatedEnemies === 5) {
-            EventBus.emit('defeated5Enemies')
+            EventBus.emit("defeated5Enemies");
         }
         if (this.defeatedEnemies === 10) {
-            EventBus.emit('defeated10Enemies')
+            EventBus.emit("defeated10Enemies");
         }
     }
 
@@ -244,6 +243,7 @@ export class BaseLevel extends Scene {
         };
         
         this.scene.start("GameVictory", { levelKey: 'level1', playerStats: playerStats });
+        this.player?.cleanup();
     }
 
     handlePlayerSpawn(x: number, y: number) {
@@ -254,7 +254,12 @@ export class BaseLevel extends Scene {
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
-            this.playerHealthBar = new PlayerHealthBar(this, 90, 20, this.player);
+            this.playerHealthBar = new PlayerHealthBar(
+                this,
+                90,
+                20,
+                this.player
+            );
             this.playerHealthBar.draw();
         }
     }

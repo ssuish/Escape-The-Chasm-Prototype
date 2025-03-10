@@ -53,7 +53,6 @@ export class PlayerController {
 
         if (this.fireKey.isDown) {
             this.player.fireGun(true);
-            console.log("[J] is held down.");
         } else {
             this.player.fireGun(false);
         }

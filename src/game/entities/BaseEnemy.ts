@@ -57,9 +57,9 @@ export abstract class BaseEnemy {
                     : (bodyA as MatterJS.BodyType);
             const gameObject = otherBody.gameObject;
 
-            console.log(
-                `Object ${enemyBody.label} Collided with: ${otherBody.label}`
-            );
+            // console.log(
+            //     `Object ${enemyBody.label} Collided with: ${otherBody.label}`
+            // );
 
             if (this.obstacles.is("deadEnd", otherBody)) {
                 this.stateMachine.setState("defeated");

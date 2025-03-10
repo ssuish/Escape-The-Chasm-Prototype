@@ -61,12 +61,30 @@ export class EnemyFootman extends BaseEnemy {
     };
 
     static preload(scene: Scene) {
+        scene.load.setPath("assets/sounds");
+        scene.load.audio("metalHit", "metal-hit.mp3").on("loaderror", () => {
+            console.error(`Failed to load metalHit sound.`);
+        });
+
         scene.load.setPath("assets/enemy");
         scene.load
             .atlas(
                 "enemy_idle",
                 "enemy_idle/enemy_idle.png",
                 "enemy_idle/enemy_idle.json"
+            )
+            .on("loaderror", () => {
+                console.error(`Failed to load atlas.`);
+            })
+            .on("load", () => {
+                console.log("Enemy assets loaded successfully.");
+            });
+
+        scene.load
+            .atlas(
+                "enemy_attack",
+                "enemy_attack/enemy_attack.png",
+                "enemy_attack/enemy_attack.json"
             )
             .on("loaderror", () => {
                 console.error(`Failed to load atlas.`);
@@ -89,6 +107,18 @@ export class EnemyFootman extends BaseEnemy {
             repeat: -1,
         });
         console.log("Enemy animation created.");
+        this.sprite.anims.create({
+            key: "attack",
+            frames: this.sprite.anims.generateFrameNames("enemy_attack", {
+                prefix: "enemy_attack_0",
+                start: 0,
+                end: 6,
+                suffix: ".png",
+            }),
+            frameRate: 2,
+            repeat: -1,
+        });
+        console.log("Enemy animation created.");
     }
 
     protected handleCollisionWith(
@@ -104,6 +134,7 @@ export class EnemyFootman extends BaseEnemy {
             if (gameObject.name === "player") {
                 console.log("Player collided with enemy");
                 this.stateMachine.setState("attack");
+                this.sprite.play("attack");
             }
         }
 
@@ -187,20 +218,9 @@ export class EnemyFootman extends BaseEnemy {
         damage: number;
     }) {
         if (projectileHit.type === "enemy-footman") {
-            console.log(
-                "Enemy type hit: ",
-                projectileHit.type,
-                " id: ",
-                projectileHit.id
-            );
             if (projectileHit.id === this.id) {
                 this.health -= projectileHit.damage;
-                console.log(
-                    "New Enemy health: ",
-                    this.health,
-                    " id: ",
-                    this.id
-                );
+                this.scene.sound.play("metalHit");
 
                 // Apply knockback
                 this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
@@ -219,7 +239,6 @@ export class EnemyFootman extends BaseEnemy {
         return this.player;
     }
 
-    // Update player position
     update(deltaTime: number) {
         const player = this.getPlayer();
         if (player) {
@@ -228,20 +247,20 @@ export class EnemyFootman extends BaseEnemy {
         }
 
         if (this.sprite && this.sprite.body) {
-            if (this.sprite.body.velocity.x > 0) {
-                if (this.sprite.flipX) {
-                    console.log("Flipping sprite to face right");
-                }
+            const playerX = this.lastPlayerX;
+            const enemyX = this.sprite.x;
+
+            if (playerX > enemyX) {
                 this.sprite.setFlipX(false);
-            } else if (this.sprite.body.velocity.x < 0) {
-                if (!this.sprite.flipX) {
-                    console.log("Flipping sprite to face left");
-                }
+            } else if (playerX < enemyX) {
                 this.sprite.setFlipX(true);
+            } else {
+                console.log(
+                    "Player and enemy are at the same horizontal position"
+                );
             }
         }
 
-        // Call the state machine update method
         this.stateMachine.update(deltaTime);
     }
 }

@@ -1,52 +1,53 @@
-{"frames": [
-
 {
-	"filename": "player_fire_00.png",
-	"frame": {"x":0,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_fire_01.png",
-	"frame": {"x":70,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_fire_02.png",
-	"frame": {"x":140,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_fire_03.png",
-	"frame": {"x":210,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_fire_04.png",
-	"frame": {"x":280,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-}],
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "player_fire.png",
-	"format": "RGBA8888",
-	"size": {"w":350,"h":70},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:00aa445bcb59c02a4438200f32658454:85175e48881951cf23389af3085e2ad2:fa155d6ec82bcffb7c59f0f4bee724b0$"
-}
+    "frames": [
+        {
+            "filename": "player_fire_00.png",
+            "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_fire_01.png",
+            "frame": { "x": 70, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_fire_02.png",
+            "frame": { "x": 140, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_fire_03.png",
+            "frame": { "x": 210, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_fire_04.png",
+            "frame": { "x": 280, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "player_fire.png",
+        "format": "RGBA8888",
+        "size": { "w": 350, "h": 70 },
+        "scale": "1",
+        "smartupdate": "$TexturePacker:SmartUpdate:00aa445bcb59c02a4438200f32658454:85175e48881951cf23389af3085e2ad2:fa155d6ec82bcffb7c59f0f4bee724b0$"
+    }
 }
