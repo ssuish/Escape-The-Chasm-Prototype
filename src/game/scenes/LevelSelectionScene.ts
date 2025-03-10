@@ -1,4 +1,4 @@
-import { GameObjects, Scene } from "phaser";
+import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { LevelSelectButton } from "../UIComponents/LevelSelectorButton";
 import { BackButton } from "../UIComponents/UIButton";

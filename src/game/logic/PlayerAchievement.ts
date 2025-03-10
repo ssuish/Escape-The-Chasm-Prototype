@@ -1,7 +1,6 @@
 //Sample Achievements Object
 //Edit this code when the game play is finalized
 
-// PlayerAchievements.ts
 export interface Achievement {
     rarity: string;
     id: string;
@@ -10,7 +9,7 @@ export interface Achievement {
     event: string;
     earned: boolean;
     badge: string;
-  }
+}
 
 export const achievements: { [key: string]: Achievement } = {
     defeat5Enemies:{
