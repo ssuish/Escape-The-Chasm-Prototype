@@ -1,7 +1,7 @@
-import { EventBus } from '../EventBus';
-import { Scene } from 'phaser';
-import { levelObjectives } from '../logic/LevelObjectives';
-import { LevelSelectButton } from '../UIComponents/UIButton';
+import { EventBus } from "../EventBus";
+import { Scene } from "phaser";
+import { levelObjectives } from "../logic/LevelObjectives";
+import { LevelSelectButton } from "../UIComponents/UIButton";
 
 interface PlayerStats {
     enemiesDefeated: number;
@@ -17,12 +17,12 @@ export class GameVictory extends Scene {
     next: Phaser.GameObjects.Text;
 
     constructor() {
-        super('GameVictory');
+        super("GameVictory");
     }
 
-    preload(){
-        this.load.image('complete', 'assets/crosshair-complete.png');
-        this.load.image('fail', 'assets/crosshair-fail.png');
+    preload() {
+        this.load.image("complete", "assets/crosshair-complete.png");
+        this.load.image("fail", "assets/crosshair-fail.png");
     }
 
     displayVictory(levelKey: string, playerStats: PlayerStats): void {
@@ -38,30 +38,47 @@ export class GameVictory extends Scene {
         console.log("Objectives:");
 
         let yOffset = 270;
-        let xOffset = 150;
+        const xOffset = 150;
 
         levelData.stars.forEach((star, index) => {
             const completed = completedObjectives[index];
             const statusText = `  ${star.objective} `;
 
-            this.add.text(xOffset, yOffset - 8, statusText, {
-                fontFamily: 'Rubik Dirt', fontSize: 32, color: '#ffffff',
-                stroke: '#000000', strokeThickness: 3,
-                align: 'left'
-            }).setOrigin(0).setDepth(100);
+            this.add
+                .text(xOffset, yOffset - 8, statusText, {
+                    fontFamily: "Rubik Dirt",
+                    fontSize: 32,
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 3,
+                    align: "left",
+                })
+                .setOrigin(0)
+                .setDepth(100);
 
             let objImg;
             if (completed) {
-                objImg = this.add.image(xOffset - 15, yOffset + 15, 'complete').setOrigin(0.5).setDepth(100).setScale(0.3);
+                objImg = this.add
+                    .image(xOffset - 15, yOffset + 15, "complete")
+                    .setOrigin(0.5)
+                    .setDepth(100)
+                    .setScale(0.3);
             } else {
-                objImg = this.add.image(xOffset -15, yOffset + 15, 'fail').setOrigin(0.5).setDepth(100).setScale(0.3);
+                objImg = this.add
+                    .image(xOffset - 15, yOffset + 15, "fail")
+                    .setOrigin(0.5)
+                    .setDepth(100)
+                    .setScale(0.3);
             }
 
             yOffset += 50;
         });
     }
 
-    private checkObjectives(levelKey: string, playerStats: PlayerStats): boolean[] {
+    private checkObjectives(
+        levelKey: string,
+        playerStats: PlayerStats
+    ): boolean[] {
         const levelData = levelObjectives[levelKey];
         const completedObjectives: boolean[] = [];
 
@@ -73,8 +90,11 @@ export class GameVictory extends Scene {
                 completed = playerStats.enemiesDefeated >= 10;
             } else if (star.objective === "Defeat 5 enemies") {
                 completed = playerStats.enemiesDefeated >= 5;
-            } else if (star.objective === "Complete the stage with 25% health or above") {
-                completed = playerStats.currentHealth / playerStats.maxHealth >= 0.25;
+            } else if (
+                star.objective === "Complete the stage with 25% health or above"
+            ) {
+                completed =
+                    playerStats.currentHealth / playerStats.maxHealth >= 0.25;
             }
             levelData.stars[index].completed = completed;
             completedObjectives.push(completed);
@@ -87,16 +107,22 @@ export class GameVictory extends Scene {
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
 
-        this.background = this.add.image(512, 384, 'background');
+        this.background = this.add.image(512, 384, "background");
         this.background.setAlpha(0.5);
 
-        this.gameOverText = this.add.text(512, 150, 'Victory', {
-            fontFamily: 'Rubik Dirt', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
+        this.gameOverText = this.add
+            .text(512, 150, "Victory", {
+                fontFamily: "Rubik Dirt",
+                fontSize: 64,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
 
-        EventBus.emit('current-scene-ready', this);
+        EventBus.emit("current-scene-ready", this);
 
         if (data && data.levelKey && data.playerStats) {
             this.displayVictory(data.levelKey, data.playerStats);
@@ -108,12 +134,17 @@ export class GameVictory extends Scene {
             this.changeScene("LevelSelection");
         }).setOrigin(0.5);
 
-
-        this.next = this.add.text(850, 550, 'Next Level >>', {
-            fontFamily: 'Rubik Dirt', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
+        this.next = this.add
+            .text(850, 550, "Next Level >>", {
+                fontFamily: "Rubik Dirt",
+                fontSize: 24,
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 8,
+                align: "center",
+            })
+            .setOrigin(0.5)
+            .setDepth(100);
     }
 
     changeScene(scene?: string) {

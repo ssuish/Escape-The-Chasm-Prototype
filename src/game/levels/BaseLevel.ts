@@ -12,6 +12,7 @@ export interface PlayerStats {
     currentHealth: number;
     maxHealth: number;
 }
+
 export class BaseLevel extends Scene {
     levelName: string;
     playerController: PlayerController;
@@ -24,6 +25,7 @@ export class BaseLevel extends Scene {
     private enemiesSpawned: number = 0;
     playerHealthBar: PlayerHealthBar;
     private defeatedEnemies: number = 0;
+    private playerSprite: Phaser.Physics.Matter.Sprite;
 
     constructor(levelName: string, numberOfEnemies: number) {
         super(levelName);
@@ -127,6 +129,7 @@ export class BaseLevel extends Scene {
             console.log("EVENT: DEFEATED 10 ENEMIES");
         });
         //EventBus.on('enemy-defeated-onDeadEnd')
+        EventBus.on("player-defeated", this.handleDefeatCondition, this);
     }
 
     awardAchievement(achievementID: string) {
@@ -189,8 +192,7 @@ export class BaseLevel extends Scene {
                         return;
                     }
 
-                    const playerSprite = this.player?.getPlayerSprite();
-                    if (!playerSprite) {
+                    if (!this.playerSprite) {
                         console.error("Player sprite is missing");
                         return;
                     }
@@ -198,7 +200,7 @@ export class BaseLevel extends Scene {
                     const enemyFootman = new EnemyFootman(
                         enemySprite,
                         this.obstacles,
-                        playerSprite,
+                        this.playerSprite,
                         this
                     );
 
@@ -233,24 +235,41 @@ export class BaseLevel extends Scene {
     handleWinCondition() {
         console.log("All enemies defeated! You win!");
 
-        // TODO Add win condition
-        this.scene.stop(this.levelName);
-        
         const playerStats: PlayerStats = {
             enemiesDefeated: this.defeatedEnemies,
             currentHealth: this.player.GetHealth(),
             maxHealth: this.player.GetMaxHealth(),
         };
-        
-        this.scene.start("GameVictory", { levelKey: 'level1', playerStats: playerStats });
+        this.restartLevel();
+        this.scene.start("GameVictory", {
+            levelKey: "level1",
+            playerStats: playerStats,
+        });
+    }
+
+    handleDefeatCondition() {
+        console.log("Player defeated! Restarting level...");
+
+        // Clean up player and enemy objects
         this.player?.cleanup();
+        this.enemyFootman?.destroy();
+
+        // Reset necessary states
+        this.defeatedEnemies = 0;
+        this.enemiesSpawned = 0;
+
+        // Restart the scene
+        this.scene.start("GameOver");
     }
 
     handlePlayerSpawn(x: number, y: number) {
-        const playerSprite = this.matter.add.sprite(x, y, "player", 0, {
+        this.playerSprite = this.matter.add.sprite(x, y, "player", 0, {
             label: "player",
         });
-        this.player = new Player(playerSprite, this.obstacles, this);
+        this.player = new Player(this.playerSprite, this.obstacles, this);
+
+        // Store the player in the scene's data
+        this.data.set("player", this.playerSprite);
 
         if (this.player) {
             this.playerController = new PlayerController(this, this.player);
@@ -287,6 +306,19 @@ export class BaseLevel extends Scene {
             this.playerHealthBar.update();
             this.enemyFootman?.update(deltaTime);
         }
+    }
+
+    restartLevel() {
+        // Clean up player and enemy objects
+        this.player?.cleanup();
+        this.enemyFootman?.destroy();
+
+        // Reset necessary states
+        this.defeatedEnemies = 0;
+        this.enemiesSpawned = 0;
+
+        // Restart the scene
+        this.scene.restart();
     }
 }
 

@@ -13,7 +13,7 @@ export class EnemyFootman extends BaseEnemy {
     constructor(
         sprite: Physics.Matter.Sprite,
         obstacles: CollisionIdentifier,
-        player: Phaser.GameObjects.Sprite,
+        player: Phaser.Physics.Matter.Sprite,
         scene: Scene
     ) {
         const instanceID =
@@ -155,12 +155,16 @@ export class EnemyFootman extends BaseEnemy {
         const player = this.getPlayer();
         console.log("Jump method called");
 
-        if (player) {
+        if (
+            player &&
+            typeof player.x === "number" &&
+            typeof player.y === "number"
+        ) {
             this.lastPlayerX = player.x;
             this.lastPlayerY = player.y;
         } else {
             console.error(
-                "Player object is undefined, using last known position"
+                "Player object or its position is undefined, using last known position"
             );
         }
 
@@ -200,7 +204,7 @@ export class EnemyFootman extends BaseEnemy {
         console.log("Enemy defeated");
         EventBus.emit("enemy-defeated", this.id);
         if (this.sprite) {
-            this.sprite.destroy();
+            this.destroy();
             const baseLevel = this.scene as BaseLevel;
             baseLevel.incrementDefeatedEnemies();
         }
@@ -235,15 +239,29 @@ export class EnemyFootman extends BaseEnemy {
         EventBus.off("projectile-hit", this.onEnemyHurt);
     }
 
-    private getPlayer(): Phaser.GameObjects.Sprite {
-        return this.player;
+    private getPlayer(): Phaser.Physics.Matter.Sprite {
+        return this.scene.data.get("player") as Phaser.Physics.Matter.Sprite;
+    }
+
+    public destroy() {
+        this.sprite.destroy();
+        EventBus.off("projectile-hit", this.onEnemyHurt);
+        EventBus.off("player-hurt", this.onPlayerHurt);
     }
 
     update(deltaTime: number) {
         const player = this.getPlayer();
-        if (player) {
+        if (
+            player &&
+            typeof player.x === "number" &&
+            typeof player.y === "number"
+        ) {
+            //console.log("Player position: ", player.x, player.y);
             this.lastPlayerX = player.x;
             this.lastPlayerY = player.y;
+        } else {
+            console.error("Player object or its position is undefined");
+            return;
         }
 
         if (this.sprite && this.sprite.body) {

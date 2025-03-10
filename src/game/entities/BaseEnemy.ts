@@ -20,7 +20,7 @@ export abstract class BaseEnemy {
         id: string,
         sprite: Physics.Matter.Sprite,
         obstacles: CollisionIdentifier,
-        player: Phaser.GameObjects.Sprite,
+        player: Phaser.Physics.Matter.Sprite,
         scene: Scene
     ) {
         this.sprite = sprite;

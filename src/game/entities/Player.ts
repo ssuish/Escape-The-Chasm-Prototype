@@ -4,6 +4,7 @@ import StateMachine from "../logic/StateMachine";
 import { ProjectilePool } from "./ProjectilePool";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EventBus } from "../EventBus";
+import { BaseLevel } from "../levels/BaseLevel";
 
 export class Player {
     private jumpForce: number;
@@ -19,6 +20,7 @@ export class Player {
     private health: number;
     private music: Phaser.Sound.BaseSoundManager;
     private maxHealth: number = 100;
+    BaseLevel: any;
 
     constructor(
         sprite: Physics.Matter.Sprite,
@@ -219,8 +221,8 @@ export class Player {
         EventBus.on("enemy-hit", this.handleEnemyHit);
         console.log("New player health: ", this.health);
 
-        if (this.health >= 25){
-            EventBus.emit('percent25Health')
+        if (this.health >= 25) {
+            EventBus.emit("percent25Health");
         }
 
         this.stateMachine.setState("idle");
@@ -252,10 +254,9 @@ export class Player {
                 alpha: 1,
                 duration: 2000,
                 onComplete: () => {
-                    console.log("Fade out complete");
-                    EventBus.emit("player-defeated");
                     this.cleanup();
-                    this.scene.scene.start("GameOver");
+                    //this.BaseLevel.restartLevel();
+                    EventBus.emit("player-defeated");
                 },
             });
         } else {
