@@ -1,23 +1,90 @@
 import { EventBus } from '../EventBus';
 import { Scene } from 'phaser';
+import { levelObjectives } from '../logic/LevelObjectives';
+import { LevelSelectButton } from '../UIComponents/UIButton';
 
-export class GameVictory extends Scene
-{
+interface PlayerStats {
+    enemiesDefeated: number;
+    currentHealth: number;
+    maxHealth: number;
+}
+
+export class GameVictory extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
-    gameOverText : Phaser.GameObjects.Text;
-    defeat5enemiesText: Phaser.GameObjects.Text;
-    defeat10enemiesText: Phaser.GameObjects.Text;
-    complete25Health: Phaser.GameObjects.Text;
+    gameOverText: Phaser.GameObjects.Text;
+    back: Phaser.GameObjects.Text;
+    next: Phaser.GameObjects.Text;
 
-    constructor ()
-    {
+    constructor() {
         super('GameVictory');
     }
 
-    create ()
-    {
-        this.camera = this.cameras.main
+    preload(){
+        this.load.image('complete', 'assets/crosshair-complete.png');
+        this.load.image('fail', 'assets/crosshair-fail.png');
+    }
+
+    displayVictory(levelKey: string, playerStats: PlayerStats): void {
+        const levelData = levelObjectives[levelKey];
+        if (!levelData) {
+            console.error("Level data not found for:", levelKey);
+            return;
+        }
+
+        const completedObjectives = this.checkObjectives(levelKey, playerStats);
+
+        console.log(`Victory! Level: ${levelData.name}`);
+        console.log("Objectives:");
+
+        let yOffset = 270;
+        let xOffset = 150;
+
+        levelData.stars.forEach((star, index) => {
+            const completed = completedObjectives[index];
+            const statusText = `  ${star.objective} `;
+
+            this.add.text(xOffset, yOffset - 8, statusText, {
+                fontFamily: 'Rubik Dirt', fontSize: 32, color: '#ffffff',
+                stroke: '#000000', strokeThickness: 3,
+                align: 'left'
+            }).setOrigin(0).setDepth(100);
+
+            let objImg;
+            if (completed) {
+                objImg = this.add.image(xOffset - 15, yOffset + 15, 'complete').setOrigin(0.5).setDepth(100).setScale(0.3);
+            } else {
+                objImg = this.add.image(xOffset -15, yOffset + 15, 'fail').setOrigin(0.5).setDepth(100).setScale(0.3);
+            }
+
+            yOffset += 50;
+        });
+    }
+
+    private checkObjectives(levelKey: string, playerStats: PlayerStats): boolean[] {
+        const levelData = levelObjectives[levelKey];
+        const completedObjectives: boolean[] = [];
+
+        if (!levelData) return [];
+
+        levelData.stars.forEach((star, index) => {
+            let completed = false;
+            if (star.objective === "Defeat 10 enemies") {
+                completed = playerStats.enemiesDefeated >= 10;
+            } else if (star.objective === "Defeat 5 enemies") {
+                completed = playerStats.enemiesDefeated >= 5;
+            } else if (star.objective === "Complete the stage with 25% health or above") {
+                completed = playerStats.currentHealth / playerStats.maxHealth >= 0.25;
+            }
+            levelData.stars[index].completed = completed;
+            completedObjectives.push(completed);
+        });
+
+        return completedObjectives;
+    }
+
+    create(data: { levelKey: string; playerStats: PlayerStats }): void {
+        this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x000000);
 
         this.background = this.add.image(512, 384, 'background');
@@ -28,31 +95,28 @@ export class GameVictory extends Scene
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5).setDepth(100);
-        
+
         EventBus.emit('current-scene-ready', this);
 
+        if (data && data.levelKey && data.playerStats) {
+            this.displayVictory(data.levelKey, data.playerStats);
+        } else {
+            console.error("Level key or player stats not provided.");
+        }
 
-        //Reference of what the Game Victory scene should look like 
-        /*this.defeat5enemiesText = this.add.text(450, 350, 'Defeated 5 Enemies', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-             align: 'center'
-        }).setOrigin(0).setDepth(100);
-        
-        this.defeat10enemiesText = this.add.text(450, 400, 'Defeated 10 Enemies', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
+        new LevelSelectButton(this, 220, 550, () => {
+            this.changeScene("LevelSelection");
+        }).setOrigin(0.5);
+
+
+        this.next = this.add.text(850, 550, 'Next Level >>', {
+            fontFamily: 'Rubik Dirt', fontSize: 24, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
-        }).setOrigin(0).setDepth(100);
-        
-        this.complete25Health = this.add.text(450, 450, 'Complete the stage above 25% health', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-               stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0).setDepth(100);*/
+        }).setOrigin(0.5).setDepth(100);
     }
 
-    changeScene () {
-        this.scene.start('MainMenu');
+    changeScene(scene?: string) {
+        this.scene.start(scene ?? "MainMenu");
     }
 }

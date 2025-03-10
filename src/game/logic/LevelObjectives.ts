@@ -3,7 +3,7 @@
 
 interface StarObjective {
   objective: string;
-  event: string;
+  completed: boolean;
 }
 
 interface LevelData {
@@ -17,18 +17,20 @@ export const levelObjectives: { [key: string]: LevelData } = {
       stars: [
         {
           objective: "Defeat 10 enemies",
-          event: 'defeated5Enemies'
+          completed: false,
         },
         {
           objective: "Defeat 5 enemies",
-          event: 'defeated10Enemies'
+          completed: false,
         },
         {
           objective: "Complete the stage with 25% health or above",
-          event: 'percent25Health'
+          completed: false,
         },
       ],
     },
+    //add more levels here
+    
     /*level2: {
       name: "Second Escape",
       stars: [

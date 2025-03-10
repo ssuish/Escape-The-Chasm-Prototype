@@ -7,11 +7,16 @@ import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
 import { EventBus } from "../EventBus";
 import { Achievement, achievements } from "../logic/PlayerAchievement";
 
+export interface PlayerStats {
+    enemiesDefeated: number;
+    currentHealth: number;
+    maxHealth: number;
+}
 export class BaseLevel extends Scene {
     levelName: string;
-    playerController?: PlayerController;
-    player?: Player;
-    enemyFootman?: EnemyFootman;
+    playerController: PlayerController;
+    player: Player;
+    enemyFootman: EnemyFootman;
     private obstacles!: CollisionIdentifier;
     private numberOfEnemies: number;
     private enemySpawnTimer!: Phaser.Time.TimerEvent;
@@ -231,7 +236,14 @@ export class BaseLevel extends Scene {
 
         // TODO Add win condition
         this.scene.stop(this.levelName);
-        this.scene.start("GameVictory");
+        
+        const playerStats: PlayerStats = {
+            enemiesDefeated: this.defeatedEnemies,
+            currentHealth: this.player.GetHealth(),
+            maxHealth: this.player.GetMaxHealth(),
+        };
+        
+        this.scene.start("GameVictory", { levelKey: 'level1', playerStats: playerStats });
     }
 
     handlePlayerSpawn(x: number, y: number) {
