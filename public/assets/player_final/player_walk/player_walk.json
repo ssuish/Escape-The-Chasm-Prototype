@@ -1,68 +1,69 @@
-{"frames": [
-
 {
-	"filename": "player_walk_00.png",
-	"frame": {"x":0,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_01.png",
-	"frame": {"x":70,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_02.png",
-	"frame": {"x":140,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_03.png",
-	"frame": {"x":210,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_04.png",
-	"frame": {"x":280,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_05.png",
-	"frame": {"x":350,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_walk_06.png",
-	"frame": {"x":420,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-}],
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "player_walk.png",
-	"format": "RGBA8888",
-	"size": {"w":490,"h":70},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:24df7dee4d17fd732625b6c39d509f75:5f6e08870097f6c7a3a561c0d29ceb79:82886aa83781486ee8923b912fdcbc92$"
-}
+    "frames": [
+        {
+            "filename": "player_walk_00.png",
+            "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_01.png",
+            "frame": { "x": 70, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_02.png",
+            "frame": { "x": 140, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_03.png",
+            "frame": { "x": 210, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_04.png",
+            "frame": { "x": 280, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_05.png",
+            "frame": { "x": 350, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_walk_06.png",
+            "frame": { "x": 420, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "player_walk.png",
+        "format": "RGBA8888",
+        "size": { "w": 490, "h": 70 },
+        "scale": "1",
+        "smartupdate": "$TexturePacker:SmartUpdate:24df7dee4d17fd732625b6c39d509f75:5f6e08870097f6c7a3a561c0d29ceb79:82886aa83781486ee8923b912fdcbc92$"
+    }
 }

@@ -1,68 +1,69 @@
-{"frames": [
-
 {
-	"filename": "player_jump_00.png",
-	"frame": {"x":0,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_01.png",
-	"frame": {"x":70,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_02.png",
-	"frame": {"x":140,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_03.png",
-	"frame": {"x":210,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_04.png",
-	"frame": {"x":280,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_05.png",
-	"frame": {"x":350,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "player_jump_06.png",
-	"frame": {"x":420,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-}],
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "playerjump.png",
-	"format": "RGBA8888",
-	"size": {"w":490,"h":70},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d26bbf1d3ddc962f6a833cb6880bfb0f:267e64f5715abd56e34472c7718037db:cf57a97929da8ca651333e428df5cdff$"
-}
+    "frames": [
+        {
+            "filename": "player_jump_00.png",
+            "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_01.png",
+            "frame": { "x": 70, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_02.png",
+            "frame": { "x": 140, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_03.png",
+            "frame": { "x": 210, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_04.png",
+            "frame": { "x": 280, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_05.png",
+            "frame": { "x": 350, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "player_jump_06.png",
+            "frame": { "x": 420, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "playerjump.png",
+        "format": "RGBA8888",
+        "size": { "w": 490, "h": 70 },
+        "scale": "1",
+        "smartupdate": "$TexturePacker:SmartUpdate:d26bbf1d3ddc962f6a833cb6880bfb0f:267e64f5715abd56e34472c7718037db:cf57a97929da8ca651333e428df5cdff$"
+    }
 }

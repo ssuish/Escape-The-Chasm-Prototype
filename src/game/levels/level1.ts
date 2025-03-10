@@ -11,9 +11,7 @@ export class Level1 extends BaseLevel {
     }
 
     create() {
-
         super.create();
-
         EventBus.emit("current-scene-ready", this);
     }
 }

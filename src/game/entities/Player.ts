@@ -17,6 +17,7 @@ export class Player {
     private obstacles!: CollisionIdentifier;
     private scene: Scene;
     private health: number;
+    private music: Phaser.Sound.BaseSoundManager;
     private maxHealth: number = 100;
 
     constructor(
@@ -28,7 +29,9 @@ export class Player {
         this.speed = gameConfig.playerSpeed;
         this.jumpForce = gameConfig.jumpForce * 1.5;
         this.obstacles = obstacles;
-        this.scene = scene;
+        this.scene = scene; // Ensure the scene is assigned here
+        this.health = this.maxHealth;
+        this.music = scene.sound;
         this.health = this.maxHealth;
 
         const scaleFactor = 2;
@@ -148,6 +151,12 @@ export class Player {
     private gameFinishedOnEnter() {}
 
     private idleOnEnter() {
+        if (
+            this.stateMachine.isCurrentState("fire") ||
+            this.stateMachine.isCurrentState("jump")
+        ) {
+            return;
+        }
         this.sprite.play("idle", true);
     }
 
@@ -170,7 +179,7 @@ export class Player {
         this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
 
         const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
-        const endColor = Phaser.Display.Color.ValueToColor(0xff0000);
+        const endColor = Phaser.Display.Color.ValueToColor(0xb10000);
 
         // TODO: Add enemy hit animation and sound effect
         this.scene.tweens.addCounter({
@@ -196,7 +205,10 @@ export class Player {
                     colorObject.b
                 );
 
-                this.sprite.setTint(color);
+                this.sprite.setTintFill(color);
+            },
+            onComplete: () => {
+                this.sprite.clearTint();
             },
         });
 
@@ -213,9 +225,12 @@ export class Player {
     private defeatedOnEnter() {
         // TODO: Alternative can't play death animation
         if (this.sprite) {
+            this.sprite.setVelocity(0);
+            this.sprite.setAngularVelocity(0);
             this.sprite.setInteractive(false);
             this.health = 0;
-            console.log("Starting fade out");
+
+            this.sprite.play("death");
 
             const camera = this.scene.cameras.main;
             const fadeOutRect = this.scene.add.rectangle(
@@ -244,7 +259,7 @@ export class Player {
         }
     }
 
-    private cleanup() {
+    public cleanup() {
         this.sprite.setVelocity(0);
         this.sprite.setAngularVelocity(0);
         this.sprite.setTint(0xffffff);
@@ -267,15 +282,26 @@ export class Player {
         const projectile = this.projectilePool.getProjectile();
         if (projectile) {
             const facingLeft = this.sprite.flipX;
-            const offsetX = facingLeft ? -40 : 40; // Adjust the offset value
-            const offsetY = 0; // Adjust the vertical offset
+            const offsetX = facingLeft ? -70 : 70; // Adjust the offset value
+            const offsetY = -2; // Adjust the vertical offset
             projectile.fireFromPlayer(
                 this.sprite.x + offsetX,
                 this.sprite.y + offsetY,
                 facingLeft,
                 20
             );
+
+            projectile.setFlipX(facingLeft);
+
+            this.music.play("gunshot");
         }
+
+        this.sprite.once("animationcomplete", () => {
+            console.log("Fire animation complete");
+            if (this.stateMachine.isCurrentState("fire")) {
+                this.stateMachine.setState("idle");
+            }
+        });
     }
 
     private interactOnEnter() {
@@ -294,6 +320,13 @@ export class Player {
     };
 
     static preload(scene: Scene) {
+        scene.load.setPath("assets/");
+        scene.load
+            .audio("gunshot", "sounds/gunshots.mp3")
+            .on("loaderror", () => {
+                console.error(`Failed to load gunshot sound.`);
+            });
+
         scene.load.setPath("assets/player_final");
         scene.load
             .atlas(
@@ -345,7 +378,7 @@ export class Player {
                 console.error(`Failed to load atlas.`);
             });
 
-        scene.load.image("projectile", "star.png").on("loaderror", () => {
+        scene.load.image("projectile", "projectile.png").on("loaderror", () => {
             console.error(`Failed to load sprite.`);
         });
     }
@@ -359,8 +392,7 @@ export class Player {
                 end: 4,
                 suffix: ".png",
             }),
-            frameRate: 8,
-            repeat: -1,
+            frameRate: 12,
         });
 
         this.sprite.anims.create({
@@ -371,7 +403,7 @@ export class Player {
                 end: 4,
                 suffix: ".png",
             }),
-            frameRate: 10,
+            frameRate: 12,
             repeat: -1,
         });
 
@@ -383,7 +415,7 @@ export class Player {
                 end: 6,
                 suffix: ".png",
             }),
-            frameRate: 3,
+            frameRate: 12,
         });
 
         this.sprite.anims.create({
@@ -394,8 +426,7 @@ export class Player {
                 end: 4,
                 suffix: ".png",
             }),
-            frameRate: 8,
-            repeat: -1,
+            frameRate: 12,
         });
 
         this.sprite.anims.create({
@@ -406,7 +437,7 @@ export class Player {
                 end: 7,
                 suffix: ".png",
             }),
-            frameRate: 6,
+            frameRate: 12,
         });
     }
 
@@ -427,7 +458,11 @@ export class Player {
     }
 
     idle() {
-        if (this.sprite) {
+        if (
+            this.sprite &&
+            !this.stateMachine.isCurrentState("fire") &&
+            !this.stateMachine.isCurrentState("jump")
+        ) {
             this.sprite.setVelocityX(0);
             this.stateMachine.setState("idle");
         }
@@ -442,18 +477,11 @@ export class Player {
     fireGun(isHolding: boolean) {
         const currentTime = this.sprite.scene.time.now;
         if (isHolding) {
-            if (this.sprite.anims.currentAnim?.key !== "fire") {
-                this.sprite.play("fire", true);
-            }
+            console.log("Firing gun");
             if (currentTime - this.lastFireTime > this.fireCooldown) {
-                if (!this.stateMachine.isCurrentState("fire")) {
-                    this.stateMachine.setState("fire");
-                    this.lastFireTime = currentTime;
-                }
-            }
-        } else {
-            if (this.stateMachine.isCurrentState("fire")) {
-                this.stateMachine.setState("idle");
+                this.sprite.play("fire", true);
+                this.stateMachine.setState("fire");
+                this.lastFireTime = currentTime;
             }
         }
     }

@@ -25,12 +25,17 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('assets');
-        this.load.image('back', 'back.png');
-        this.load.image('button', 'btn-grey.png');
-        this.load.image('card1', 'card1.png');
-        this.load.image('silver', 'silver-badge.png');
-        this.load.image('gold', 'gold-badge.png');
+        this.load.setPath("assets");
+        this.load.image("back", "back.png");
+        this.load.image("button", "btn-grey.png");
+        this.load.image("card1", "card1.png");
+        this.load.image("silver", "silver-badge.png");
+        this.load.image("gold", "gold-badge.png");
+        this.load
+            .audio("gunshot", "sounds/gunshots.mp3")
+            .on("loaderror", () => {
+                console.error(`Failed to load gunshot sound.`);
+            });
     }
 
     create() {

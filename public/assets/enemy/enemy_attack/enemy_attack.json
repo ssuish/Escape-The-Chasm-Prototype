@@ -1,7 +1,7 @@
 {
     "frames": [
         {
-            "filename": "player_idle_00.png",
+            "filename": "enemy_attack_00.png",
             "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
             "rotated": false,
             "trimmed": false,
@@ -9,7 +9,7 @@
             "sourceSize": { "w": 70, "h": 70 }
         },
         {
-            "filename": "player_idle_01.png",
+            "filename": "enemy_attack_01.png",
             "frame": { "x": 70, "y": 0, "w": 70, "h": 70 },
             "rotated": false,
             "trimmed": false,
@@ -17,7 +17,7 @@
             "sourceSize": { "w": 70, "h": 70 }
         },
         {
-            "filename": "player_idle_02.png",
+            "filename": "enemy_attack_02.png",
             "frame": { "x": 140, "y": 0, "w": 70, "h": 70 },
             "rotated": false,
             "trimmed": false,
@@ -25,7 +25,7 @@
             "sourceSize": { "w": 70, "h": 70 }
         },
         {
-            "filename": "player_idle_03.png",
+            "filename": "enemy_attack_03.png",
             "frame": { "x": 210, "y": 0, "w": 70, "h": 70 },
             "rotated": false,
             "trimmed": false,
@@ -33,8 +33,24 @@
             "sourceSize": { "w": 70, "h": 70 }
         },
         {
-            "filename": "player_idle_04.png",
+            "filename": "enemy_attack_04.png",
             "frame": { "x": 280, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "enemy_attack_05.png",
+            "frame": { "x": 350, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "enemy_attack_06.png",
+            "frame": { "x": 420, "y": 0, "w": 70, "h": 70 },
             "rotated": false,
             "trimmed": false,
             "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
@@ -44,10 +60,10 @@
     "meta": {
         "app": "https://www.codeandweb.com/texturepacker",
         "version": "1.0",
-        "image": "player_idle.png",
+        "image": "enemy_attack.png",
         "format": "RGBA8888",
-        "size": { "w": 350, "h": 70 },
+        "size": { "w": 490, "h": 70 },
         "scale": "1",
-        "smartupdate": "$TexturePacker:SmartUpdate:67a5323f6ca5c32715021a513608bf2e:58bd9545c6f3b3719e4b178c766d2e71:a29a046d3956be1006ff68ea58941ba7$"
+        "smartupdate": "$TexturePacker:SmartUpdate:8130033b0c20753cd17a9be14c235794:dc9bede101e5f3ac47b9b71f2e5b79da:40af74e7559a69fd5950eece6e713d2a$"
     }
 }

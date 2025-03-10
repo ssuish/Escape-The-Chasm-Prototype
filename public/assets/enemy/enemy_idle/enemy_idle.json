@@ -1,44 +1,45 @@
-{"frames": [
-
 {
-	"filename": "enemy_idle_00.png",
-	"frame": {"x":0,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "enemy_idle_01.png",
-	"frame": {"x":70,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "enemy_idle_02.png",
-	"frame": {"x":140,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-},
-{
-	"filename": "enemy_idle_03.png",
-	"frame": {"x":210,"y":0,"w":70,"h":70},
-	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
-	"sourceSize": {"w":70,"h":70}
-}],
-"meta": {
-	"app": "https://www.codeandweb.com/texturepacker",
-	"version": "1.0",
-	"image": "enemyidle.png",
-	"format": "RGBA8888",
-	"size": {"w":280,"h":70},
-	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:d51f73c8852fcca1700227e26580a489:110f197abd994ba3b264e3ca831ec264:b214fa69e1660f20c88a50112c8116f3$"
-}
+    "frames": [
+        {
+            "filename": "enemy_idle_00.png",
+            "frame": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "enemy_idle_01.png",
+            "frame": { "x": 70, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "enemy_idle_02.png",
+            "frame": { "x": 140, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        },
+        {
+            "filename": "enemy_idle_03.png",
+            "frame": { "x": 210, "y": 0, "w": 70, "h": 70 },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 70, "h": 70 },
+            "sourceSize": { "w": 70, "h": 70 }
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "enemy_idle.png",
+        "format": "RGBA8888",
+        "size": { "w": 280, "h": 70 },
+        "scale": "1",
+        "smartupdate": "$TexturePacker:SmartUpdate:d51f73c8852fcca1700227e26580a489:110f197abd994ba3b264e3ca831ec264:b214fa69e1660f20c88a50112c8116f3$"
+    }
 }
