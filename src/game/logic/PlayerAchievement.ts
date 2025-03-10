@@ -39,5 +39,14 @@ export const achievements: { [key: string]: Achievement } = {
         earned: false,
         badge: 'gold' //(insert the NFT for the badge)
     },
+    overpoweredPlayer:{
+        rarity: "platinum",
+        id: "overpoweredPlayer",
+        name: "Skilled Player",
+        description: "Defeat 5 enemies without getting hit",
+        event: "noDamage",
+        earned: false,
+        badge: 'platinum' //(insert the NFT for the badge)
+    },
     //add more achievements here
 }

@@ -1,8 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
-//import { LevelSelectButton } from "../UIComponents/LevelSelectorButton";
 import { BackButton, PlayButton } from "../UIComponents/UIButton";
-import { LevelManager } from '../UIComponents/LevelManager'; // Import LevelManager
+import { LevelManager } from '../UIComponents/LevelManager'; 
 
 // Import all levels dynamically
 //const levels = require(`../levels/${}`);

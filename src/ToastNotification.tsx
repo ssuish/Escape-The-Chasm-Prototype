@@ -14,10 +14,10 @@ function ToastNotifications() {
             toast(
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <img
-                        src={achievements.badge} // Adjust the path to your image
+                        src={`./assets/badges/${achievements.badge}-badge.png`} // Adjust the path to your image
                         style={{
-                            width: "50px",
-                            height: "50px",
+                            width: "60px",
+                            height: "60px",
                             marginRight: "10px",
                         }}
                     />
