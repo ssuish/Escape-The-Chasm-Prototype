@@ -15,7 +15,7 @@ export class LevelSelection extends Scene {
     }
 
     create() {
-        new BackButton(this, 45, 40, () => {
+        new BackButton(this, 15, 10, () => {
             this.changeScene("MainMenu");
         });
 

@@ -42,9 +42,9 @@ export class PlayButton extends GameObjects.Text {
     }
 }
 
-export class AchievementsButton extends GameObjects.Text {
+export class DashboardButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "ACHIEVEMENTS", {
+        super(scene, x, y, "DASHBOARD", {
             fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
             stroke: '#000000', strokeThickness: 3
         });
@@ -68,8 +68,8 @@ export class AchievementsButton extends GameObjects.Text {
 
 export class CreditsButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "CREDITS", {
-            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+        super(scene, x, y, "© Escapicism", {
+            fontFamily: 'Arial', fontSize: 24, color: '#d3d3d3',
             stroke: '#000000', strokeThickness: 3,
         });
 
@@ -77,10 +77,12 @@ export class CreditsButton extends GameObjects.Text {
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
                 this.setTint(0xdedede);
                 this.setStroke('000000', 5)
+                this.setStyle({ textDecoration: 'underline' });
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setTint(0xffffff);
                 this.setStroke('000000', 3)
+                this.setStyle({ textDecoration: '' }); // Remove underline
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
@@ -122,25 +124,27 @@ export class MusicButton extends UIButton {
     }
 }
 
-export class BackButton extends UIButton {
+export class BackButton extends GameObjects.Text {
     constructor(scene: Scene, x: number, y: number, callback: () => void) {
-        super(scene, x, y, "button", callback);
-        scene.add.image(45, 40, 'back').setScale(0.07);
-        this.setScale(0.9)
+        super(scene, x, y, "<<<", {
+            fontFamily: 'Rubik Dirt', fontSize: 48, color: '#d3d3d3',
+            stroke: '#000000', strokeThickness: 3
+        });
 
         this.setInteractive()
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
                 this.setTint(0xdedede);
+                this.setStroke('000000', 5)
             })
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
                 this.setTint(0xffffff);
+                this.setStroke('000000', 3)
             })
-            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-                this.setTint(0x8afbff);
-            })
+            .on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, callback)     
             .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
                 this.setTint(0xffffff);
             });
+            scene.add.existing(this);
     }
 }
 

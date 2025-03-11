@@ -2,7 +2,6 @@ import { Boot } from "./scenes/Boot";
 import { GameOver } from "./scenes/GameOverScene";
 import { Level1 } from "./levels/level1";
 import { MainMenu } from "./scenes/MainMenuScene";
-import { Achievements } from "./scenes/AchievementsScene";
 import { GameSettings } from "./scenes/GameSettings";
 import { LevelSelection } from "./scenes/LevelSelectionScene";
 import { AUTO, Game } from "phaser";
@@ -31,7 +30,6 @@ const config: Phaser.Types.Core.GameConfig = {
         Level1,
         GameOver,
         GameVictory,
-        Achievements,
         Credits,
         GameSettings,
         MusicToggle,
