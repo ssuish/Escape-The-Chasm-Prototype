@@ -30,20 +30,20 @@ export const achievements: { [key: string]: Achievement } = {
         earned: false,
         badge: 'silver' //(insert the NFT for the badge)
     },
-    suicidalEnemies:{
+    mvPlayer:{
         rarity: "gold",
-        id: "suicidalEnemies",
-        name: "Kamikaze",
-        description: "Defeat 5 enemies by letting them fall off the platform",
-        event: "platform5Enemies",
+        id: "mvPlayer",
+        name: "Master",
+        description: "Defeat 10 enemies with not less than 75% health",
+        event: "health75",
         earned: false,
         badge: 'gold' //(insert the NFT for the badge)
     },
-    overpoweredPlayer:{
+    opPlayer:{
         rarity: "platinum",
-        id: "overpoweredPlayer",
-        name: "Skilled Player",
-        description: "Defeat 5 enemies without getting hit",
+        id: "opPlayer",
+        name: "Godlike",
+        description: "Defeat 10 enemies without getting hit",
         event: "noDamage",
         earned: false,
         badge: 'platinum' //(insert the NFT for the badge)
