@@ -7,6 +7,18 @@ import PlayerHealthBar from "../UIComponents/PlayerHealthBar";
 import { EventBus } from "../EventBus";
 import { Achievement, achievements } from "../logic/PlayerAchievement";
 
+const TILESET_PATH = "assets/tileset";
+const TILESET_IMAGE = "platformerPack_industrial_tilesheet.png";
+const TILEMAP_JSON = "game-map.tmj";
+const TILEMAP_KEY = "tilemap";
+const TILESET_KEY = "tilesheet";
+const GRAVITY_Y = 2;
+const CAMERA_ZOOM = 1;
+const ENEMY_SPAWN_INTERVAL = 5000; // Interval in milliseconds
+const ENEMY_SPAWN_DURATION = 60000; // Total duration in milliseconds
+const PLAYER_HEALTHBAR_X = 90;
+const PLAYER_HEALTHBAR_Y = 20;
+
 export interface PlayerStats {
     enemiesDefeated: number;
     currentHealth: number;
@@ -38,16 +50,14 @@ export class BaseLevel extends Scene {
     }
 
     preload() {
-        this.load.setPath("assets/tileset");
+        this.load.setPath(TILESET_PATH);
+
+        this.load.image(TILESET_KEY, TILESET_IMAGE).on("loaderror", () => {
+            console.error(`Failed to load tilesheet image.`);
+        });
 
         this.load
-            .image("tilesheet", "platformerPack_industrial_tilesheet.png")
-            .on("loaderror", () => {
-                console.error(`Failed to load tilesheet image.`);
-            });
-
-        this.load
-            .tilemapTiledJSON("tilemap", "game-map.tmj")
+            .tilemapTiledJSON(TILEMAP_KEY, TILEMAP_JSON)
             .on("loaderror", () => {
                 console.error(`Failed to load tilemap.`);
             });
@@ -59,10 +69,10 @@ export class BaseLevel extends Scene {
     create() {
         this.load.setPath("assets");
 
-        this.map = this.make.tilemap({ key: "tilemap" });
+        this.map = this.make.tilemap({ key: TILEMAP_KEY });
         const tileset = this.map.addTilesetImage(
             "industrial_tilesheet",
-            "tilesheet"
+            TILESET_KEY
         );
         if (tileset) {
             const wall = this.map.createLayer("Wall", tileset);
@@ -105,13 +115,13 @@ export class BaseLevel extends Scene {
         }
 
         // Entities will fall down faster
-        this.matter.world.setGravity(0, 2);
+        this.matter.world.setGravity(0, GRAVITY_Y);
 
         // Camera Settings
         const mapHeight = this.map.heightInPixels;
         const mapWidth = this.map.widthInPixels;
         this.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
-        this.cameras.main.setZoom(1);
+        this.cameras.main.setZoom(CAMERA_ZOOM);
         this.cameras.main.scrollY = mapHeight - this.cameras.main.height;
         this.cameras.main.scrollX = mapWidth / 2 - this.cameras.main.width;
 
@@ -147,14 +157,11 @@ export class BaseLevel extends Scene {
     }
 
     startEnemySpawnTimer() {
-        const spawnInterval = 5000; // Interval in milliseconds
-        const spawnDuration = 60000; // Total duration in milliseconds
-
         this.enemySpawnTimer = this.time.addEvent({
-            delay: spawnInterval,
+            delay: ENEMY_SPAWN_INTERVAL,
             callback: this.spawnEnemies,
             callbackScope: this,
-            repeat: spawnDuration / spawnInterval - 1,
+            repeat: ENEMY_SPAWN_DURATION / ENEMY_SPAWN_INTERVAL - 1,
         });
     }
 
@@ -275,8 +282,8 @@ export class BaseLevel extends Scene {
             this.playerController = new PlayerController(this, this.player);
             this.playerHealthBar = new PlayerHealthBar(
                 this,
-                90,
-                20,
+                PLAYER_HEALTHBAR_X,
+                PLAYER_HEALTHBAR_Y,
                 this.player
             );
             this.playerHealthBar.draw();

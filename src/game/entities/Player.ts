@@ -4,7 +4,19 @@ import StateMachine from "../logic/StateMachine";
 import { ProjectilePool } from "./ProjectilePool";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EventBus } from "../EventBus";
-import { BaseLevel } from "../levels/BaseLevel";
+
+const SCALE_FACTOR = 2;
+const FIRE_COOLDOWN = 300; // Firing rate in milliseconds
+const MAX_HEALTH = 100;
+const KNOCKBACK_VELOCITY_X = 10;
+const KNOCKBACK_VELOCITY_Y = -10;
+const FADE_OUT_DURATION = 2000;
+const FADE_OUT_COLOR = 0x000000;
+const TINT_START_COLOR = 0xffffff;
+const TINT_END_COLOR = 0xb10000;
+const TINT_DURATION = 100;
+const TINT_REPEAT = 2;
+const TINT_YOYO = true;
 
 export class Player {
     private jumpForce: number;
@@ -13,14 +25,13 @@ export class Player {
     private stateMachine: StateMachine;
     private isTouchingGround: boolean = false;
     private projectilePool: ProjectilePool;
-    private fireCooldown: number = 300; // Firing rate in milliseconds
+    private fireCooldown: number = FIRE_COOLDOWN;
     private lastFireTime: number = 0;
     private obstacles!: CollisionIdentifier;
     private scene: Scene;
     private health: number;
     private music: Phaser.Sound.BaseSoundManager;
-    private maxHealth: number = 100;
-    BaseLevel: any;
+    private maxHealth: number = MAX_HEALTH;
 
     constructor(
         sprite: Physics.Matter.Sprite,
@@ -36,21 +47,20 @@ export class Player {
         this.music = scene.sound;
         this.health = this.maxHealth;
 
-        const scaleFactor = 2;
-        this.sprite.setScale(scaleFactor);
+        this.sprite.setScale(SCALE_FACTOR);
         this.sprite.setTexture(this.sprite.texture.key, 0);
 
         const { width, height } = this.sprite;
         this.sprite.setBody(
             {
                 type: "rectangle",
-                width: width * scaleFactor * 0.5,
-                height: height * scaleFactor * 1.7,
+                width: width * SCALE_FACTOR * 0.5,
+                height: height * SCALE_FACTOR * 1.7,
             },
             {
                 position: {
                     x: this.sprite.x,
-                    y: this.sprite.y + height * scaleFactor,
+                    y: this.sprite.y + height * SCALE_FACTOR,
                 },
             }
         );
@@ -175,21 +185,23 @@ export class Player {
     }
 
     private enemyHitOnEnter() {
-        this.sprite.setVelocityY(-10);
+        this.sprite.setVelocityY(KNOCKBACK_VELOCITY_Y);
 
         // Apply knockback
-        this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
+        this.sprite.setVelocityX(
+            this.sprite.flipX ? KNOCKBACK_VELOCITY_X : -KNOCKBACK_VELOCITY_X
+        );
 
-        const startColor = Phaser.Display.Color.ValueToColor(0xffffff);
-        const endColor = Phaser.Display.Color.ValueToColor(0xb10000);
+        const startColor = Phaser.Display.Color.ValueToColor(TINT_START_COLOR);
+        const endColor = Phaser.Display.Color.ValueToColor(TINT_END_COLOR);
 
         // TODO: Add enemy hit animation and sound effect
         this.scene.tweens.addCounter({
             from: 0,
             to: 100,
-            duration: 100,
-            repeat: 2,
-            yoyo: true,
+            duration: TINT_DURATION,
+            repeat: TINT_REPEAT,
+            yoyo: TINT_YOYO,
             ease: Phaser.Math.Easing.Sine.InOut,
             onUpdate: (tween) => {
                 const value = tween.getValue();
@@ -244,7 +256,7 @@ export class Player {
                 camera.scrollY + camera.height / 2,
                 camera.width,
                 camera.height,
-                0x000000
+                FADE_OUT_COLOR
             );
             fadeOutRect.setAlpha(0);
 
@@ -252,7 +264,7 @@ export class Player {
             this.scene.tweens.add({
                 targets: fadeOutRect,
                 alpha: 1,
-                duration: 2000,
+                duration: FADE_OUT_DURATION,
                 onComplete: () => {
                     this.cleanup();
                     //this.BaseLevel.restartLevel();
@@ -508,4 +520,3 @@ export class Player {
         this.sprite.destroy();
     }
 }
-

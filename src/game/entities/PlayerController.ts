@@ -30,7 +30,7 @@ export class PlayerController {
             this.pauseKey = scene.input.keyboard.addKey(
                 Input.Keyboard.KeyCodes.L
             );
-            console.log("Keyboard input registered"); // Debug log
+            console.log("Keyboard input registered"); 
         } else {
             throw new Error("Keyboard input is not available");
         }

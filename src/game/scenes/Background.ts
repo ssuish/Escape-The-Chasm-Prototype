@@ -24,7 +24,6 @@ export class Background extends Phaser.Scene {
             )
             .setOrigin(0);
 
-        // Create a RenderTexture
         const renderTexture = this.add
             .renderTexture(
                 0,
@@ -34,7 +33,6 @@ export class Background extends Phaser.Scene {
             )
             .setOrigin(0);
 
-        // Draw overlayShadow with MULTIPLY blend mode
         renderTexture.draw(
             this.add
                 .image(
@@ -46,7 +44,6 @@ export class Background extends Phaser.Scene {
                 .setBlendMode(Phaser.BlendModes.MULTIPLY)
         );
 
-        // Draw overlayDodge with COLOR_DODGE blend mode
         renderTexture.draw(
             this.add
                 .image(

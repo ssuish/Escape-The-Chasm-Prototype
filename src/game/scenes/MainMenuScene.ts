@@ -17,10 +17,8 @@ export class MainMenu extends Scene {
             color: '#ffffff',
         });
 
-        //logo
         this.logo = this.add.image(512, 250, "escape").setOrigin(0.5).setDepth(100);
 
-        // Create buttons to switch scenes
         new PlayButton(this, 512, 450, () => {
             this.changeScene("LevelSelection");
         }).setOrigin(0.5);

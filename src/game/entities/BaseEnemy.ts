@@ -57,14 +57,9 @@ export abstract class BaseEnemy {
                     : (bodyA as MatterJS.BodyType);
             const gameObject = otherBody.gameObject;
 
-            // console.log(
-            //     `Object ${enemyBody.label} Collided with: ${otherBody.label}`
-            // );
-
             if (this.obstacles.is("deadEnd", otherBody)) {
                 this.stateMachine.setState("defeated");
-                // TODO: Add event emitter for defeated enemies on deadend.
-                // TODO: check enemy id and emit event accordingly
+                // TODO: If we add new enemy type - check enemy id and emit event accordingly.
                 EventBus.emit("enemy-defeated-onDeadEnd");
                 return;
             }

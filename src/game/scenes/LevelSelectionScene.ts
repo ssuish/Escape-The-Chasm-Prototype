@@ -20,11 +20,7 @@ export class LevelSelection extends Scene {
         });
 
         this.levelManager = new LevelManager(this, 512, 348);
-
-        // Select a default level (e.g., 'level1')
         this.selectedLevelKey = 'level1';
-
-        // Display the default level portrait
         this.levelManager.drawLevelPortrait(this.selectedLevelKey);
 
         new PlayButton(this, 512, 530, () => {

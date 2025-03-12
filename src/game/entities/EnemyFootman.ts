@@ -4,6 +4,13 @@ import { EventBus } from "../EventBus";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { BaseLevel } from "../levels/BaseLevel";
 
+const MAX_HEALTH = 30;
+const DAMAGE = 3;
+const SCALE = 1.8;
+const SPEED = 5;
+const MIN_NORMALIZED_DIRECTION_Y = 0.1;
+const KNOCKBACK_VELOCITY = 10;
+
 export class EnemyFootman extends BaseEnemy {
     private health: number;
     private maxHealth: number;
@@ -21,31 +28,24 @@ export class EnemyFootman extends BaseEnemy {
 
         super(instanceID, sprite, obstacles, player, scene);
 
-        this.maxHealth = 30;
+        this.maxHealth = MAX_HEALTH;
         this.health = this.maxHealth;
-        this.damage = 3;
+        this.damage = DAMAGE;
         this.scene = scene;
         this.player = player;
+
         const body = sprite.body as MatterJS.BodyType;
         this.id = body.id;
+
+        // Initialize last player position
         this.lastPlayerX = player.x;
         this.lastPlayerY = player.y;
 
         scene.add.existing(sprite);
-        this.sprite.setScale(1.8);
+        this.sprite.setScale(SCALE);
         this.sprite.setFixedRotation();
-        // this.sprite.setRectangle(this.sprite.width, this.sprite.height * 2);
-        // if (this.sprite.body) {
-        //     (this.sprite.body as MatterJS.BodyType & { label: string }).label = "enemy-footman"; // Manually set the label back
-        // }
-
         this.sprite.setTexture("enemy_idle");
-        console.log(
-            `Sprite dimensions: width=${this.sprite.width}, height=${this.sprite.height}`
-        );
-        console.log(`Sprite body: `, this.sprite.body);
 
-        // Event listeners
         EventBus.on("player-hurt", this.onPlayerHurt.bind(this)).on(
             "projectile-hit",
             this.onEnemyHurt.bind(this)
@@ -143,7 +143,6 @@ export class EnemyFootman extends BaseEnemy {
 
     protected patrolOnEnter() {
         console.log("Enemy patrolling");
-        //this.sprite.play("patrol");
     }
 
     protected attackOnEnter() {
@@ -177,18 +176,20 @@ export class EnemyFootman extends BaseEnemy {
         let normalizedDirectionY = directionY / magnitude;
 
         if (directionY >= 0) {
-            normalizedDirectionY = Math.max(normalizedDirectionY, 0.1);
+            normalizedDirectionY = Math.max(
+                normalizedDirectionY,
+                MIN_NORMALIZED_DIRECTION_Y
+            );
         }
 
-        const speed = 5;
         if (directionY < 0) {
             // Player is above, frog hop
             this.sprite.setVelocity(
-                normalizedDirectionX * speed,
-                normalizedDirectionY * speed * 2
+                normalizedDirectionX * SPEED,
+                normalizedDirectionY * SPEED * 2
             );
         } else {
-            this.sprite.setVelocity(normalizedDirectionX * speed, 0);
+            this.sprite.setVelocity(normalizedDirectionX * SPEED, 0);
         }
 
         this.isTouchingGround = false;
@@ -226,8 +227,10 @@ export class EnemyFootman extends BaseEnemy {
                 this.health -= projectileHit.damage;
                 this.scene.sound.play("metalHit");
 
-                // Apply knockback
-                this.sprite.setVelocityX(this.sprite.flipX ? 10 : -10);
+                // Apply knockback force
+                this.sprite.setVelocityX(
+                    this.sprite.flipX ? KNOCKBACK_VELOCITY : -KNOCKBACK_VELOCITY
+                );
 
                 if (this.health <= 0) {
                     this.stateMachine.setState("defeated");
@@ -256,7 +259,6 @@ export class EnemyFootman extends BaseEnemy {
             typeof player.x === "number" &&
             typeof player.y === "number"
         ) {
-            //console.log("Player position: ", player.x, player.y);
             this.lastPlayerX = player.x;
             this.lastPlayerY = player.y;
         } else {

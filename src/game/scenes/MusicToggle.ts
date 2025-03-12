@@ -20,10 +20,8 @@ export class MusicToggle extends Phaser.Scene {
     }
 
     create() {
-        //Music toggle appear on top right corner
         this.musicToggle = new MusicButton(this, 980, 40, () => {});
 
-        //checking if there is a 'musicEnabled' data
         if (!this.registry.has("musicEnabled")) {
             this.registry.set("musicEnabled", true);
             this.music = this.sound.add("bgm", { loop: true });

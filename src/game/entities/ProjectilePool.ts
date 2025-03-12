@@ -1,6 +1,10 @@
 import { Scene } from "phaser";
 import { Projectile } from "./Projectile";
 
+const OFF_SCREEN_X = -100;
+const OFF_SCREEN_Y = -100;
+const PROJECTILE_KEY = "projectile";
+
 export class ProjectilePool {
     private scene: Scene;
     private projectiles: Phaser.GameObjects.Group;
@@ -17,20 +21,19 @@ export class ProjectilePool {
         for (let i = 0; i < maxSize; i++) {
             const projectile = new Projectile(
                 scene,
-                -100,
-                -100,
-                "projectile",
+                OFF_SCREEN_X,
+                OFF_SCREEN_Y,
+                PROJECTILE_KEY,
                 this
             );
             this.projectiles.add(projectile, true);
-            console.log(`Projectile ${i} added to pool`);
         }
     }
 
     returnProjectile(proj: Projectile) {
         proj.setActive(false);
         proj.setVisible(false);
-        proj.setPosition(-100, -100); // Move off-screen
+        proj.setPosition(OFF_SCREEN_X, OFF_SCREEN_Y); // Move off-screen
         console.log("Projectile returned to pool");
     }
 
@@ -56,4 +59,3 @@ export class ProjectilePool {
         );
     }
 }
-
