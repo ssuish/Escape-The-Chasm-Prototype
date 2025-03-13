@@ -6,8 +6,8 @@ import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EventBus } from "../EventBus";
 
 const SCALE_FACTOR = 2;
-const FIRE_COOLDOWN = 300; // Firing rate in milliseconds
-const MAX_HEALTH = 100;
+const FIRE_COOLDOWN = gameConfig.basicGunConfig.fireRate; // Firing rate in milliseconds
+const MAX_HEALTH = gameConfig.playerConfig.maxHealth;
 const KNOCKBACK_VELOCITY_X = 10;
 const KNOCKBACK_VELOCITY_Y = -10;
 const FADE_OUT_DURATION = 2000;
@@ -305,7 +305,7 @@ export class Player {
                 this.sprite.x + offsetX,
                 this.sprite.y + offsetY,
                 facingLeft,
-                20
+                gameConfig.basicGunConfig.bulletSpeed
             );
 
             projectile.setFlipX(facingLeft);
