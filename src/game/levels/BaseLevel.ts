@@ -129,6 +129,12 @@ export class BaseLevel extends Scene {
         this.startEnemySpawnTimer();
 
         //Achievements Event
+        //Reference
+        //EventBus.on("[event name]"), () => {
+        //    this.awardAchievement("[id]");
+        //    console.log("[console maeesage]");
+        //});
+
         EventBus.on("defeated5Enemies", () => {
             this.awardAchievement("defeat5Enemies");
             console.log("EVENT: DEFEATED 5 ENEMIES");
@@ -138,6 +144,17 @@ export class BaseLevel extends Scene {
             this.awardAchievement("defeat10Enemies");
             console.log("EVENT: DEFEATED 10 ENEMIES");
         });
+
+        EventBus.on("health75", () => {
+            this.awardAchievement("mvPlayer");
+            console.log("EVENT: MVP");
+        });
+
+        EventBus.on("noDamage", () => {
+            this.awardAchievement("opPlayer");
+            console.log("EVENT: OP");
+        });
+
         //EventBus.on('enemy-defeated-onDeadEnd')
         EventBus.on("player-defeated", this.handleDefeatCondition, this);
     }
@@ -236,6 +253,12 @@ export class BaseLevel extends Scene {
         }
         if (this.defeatedEnemies === 10) {
             EventBus.emit("defeated10Enemies");
+        }
+        if (this.defeatedEnemies === 10 && this.player.GetHealth() / this.player.GetMaxHealth() >= 0.75 ){
+            EventBus.emit("health75");
+        }
+        if (this.defeatedEnemies === 10 && this.player.GetHealth() / this.player.GetMaxHealth() === 1 ){
+            EventBus.emit("noDamage");
         }
     }
 

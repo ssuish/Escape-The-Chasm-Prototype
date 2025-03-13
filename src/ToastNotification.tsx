@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Achievement } from "./game/logic/PlayerAchievement";
@@ -16,24 +16,28 @@ function ToastNotifications() {
                     <img
                         src={`./assets/badges/${achievements.badge}-badge.png`} // Adjust the path to your image
                         style={{
-                            width: "60px",
-                            height: "60px",
-                            marginRight: "10px",
+                            width: "70px",
+                            height: "70px",
+                            margin: 0,
+                            paddingRight: 20
                         }}
                     />
-                    <strong>
-                        Achievement Unlocked: {achievements.name} &nbsp;
-                    </strong>
-                    <p> "{achievements.description}"</p>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <strong>{achievements.name}</strong>
+                        <p style={{ margin: 0, paddingBottom: 10 }}>"{achievements.description}"</p>
+                        <p style={{ margin: 0, fontStyle: "italic", fontSize: 12 }}>Check your dashboard</p>
+                    </div>
                 </div>,
                 {
-                    position: "top-right",
+                    position: "bottom-right",
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
-                    pauseOnHover: true,
                     progress: undefined,
-                    style: { width: "500px" },
+                    theme: "light",
+                    style: { width: "300px" },
+                    transition: Slide,
+                    rtl: false,            
                 }
             );
         };
