@@ -1,7 +1,7 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { levelObjectives } from "../logic/LevelObjectives";
-import { LevelSelectButton } from "../UIComponents/UIButton";
+import { DashboardButton, LevelSelectButton } from "../UIComponents/UIButton";
 
 interface PlayerStats {
     enemiesDefeated: number;
@@ -21,8 +21,8 @@ export class GameVictory extends Scene {
     }
 
     preload() {
-        this.load.image("complete", "assets/crosshair-complete.png");
-        this.load.image("fail", "assets/crosshair-fail.png");
+        this.load.image("complete", "assets/hex-c.png");
+        this.load.image("fail", "assets/hex-inc2.png");
     }
 
     displayVictory(levelKey: string, playerStats: PlayerStats): void {
@@ -62,13 +62,13 @@ export class GameVictory extends Scene {
                     .image(xOffset - 15, yOffset + 15, "complete")
                     .setOrigin(0.5)
                     .setDepth(100)
-                    .setScale(0.3);
+                    .setScale(0.07);
             } else {
                 objImg = this.add
                     .image(xOffset - 15, yOffset + 15, "fail")
                     .setOrigin(0.5)
                     .setDepth(100)
-                    .setScale(0.3);
+                    .setScale(0.07);
             }
 
             yOffset += 50;
@@ -145,6 +145,10 @@ export class GameVictory extends Scene {
             })
             .setOrigin(0.5)
             .setDepth(100);
+
+        new DashboardButton(this, 512, 625, () => {
+               //Go to Dahsboard here
+        }).setOrigin(0.5).setScale(0.5);
     }
 
     changeScene(scene?: string) {

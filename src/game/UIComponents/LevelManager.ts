@@ -48,9 +48,9 @@ export class LevelManager extends GameObjects.Container {
             yOffset += yStep;
         });
         
-        const crosshair1 = this.scene.add.image(-rectWidth / 2 + 125, yOffset + 70, 'crosshair').setScale(0.7).setOrigin(0.5);
-        const crosshair2 = this.scene.add.image(-rectWidth / 2 + 225, yOffset + 70, 'crosshair').setScale(0.7).setOrigin(0.5);
-        const crosshair3 = this.scene.add.image(-rectWidth / 2 + 325, yOffset + 70, 'crosshair').setScale(0.7).setOrigin(0.5);
+        const crosshair1 = this.scene.add.image(-rectWidth / 2 + 125, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
+        const crosshair2 = this.scene.add.image(-rectWidth / 2 + 225, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
+        const crosshair3 = this.scene.add.image(-rectWidth / 2 + 325, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
         this.add(crosshair1);
         this.add(crosshair2);
         this.add(crosshair3);
