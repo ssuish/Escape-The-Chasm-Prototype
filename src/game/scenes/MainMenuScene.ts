@@ -17,7 +17,7 @@ export class MainMenu extends Scene {
             color: '#ffffff',
         });
 
-        this.logo = this.add.image(512, 250, "escape").setOrigin(0.5).setDepth(100);
+        this.logo = this.add.image(512, 250, "escape").setOrigin(0.5).setDepth(100).setScale(0.7);
 
         new PlayButton(this, 512, 450, () => {
             this.changeScene("LevelSelection");
