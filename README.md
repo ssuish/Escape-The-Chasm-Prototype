@@ -1,19 +1,54 @@
-# Phaser React TypeScript Template
+![logo](gameLogo.png)
 
-This is a Phaser 3 project template that uses the React framework and Vite for bundling. It includes a bridge for React to Phaser game communication, hot-reloading for quick development workflow and scripts to generate production-ready builds.
+# Escape the Chasm
 
-**[This Template is also available as a JavaScript version.](https://github.com/phaserjs/template-react)**
+## Game Concept
+
+Escape the Chasm is a hyper-casual arcade survival web game where the player has to escape in a futuristic facility using their escape elevator while facing enemy hordes. They must survive as long as they can using their guns to defeat the enemies. Targeting specifically towards arcade enthusiasts and web3 gamers that to incentivize their skills and achievements. 
+
+By focusing on skill and innovation, we aim to revolutionize the gaming landscape. Our goal is to inspire excellence and redefine success through innovative, achievement-driven gameplay that elevates the player's journey.
+
+## Roadmap
+
+### Phase 1: Pre-Launch & Soft Launch
+
+- Game prototype with core mechanics
+- Wallet connection functionality
+- Character and environment assets
+- Smart contract development
+
+### Phase 2: Launch
+
+- Power-ups and boosters with crypto integration
+- Weapon upgrade system
+- Leaderboards and social features
+- New level releases
+
+### Phase 3: Expansion
+
+- More exclusive level access
+- NFT marketplace integration
+- Community guilds (Co-op gameplay)
+- Collaborative guild objectives
+
+#### Phase 4: Sustained Growth
+
+- Limited-time NFT event challenges
+- Economic stability monitoring
+- Guild tournaments and marketplace expansion
+- Multi-Device Support 
+
+
+## Infrastructure
+
+This is a Phaser 3 game that uses the React framework and Vite for bundling. It includes a bridge for React to Phaser game communication, hot-reloading for quick development workflow and scripts to generate production-ready builds. Matter.JS is used as a main 2D physics engine for emulating 2D rigid bodies of the game sprites. 
 
 ### Versions
-
-This template has been updated for:
 
 - [Phaser 3.88.0](https://github.com/phaserjs/phaser)
 - [React 18.2.0](https://github.com/facebook/react)
 - [Vite 5.3.1](https://github.com/vitejs/vite)
 - [TypeScript 5.2.2](https://github.com/microsoft/TypeScript)
-
-![screenshot](screenshot.png)
 
 ## Requirements
 
@@ -39,20 +74,26 @@ Once the server is running you can edit any of the files in the `src` folder. Vi
 
 ## Template Project Structure
 
-We have provided a default project structure to get you started. This is as follows:
+Provided is a game project folder structure. This is as follows:
 
 - `index.html` - A basic HTML page to contain the game.
 - `src` - Contains the React client source code.
 - `src/main.tsx` - The main **React** entry point. This bootstraps the React application.
 - `src/vite-env.d.ts` - Global TypeScript declarations, provide types information.
 - `src/App.tsx` - The main React component.
+- `public/style.css` - Some simple CSS rules to help with page layout.
+- `public/assets` - Contains the static assets used by the game.
 - `src/game/PhaserGame.tsx` - The React component that initializes the Phaser Game and serve like a bridge between React and Phaser.
 - `src/game/EventBus.ts` - A simple event bus to communicate between React and Phaser.
 - `src/game` - Contains the game source code.
 - `src/game/main.tsx` - The main **game** entry point. This contains the game configuration and start the game.
 - `src/game/scenes/` - The Phaser Scenes are in this folder.
-- `public/style.css` - Some simple CSS rules to help with page layout.
-- `public/assets` - Contains the static assets used by the game.
+- `src/game/config` - The configuration files for default values of the entities and systems.
+- `src/game/entities/` - Contains all of the game entities and its components.
+- `src/game/levels/` - Contains all gameplay systems for a specific level.
+- `src/game/logic/` - Contains the global game systems that interact the most on the entities and its components.
+- `src/game/scenes/` - A set of scenes use for UI programming and rendering of the game.
+- `src/game/UIComponents/` - List of all UI components, e.g. buttons, that interact with the player to the game systems.
 
 ## React Bridge
 
@@ -174,8 +215,6 @@ After you run the `npm run build` command, your code will be built into a single
 
 In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
 
-## Customizing the Template
-
 ### Vite
 
 If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
@@ -226,19 +265,16 @@ After:
 
 Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
 
-## Join the Phaser Community!
+## Attributions
 
-We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
+- Joel Steudler | Modern Day Massive - Pyscho Analysis
+- Floraphonic | Metal Hit 95
+- Yael Gomez | Gunshot Sound - Heavy FX
 
-**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
-**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
-**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
-**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
-**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
+## We are Escapicism!
 
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+We are looking for developers and artists who share the same vision with us to revolutionize this Web3 game industry. So please join our community. 😄
 
-The Phaser logo and characters are &copy; 2011 - 2024 Phaser Studio Inc.
+The Escape the Chasm art and graphics assets and scripts are &copy; 2025 Escapicism.
 
 All rights reserved.
