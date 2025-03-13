@@ -1,11 +1,14 @@
 import { Physics, Scene } from "phaser";
 import { ProjectilePool } from "./ProjectilePool";
 import { EventBus } from "../EventBus";
+import { gameConfig } from "../config/gameConfig";
 
 export class Projectile extends Physics.Matter.Sprite {
     private pool: ProjectilePool;
     private hasCollided: boolean;
     private damage: number;
+
+    // TODO: Refactor this code to allow customization for different types of projectiles
 
     constructor(
         scene: Scene,
@@ -20,7 +23,7 @@ export class Projectile extends Physics.Matter.Sprite {
         this.setVisible(false);
         this.pool = pool;
         this.hasCollided = false;
-        this.damage = 10;
+        this.damage = gameConfig.basicGunConfig.bulletDamage;
 
         // Adjust the size of the collider box
         this.setBody({

@@ -3,11 +3,13 @@ import { BaseEnemy } from "./BaseEnemy";
 import { EventBus } from "../EventBus";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { BaseLevel } from "../levels/BaseLevel";
+import { gameConfig } from "../config/gameConfig";
 
-const MAX_HEALTH = 30;
-const DAMAGE = 3;
-const SCALE = 1.8;
-const SPEED = 5;
+const MAX_HEALTH = gameConfig.enemyFootmanConfig.maxHealth;
+const DAMAGE = gameConfig.enemyFootmanConfig.damage;
+const SCALE = gameConfig.enemyFootmanConfig.scale;
+const SPEED = gameConfig.enemyFootmanConfig.speed;
+const JUMP_FORCE = gameConfig.enemyFootmanConfig.jumpForce;
 const MIN_NORMALIZED_DIRECTION_Y = 0.1;
 const KNOCKBACK_VELOCITY = 10;
 
@@ -28,8 +30,10 @@ export class EnemyFootman extends BaseEnemy {
 
         super(instanceID, sprite, obstacles, player, scene);
 
+        this.speed = SPEED;
+        this.jumpForce = JUMP_FORCE;
         this.maxHealth = MAX_HEALTH;
-        this.health = this.maxHealth;
+        this.health = MAX_HEALTH;
         this.damage = DAMAGE;
         this.scene = scene;
         this.player = player;
@@ -284,4 +288,8 @@ export class EnemyFootman extends BaseEnemy {
         this.stateMachine.update(deltaTime);
     }
 }
+
+
+
+
 

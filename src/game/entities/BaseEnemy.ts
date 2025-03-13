@@ -1,5 +1,4 @@
 import { Physics, Scene } from "phaser";
-import { gameConfig } from "../config/gameConfig";
 import StateMachine from "../logic/StateMachine";
 import CollisionIdentifier from "../logic/CollisionIdentifier";
 import { EventBus } from "../EventBus";
@@ -24,9 +23,6 @@ export abstract class BaseEnemy {
         scene: Scene
     ) {
         this.sprite = sprite;
-        // TODO: Replace the gameConfig values with the enemies' own values
-        this.speed = gameConfig.playerSpeed;
-        this.jumpForce = gameConfig.jumpForce;
         this.obstacles = obstacles;
         this.player = player;
         this.scene = scene;
