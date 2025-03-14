@@ -30,6 +30,7 @@ export class Preloader extends Scene {
         this.load.image("silver", "badges/silver-badge.png");
         this.load.image("gold", "badges/gold-badge.png");
         this.load.image("platinum", "badges/platinum-badge.png");
+        this.load.image('card', 'card-quest.png');
         this.load
             .audio("gunshot", "sounds/gunshots.mp3")
             .on("loaderror", () => {

@@ -15,6 +15,7 @@ export class GameVictory extends Scene {
     gameOverText: Phaser.GameObjects.Text;
     back: Phaser.GameObjects.Text;
     next: Phaser.GameObjects.Text;
+    playerStats : PlayerStats;
 
     constructor() {
         super("GameVictory");
@@ -147,11 +148,13 @@ export class GameVictory extends Scene {
             .setDepth(100);
 
         new DashboardButton(this, 512, 625, () => {
-               //Go to Dahsboard here
+               //Go to Dashboard here
         }).setOrigin(0.5).setScale(0.5);
     }
 
-    changeScene(scene?: string) {
-        this.scene.start(scene ?? "MainMenu");
-    }
+    changeScene(scene?: string,) {
+        this.scene.start(scene ?? "Main Menu", { levelcompleted: this.displayVictory, completedLevelKey: 'level1' });
+    } 
 }
+
+localStorage.setItem('level1Completed', 'true'); 

@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { BackButton, PlayButton } from "../UIComponents/UIButton";
 import { LevelManager } from '../UIComponents/LevelManager'; 
+import { levelObjectives } from "../logic/LevelObjectives";
 
 // Import all levels dynamically
 //const levels = require(`../levels/${}`);
@@ -14,14 +15,27 @@ export class LevelSelection extends Scene {
         super("LevelSelection");
     }
 
-    create() {
+    preload(){
+        this.load.image("complete", "assets/hex-c.png");
+        this.load.image("fail", "assets/hex-inc2.png");
+    }
+
+    create(data: { levelCompleted: boolean; completedLevelKey: string }): void {
+
+        if (data && data.levelCompleted && data.completedLevelKey) {
+            const levelData = levelObjectives[data.completedLevelKey];
+            if (levelData) {
+                levelData.stars.forEach(star => {
+                    star.completed = true; // Mark all objectives as completed
+                });
+            }
+        }
+        this.levelManager = new LevelManager(this, this.cameras.main.centerX, this.cameras.main.centerY);
+        this.levelManager.drawLevelPortrait('level1'); // Display level1 by default
+        
         new BackButton(this, 15, 10, () => {
             this.changeScene("MainMenu");
         });
-
-        this.levelManager = new LevelManager(this, 512, 348);
-        this.selectedLevelKey = 'level1';
-        this.levelManager.drawLevelPortrait(this.selectedLevelKey);
 
         new PlayButton(this, 512, 530, () => {
             this.changeScene('Level1');
