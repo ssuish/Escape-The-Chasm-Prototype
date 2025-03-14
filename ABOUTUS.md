@@ -1,2 +1,0 @@
-# Core Contributors
-- Lead: Me 
