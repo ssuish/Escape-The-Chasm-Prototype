@@ -1,5 +1,5 @@
 import { Scene, GameObjects } from 'phaser';
-import { levelObjectives } from '../logic/LevelObjectives'; // Adjust the path
+import { levelObjectives } from '../logic/LevelObjectives';
 
 export class LevelManager extends GameObjects.Container {
     constructor(scene: Scene, x: number, y: number) {
@@ -9,7 +9,7 @@ export class LevelManager extends GameObjects.Container {
     }
 
     drawLevelPortrait(levelKey: string): void {
-        this.removeAll(true); // Clear previous elements
+        this.removeAll(true);
 
         const levelData = levelObjectives[levelKey];
         if (!levelData) {
@@ -17,42 +17,36 @@ export class LevelManager extends GameObjects.Container {
             return;
         }
 
-        const rectWidth = 450;
+        const rectWidth = 550;
         const rectHeight = 500;
 
         // Draw rectangle
-        const rect = this.scene.add.graphics();
-        rect.fillStyle(0x4a4a4a, 0.8);
-        rect.fillRoundedRect(-rectWidth / 2, -rectHeight / 2, rectWidth, rectHeight, 20);
-        rect.lineStyle(10, 0x000000, 1);
-        rect.strokeRoundedRect(-rectWidth / 2, -rectHeight / 2, rectWidth, rectHeight, 20);
-        this.add(rect);
+        this.scene.add.image(512, 384, "card").setScale(1.1);
 
         // Add level name
         const nameText = this.scene.add.text(-rectWidth / 2 + 20, -rectHeight / 2 + 20, levelData.name, {
             fontFamily: 'Rubik Dirt', fontSize: 40, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 5
+            stroke: '#000000', strokeThickness: 8
         }).setOrigin(0);
         this.add(nameText);
 
         // Add objectives
-        let yOffset = -rectHeight / 2 + 90; // Start below the level name
+        let yOffset = -rectHeight / 2 + 90;
         const yStep = 45;
 
-        levelData.stars.forEach((star) => {
-            const objectiveText = this.scene.add.text(-rectWidth / 2 + 20, yOffset, `${star.objective}`, {
-                fontFamily: 'Arial', fontSize: 20, color: '#ffffff',
+        levelData.stars.forEach((star) => { // Removed index parameter
+            const objectiveText = this.scene.add.text(-rectWidth / 2 + 35, yOffset + 24, `${star.objective}`, {
+                fontFamily: 'Rubik Dirt', fontSize: 22,
+                color: star.completed ? '#00ff00' : '#ffffff',
                 stroke: '#000000', strokeThickness: 5
             }).setOrigin(0);
             this.add(objectiveText);
+
+            const achievementImageKey = star.completed ? 'complete' : 'fail';
+            const achievementImage = this.scene.add.image(-rectWidth / 2 + 10, yOffset + 40, achievementImageKey);
+            achievementImage.setScale(0.06); // Adjust scale if needed
+            this.add(achievementImage);
             yOffset += yStep;
         });
-        
-        const crosshair1 = this.scene.add.image(-rectWidth / 2 + 125, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
-        const crosshair2 = this.scene.add.image(-rectWidth / 2 + 225, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
-        const crosshair3 = this.scene.add.image(-rectWidth / 2 + 325, yOffset + 70, 'hex').setScale(0.15).setOrigin(0.5);
-        this.add(crosshair1);
-        this.add(crosshair2);
-        this.add(crosshair3);
-    }    
+    }
 }
